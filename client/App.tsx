@@ -9,9 +9,7 @@ import {
 import Navigation from './src/Navigation/Navigation';
 import { UserProvider } from './src/context/UserProvider';
 
-
-
-
+console.log('Firebase Auth Branch Test')
 
 function App(): React.JSX.Element {
 
