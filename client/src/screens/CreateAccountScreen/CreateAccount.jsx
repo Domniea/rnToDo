@@ -19,7 +19,7 @@ const CreateAccount = () => {
     } = useForm()
 
     const pwd = watch('password')
-
+    console.log(pwd)
     const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
 
     const {height} = useWindowDimensions()

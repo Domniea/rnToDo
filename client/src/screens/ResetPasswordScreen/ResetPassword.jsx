@@ -11,13 +11,17 @@ import { UserContext } from '../../context/UserProvider'
 const ResetPassword = () => {
 
     const navigation = useNavigation()
-
+    
     const {
         control,
-        handleSubmit
+        handleSubmit,
+        watch
     } = useForm()
 
     const {height} = useWindowDimensions()
+
+    const pwd = watch('newPassword')
+    console.log(pwd)
 
     function onResendCode() {
         console.log('Code re-sent')
@@ -55,15 +59,8 @@ const ResetPassword = () => {
             placeholder='re-type password'
             control={control}
             rules={{
-                required: 'Password is REQUIRED',
-                minLength: {
-                    value: 8,
-                    message: 'minimum 8 characters'
-                },
-                maxLength: {
-                    value: 15,
-                    message: 'Maximum 15 characters'
-                }
+                required: 'Passwords do not match',
+                validate: value => value === pwd || 'Passwords do not match'
             }}
         />
 
