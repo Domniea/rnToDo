@@ -2,6 +2,7 @@ import {
     View, 
     Text,
     TextInput,
+    Pressable,
     Image,
     StyleSheet, 
     useWindowDimensions,
@@ -17,6 +18,13 @@ import CustomInput from '../../components/CustomInput/CustomInput'
 import CustomButton from '../../components/CustomButton/CustomButton'
 import SocialSignInButtons from '../../components/SocialSignInButtons'
 import { UserContext } from '../../context/UserProvider'
+import { Button } from '@aws-amplify/ui-react-native/dist/primitives'
+
+import {
+    withAuthenticator,
+    useAuthenticator
+  } from '@aws-amplify/ui-react-native';
+import { signOut } from 'aws-amplify/auth'
 
 
 const SignIn = () => {
@@ -54,6 +62,9 @@ const SignIn = () => {
                 resizeMode='contain'
             />
             <Text style={styles.header}>Sign in Screen</Text>
+            <Pressable onPress={signOut}>
+                <Text>Sign Out</Text>
+            </Pressable>
     
             <CustomInput 
                 placeholder='Email'
