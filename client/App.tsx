@@ -10,7 +10,7 @@ import Navigation from './src/Navigation/Navigation';
 import { UserProvider } from './src/context/UserProvider';
 
 
-
+console.log('Amplify Auth Test')
 
 
 function App(): React.JSX.Element {
