@@ -24,7 +24,7 @@ import {
     withAuthenticator,
     useAuthenticator
   } from '@aws-amplify/ui-react-native';
-import { signOut } from 'aws-amplify/auth'
+import { signOut, signIn } from 'aws-amplify/auth'
 
 
 const SignIn = () => {
@@ -62,6 +62,7 @@ const SignIn = () => {
                 resizeMode='contain'
             />
             <Text style={styles.header}>Sign in Screen</Text>
+   
             <Pressable onPress={signOut}>
                 <Text>Sign Out</Text>
             </Pressable>
