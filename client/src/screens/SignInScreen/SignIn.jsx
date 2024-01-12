@@ -19,7 +19,7 @@ import CustomButton from '../../components/CustomButton/CustomButton'
 import SocialSignInButtons from '../../components/SocialSignInButtons'
 import { UserContext } from '../../context/UserProvider'
 
-import { signOut, signIn } from 'aws-amplify/auth'
+import { signOut, signIn, signInWithRedirect } from 'aws-amplify/auth'
 import { getCurrentUser } from 'aws-amplify/auth';
 
 const SignIn = () => {
@@ -72,6 +72,7 @@ const SignIn = () => {
         }
     }
 
+    
     // useEffect(() => {
     //     currentAuthenticatedUser()
     // })
@@ -95,9 +96,9 @@ const SignIn = () => {
             />
             <Text style={styles.header}>Sign in Screen</Text>
    
-            <Pressable onPress={onPressSignOut}>
+            {/* <Pressable onPress={onPressSignOut}>
                 <Text>Sign Out</Text>
-            </Pressable>
+            </Pressable> */}
     
             <CustomInput 
                 placeholder='Username'
@@ -124,7 +125,7 @@ const SignIn = () => {
                     required: 'Password is REQUIRED'
                 }}
             />
-            
+    
             <CustomButton 
                 text='Sign In'
                 onPress={handleSubmit(onPressSignIn)}
@@ -134,8 +135,10 @@ const SignIn = () => {
                 onPress={onForgotPassword}
                 type='TERTIARY'
             />
-        
-            <SocialSignInButtons />
+            
+            <SocialSignInButtons 
+                onPressGoogle={() => signInWithRedirect({provider: 'Google'})} 
+            />
 
             <CustomButton 
             text="Don't have an account? Create on here"

@@ -4,7 +4,7 @@ import React, { useContext } from 'react'
 import { UserContext } from '../../context/UserProvider'
 import CustomButton from '../CustomButton'
 
-const SocialSignInButtons = () => {
+const SocialSignInButtons = ({onPressGoogle}) => {
 
     const {
         onGoogle,
@@ -16,7 +16,7 @@ const SocialSignInButtons = () => {
     <>
         <CustomButton 
             text='Sign in with Google'
-            onPress={onGoogle}
+            onPress={onPressGoogle}
             bgColor='#E7EAF4'
             fgColor='#4765A9'
         />
