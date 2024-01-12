@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 import {
   View,
@@ -15,16 +15,18 @@ import { Amplify } from 'aws-amplify';
 import amplifyconfig from './src/amplifyconfiguration.json';
 Amplify.configure(amplifyconfig);
 
-
 import {
   withAuthenticator,
   useAuthenticator
 } from '@aws-amplify/ui-react-native';
+import { getCurrentUser } from 'aws-amplify/auth';
 
 console.log('Amplify Auth Test')
 
 
 function App(): React.JSX.Element {
+
+
 
   return (
     // <SafeAreaView  >

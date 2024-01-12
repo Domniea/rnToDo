@@ -8,10 +8,12 @@ import CustomButton from '../../components/CustomButton/CustomButton'
 
 import { UserContext } from '../../context/UserProvider'
 
-const ConfirmEmail = () => {
+import { confirmSignUp, resendSignUpCode } from 'aws-amplify/auth';
 
+const ConfirmEmail = (props) => {
+    const {route} = props
     const navigation = useNavigation()
-
+    console.log(route.params.userId, route.params.username)
     const {
         control,
         handleSubmit
@@ -19,14 +21,26 @@ const ConfirmEmail = () => {
 
     const {height} = useWindowDimensions()
 
+    async function handleSignUpConfirmation({ username, confirmationCode }) {
+        try {
+          const { isSignUpComplete, nextStep } = await confirmSignUp({
+            username,
+            confirmationCode
+          });
+          navigation.navigate('Home')
+        } catch (error) {
+          console.log('error confirming sign up', error);
+        }
+      }
+
     function onRegisterPress() {
         console.log('Registered')
         navigation.navigate('Home')
     }
 
     function onResendCode() {
-        console.log('Code re-sent')
-        Alert.alert("Resent Code.")
+        resendSignUpCode({clientId: route.params.userId, username: route.params.username})
+        console.log('RESENT')
     }
 
     function onBacktoSignIn() {
@@ -38,9 +52,16 @@ const ConfirmEmail = () => {
   return (
     <View style={styles.root}>
         <Text style={styles.header}>Confirm Your Email</Text>
-
         <CustomInput 
-            name='confirmationEmailCode'
+            name='username'
+            placeholder='Username'
+            control={control}
+            rules={{
+                required: 'Confirmation code is REQUIRED'
+            }}
+        />
+        <CustomInput 
+            name='confirmationCode'
             placeholder='Enter conformation code'
             control={control}
             rules={{
@@ -50,7 +71,7 @@ const ConfirmEmail = () => {
 
         <CustomButton 
             text='Confirm'
-            onPress={handleSubmit(onRegisterPress)}
+            onPress={handleSubmit(handleSignUpConfirmation)}
         />
         <CustomButton 
         text="Resend Code"

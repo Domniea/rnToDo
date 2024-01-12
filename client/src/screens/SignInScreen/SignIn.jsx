@@ -8,7 +8,7 @@ import {
     useWindowDimensions,
     ScrollView
 } from 'react-native'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useForm } from 'react-hook-form'
 
@@ -18,17 +18,13 @@ import CustomInput from '../../components/CustomInput/CustomInput'
 import CustomButton from '../../components/CustomButton/CustomButton'
 import SocialSignInButtons from '../../components/SocialSignInButtons'
 import { UserContext } from '../../context/UserProvider'
-import { Button } from '@aws-amplify/ui-react-native/dist/primitives'
 
-import {
-    withAuthenticator,
-    useAuthenticator
-  } from '@aws-amplify/ui-react-native';
 import { signOut, signIn } from 'aws-amplify/auth'
-
+import { getCurrentUser } from 'aws-amplify/auth';
 
 const SignIn = () => {
 
+    
     const navigation = useNavigation()
 
     const {height} = useWindowDimensions()
@@ -43,6 +39,42 @@ const SignIn = () => {
         console.log(data)
         navigation.navigate('Home')
     }
+
+    async function currentAuthenticatedUser() {
+      try {
+        const { username, userId, signInDetails } = await getCurrentUser();
+        console.log(`The username: ${username}`);
+        console.log(`The userId: ${userId}`);
+        console.log(`The signInDetails: ${signInDetails}`);
+        
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    async function onPressSignIn(data) {
+        try {
+          const response = await signIn(data);
+          console.log(response)
+        //   navigation.navigate('Home', {screen: 'Home'})
+
+        } catch (error) {
+          console.log('error signing in', error);
+        }
+      }
+
+    async function onPressSignOut() {
+        try{
+            await signOut()
+        }
+        catch(error) {
+            console.log('error: ', error)
+        }
+    }
+
+    // useEffect(() => {
+    //     currentAuthenticatedUser()
+    // })
 
     function onForgotPassword() {
         console.log('Forgot Password')
@@ -63,13 +95,13 @@ const SignIn = () => {
             />
             <Text style={styles.header}>Sign in Screen</Text>
    
-            <Pressable onPress={signOut}>
+            <Pressable onPress={onPressSignOut}>
                 <Text>Sign Out</Text>
             </Pressable>
     
             <CustomInput 
-                placeholder='Email'
-                name='email'
+                placeholder='Username'
+                name='username'
                 control={control}
                 rules={{
                     required: 'Email is REQUIRED',
@@ -95,7 +127,7 @@ const SignIn = () => {
             
             <CustomButton 
                 text='Sign In'
-                onPress={handleSubmit(onSignIn)}
+                onPress={handleSubmit(onPressSignIn)}
             />
             <CustomButton 
                 text='Forgot Password'

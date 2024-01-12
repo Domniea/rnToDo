@@ -8,6 +8,8 @@ import CustomButton from '../../components/CustomButton/CustomButton'
 import SocialSignInButtons from '../../components/SocialSignInButtons'
 import { UserContext } from '../../context/UserProvider'
 
+import { signUp } from 'aws-amplify/auth'
+
 const CreateAccount = () => {
 
     const navigation = useNavigation()
@@ -24,11 +26,31 @@ const CreateAccount = () => {
 
     const {height} = useWindowDimensions()
    
-    function onSignUp(data) {
-        console.log('Registered')
-        console.log(data)
-        navigation.navigate('ConfirmEmail')
-    }
+    // function onSignUp(data) {
+    //     console.log('Registered')
+    //     console.log(data)
+    //     navigation.navigate('ConfirmEmail')
+    // }
+    async function handleSignUp({ username, password, email }) {
+        try {
+          const { isSignUpComplete, userId, nextStep } = await signUp({
+            username,
+            password,
+            options: {
+              userAttributes: {
+                email
+              },
+              // optional
+              autoSignIn: true // or SignInOptions e.g { authFlowType: "USER_SRP_AUTH" }
+            }
+          });
+        //   console.log(userId);
+          navigation.navigate('ConfirmEmail', {userId, username})
+          
+        } catch (error) {
+          console.log('error signing up:', error);
+        }
+      }
 
     function onBacktoSignIn() {
         console.log('On back to sign in')
@@ -101,7 +123,7 @@ const CreateAccount = () => {
 
         <CustomButton 
             text='Register'
-            onPress={handleSubmit(onSignUp)}
+            onPress={handleSubmit(handleSignUp)}
         />
 
         <Text style={styles.text}>

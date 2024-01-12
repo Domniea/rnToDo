@@ -1,8 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Hub } from 'aws-amplify/utils';
 
 
 import SignIn from '../screens/SignInScreen/SignIn';
@@ -11,20 +12,85 @@ import ConfirmEmail from '../screens/ConfirmEmailScreen/ConfirmEmail';
 import ResetPassword from '../screens/ResetPasswordScreen/ResetPassword';
 import ForgotPaassword from '../screens/ForgotPaassword';
 import Home from '../screens/HomeScreen/Home';
+import ProtectedRoute from '../components/ProtectedRoute';
+
+import { getCurrentUser } from 'aws-amplify/auth';
+
+
 
 const Stack = createNativeStackNavigator();
 // const Stack = createStackNavigator()
 
 const Navigation = () => {
+
+  const [user, setUser] = useState(undefined)
+
+  const checkUser = async () => {
+    const response = await getCurrentUser({bypassCache: true});
+    console.log('ran')
+    setUser(response)
+  }
+
+async function currentAuthenticatedUser() {
+  try {
+      const response = await getCurrentUser({bypassCache: true});
+      console.log('thrown')
+      setUser(response)
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    checkUser()
+  }, [])
+  
+useEffect(() => {
+  function listener(data) {
+    if (data.payload.event === 'signedIn') {
+      checkUser()
+    }
+    console.log(data.payload.event)
+  }
+
+  Hub.listen('auth', listener)
+  return () => Hub.remove('auth', listener)
+}, [])
+
+useEffect(() => {
+  function listener(data) {
+    if (data.payload.event === 'signedOut') {
+      setUser(undefined)
+    }
+    console.log(data.payload.event)
+  }
+
+  Hub.listen('auth', listener)
+  return () => Hub.remove('auth', listener)
+}, [])
+
+console.log(user)
+
   return (
     <NavigationContainer>
         <Stack.Navigator>
-            <Stack.Screen name='SignIn' component={SignIn} />
-            <Stack.Screen name='CreateAccount' component={CreateAccount} />
-            <Stack.Screen name='ConfirmEmail' component={ConfirmEmail} />
-            <Stack.Screen name='ForgotPassword' component={ForgotPaassword} />
-            <Stack.Screen name='ResetPassword' component={ResetPassword} />
-            <Stack.Screen name='Home' component={Home} />
+          {
+            user ? (
+                <Stack.Screen name='Home' component={Home} />
+
+            )
+              :
+
+              (
+                <>
+                  <Stack.Screen name='SignIn' component={SignIn} />
+                  <Stack.Screen name='CreateAccount' component={CreateAccount} />
+                  <Stack.Screen name='ConfirmEmail' component={ConfirmEmail} />
+                  <Stack.Screen name='ForgotPassword' component={ForgotPaassword} />
+                  <Stack.Screen name='ResetPassword' component={ResetPassword} />
+                </>
+              )
+          }
         </Stack.Navigator>
     </NavigationContainer>
   )
