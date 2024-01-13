@@ -26,11 +26,6 @@ const CreateAccount = () => {
 
     const {height} = useWindowDimensions()
    
-    // function onSignUp(data) {
-    //     console.log('Registered')
-    //     console.log(data)
-    //     navigation.navigate('ConfirmEmail')
-    // }
     async function handleSignUp({ username, password, email }) {
         try {
           const { isSignUpComplete, userId, nextStep } = await signUp({
