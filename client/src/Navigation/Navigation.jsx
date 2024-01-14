@@ -25,13 +25,17 @@ const Navigation = () => {
 
   const [user, setUser] = useState(undefined)
 
-  const checkUser = async () => {
-    const response = await getCurrentUser({bypassCache: true});
-    console.log('ran')
-    setUser(response)
-  }
+  async function checkUser() {
+    try {
+        const response = await getCurrentUser({bypassCache: true});
+        console.log('thrown')
+        setUser(response)
+      } catch (err) {
+        console.log(err);
+      }
+    }
 
-async function currentAuthenticatedUser() {
+async function checkUser() {
   try {
       const response = await getCurrentUser({bypassCache: true});
       console.log('thrown')
