@@ -30,7 +30,7 @@ const Home = (props) => {
 
   async function getAllToDos() {
     try{
-      const data = await axios.get('http://localhost:9000/todo/')
+      const data = await axios.get('https://rntodo-production.up.railway.app/todo')
       setAllToDos(data.data)
     }
     catch(error) {
@@ -40,7 +40,7 @@ const Home = (props) => {
   
   async function submitToDo(data) {
     try {
-      const response = await axios.post(`http://localhost:9000/todo/${username}`, data)
+      const response = await axios.post(`https://rntodo-production.up.railway.app/todo/${username}`, data)
       console.log(response)
       setAllToDos(prevState => {
         return [...prevState,
