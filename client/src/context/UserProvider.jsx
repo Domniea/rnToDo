@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState, createContext } from "react";
-import { useNavigation } from "@react-navigation/native";
+
+import { getCurrentUser } from 'aws-amplify/auth';
 
 const UserContext = createContext()
 
@@ -13,21 +14,22 @@ function UserProvider(props) {
         
     // const navigation = useNavigation()
 
-    const [username, setUsername] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [passwordReType, setPasswordReType] = useState('')
-    const [conformationCode, setConformationCode] = useState('')
-    const [passResetCode, setPassResetCode] = useState('')
-    const [newPass, setNewPass] =useState('')
-    const [usernameResetCheck, setUsernameResetCheck] = useState('')
+    const [user, setUser] = useState(undefined)
 
+    async function checkUser() {
+        try {
+            const response = await getCurrentUser({bypassCache: true});
+            setUser(response)
+        } catch (err) {
+            console.log(err);
+        }
+        }
 
-  
-    function onSignUp() {
-        console.log('Sign Up')
-    }
+    useEffect(() => {
+        checkUser()
+    }, [])
 
+    
     function onGoogle() {
         console.log('Google In')
     }
@@ -40,38 +42,12 @@ function UserProvider(props) {
         console.log('Apple In')
     }
 
-  
-
-    function onSendPress() {
-        console.log('Sent')
-    }
-
-    function onSubmitPress() {
-        console.log('Submitted')
-    }
-
     return (
         <UserContext.Provider
             value={{
-                username,
-                setUsername,
-                email,
-                setEmail,
-                password,
-                setPassword,
-                usernameResetCheck,
-                setUsernameResetCheck,
-                passwordReType,
-                setPasswordReType,
-                passResetCode,
-                setPassResetCode,
-                newPass,
-                setNewPass,
-                conformationCode,
-                setConformationCode,
-                onSignUp,
-                onSendPress,
-                onSubmitPress,
+                user,
+                setUser,
+                checkUser,
                 onGoogle,
                 onFacebook,
                 onApple

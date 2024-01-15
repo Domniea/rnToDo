@@ -11,16 +11,15 @@ const ToDo = (props) => {
     } = props
 
     const [isCompleted, setIsCompleted] = useState(false)
-    console.log(isCompleted)
   return (
     <View style={styles.inline}>
-        <CheckBox 
+        {/* <CheckBox 
             style={styles.checkbox}
             lineWidth={1}
             value={isCompleted}
             onValueChange={setIsCompleted}
-        />
-        <Text style={styles.todo}>Test ToDo</Text>
+        /> */}
+        <Text style={styles.todo}>{title}</Text>
         {/* <Text>{notes}</Text> */}
 
     </View>
@@ -31,10 +30,10 @@ export default ToDo
 
 const styles = StyleSheet.create({
     inline: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        width: '100%'
+        // flexDirection: 'row',
+        // justifyContent: 'space-evenly',
+        // width: '100%'
+        alignSelf: 'center'
     },
     todo: {
         fontSize: 25,

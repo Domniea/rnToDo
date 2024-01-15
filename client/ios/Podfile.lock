@@ -1,5 +1,5 @@
 PODS:
-  - AmplifyRTNCore (1.0.10):
+  - AmplifyRTNCore (1.0.12):
     - React-Core
   - AmplifyRTNWebBrowser (1.0.12):
     - React-Core
@@ -1370,7 +1370,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AmplifyRTNCore: 74fc06365f08cabb0fa2e22869fe62fd89bda2c5
+  AmplifyRTNCore: 193763385b67c18d4f2abca718eeb7886b03aa00
   AmplifyRTNWebBrowser: c89453eca39b3ef96920592ce6fd5a44440b0271
   BEMCheckBox: 5ba6e37ade3d3657b36caecc35c8b75c6c2b1a4e
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09

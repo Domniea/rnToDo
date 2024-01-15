@@ -9,11 +9,18 @@
       "UnauthRoleName": "amplify-rntodo-dev-103424-unauthRole",
       "StackName": "amplify-rntodo-dev-103424",
       "StackId": "arn:aws:cloudformation:us-east-2:654654419328:stack/amplify-rntodo-dev-103424/804e7512-afde-11ee-bc62-0a09deae38fd",
-      "AmplifyAppId": "d3c0ke820588iy"
+      "AmplifyAppId": "d3c0ke820588iy",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-rntodo-dev-103424-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "auth": {
         "rntodod821245a": {}
+      },
+      "function": {
+        "todoFunction": {
+          "deploymentBucketName": "amplify-rntodo-dev-103424-deployment",
+          "s3Key": "amplify-builds/todoFunction-36345975793359683756-build.zip"
+        }
       }
     }
   }

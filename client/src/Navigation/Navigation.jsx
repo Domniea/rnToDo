@@ -1,8 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createStackNavigator } from '@react-navigation/stack';
 import { Hub } from 'aws-amplify/utils';
 
 
@@ -15,39 +14,16 @@ import Home from '../screens/HomeScreen/Home';
 import ProtectedRoute from '../components/ProtectedRoute';
 
 import { getCurrentUser } from 'aws-amplify/auth';
+import { UserContext } from '../context/UserProvider';
 
 
 
 const Stack = createNativeStackNavigator();
-// const Stack = createStackNavigator()
 
-const Navigation = () => {
+  const Navigation = () => {
 
-  const [user, setUser] = useState(undefined)
-
-  async function checkUser() {
-    try {
-        const response = await getCurrentUser({bypassCache: true});
-        console.log('thrown')
-        setUser(response)
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
-async function checkUser() {
-  try {
-      const response = await getCurrentUser({bypassCache: true});
-      console.log('thrown')
-      setUser(response)
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  useEffect(() => {
-    checkUser()
-  }, [])
+  const {user, setUser, checkUser} = useContext(UserContext)
+  
   
 useEffect(() => {
   function listener(data) {
@@ -80,7 +56,7 @@ console.log(user)
         <Stack.Navigator>
           {
             user ? (
-                <Stack.Screen name='Home' component={Home} />
+                <Stack.Screen name='Home' component={Home} user={user} test='poop'/>
 
             )
               :

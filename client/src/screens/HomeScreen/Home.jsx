@@ -1,28 +1,62 @@
-import React from 'react'
-import { StyleSheet, Text, View, Pressable } from 'react-native'
+import React, { useEffect, useState, useContext } from 'react'
+import { StyleSheet, Text, View, Pressable, ScrollViewBase } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useForm } from 'react-hook-form'
 import { signOut } from 'aws-amplify/auth'
+import { UserContext } from '../../context/UserProvider'
+import axios from 'axios'
 
 import CustomButton from '../../components/CustomButton'
 import CustomInput from '../../components/CustomInput'
 import ToDo from '../../components/ToDo'
 
-const Home = () => {
+
+
+const Home = (props) => {
+  
+  const { user } = useContext(UserContext)
 
   const navigation = useNavigation()
 
+
+  const{
+    username,
+    userId
+  } = user
+
   const {control, handleSubmit} = useForm()
 
-  function onSignInPress(data) {
-    console.log(data)
+  const [ allToDos, setAllToDos] = useState([])
+
+  async function getAllToDos() {
+    try{
+      const data = await axios.get('http://localhost:9000/todo/')
+      setAllToDos(data.data)
+    }
+    catch(error) {
+      console.log(error)
+    }
+  }
+  
+  async function submitToDo(data) {
+    try {
+      const response = await axios.post(`http://localhost:9000/todo/${username}`, data)
+      console.log(response)
+      setAllToDos(prevState => {
+        return [...prevState,
+        response]
+      })
+    }
+    catch(error) {
+      console.log(error)
+    }
   }
 
+  function onSubmitPress(data) {
+    submitToDo(data)
+    console.log('input', data)
+  }
 
-
-
-
-  
   async function handleSignOut() {
     try {
       await signOut();
@@ -30,9 +64,19 @@ const Home = () => {
       console.log('error signing out: ', error);
     }
   }
+  
+
+  useEffect(() => {
+    getAllToDos()
+  }, [allToDos]) 
 
 
-  console.log('')
+  const todo = allToDos.map((item, i) => {
+    return <ToDo 
+      key={i}
+      title={item.title}
+    />
+  }) 
 
   return (
     <View style={styles.container}>
@@ -66,13 +110,15 @@ const Home = () => {
         /> */}
         <CustomButton 
           text='Submit'
-          onPress={handleSubmit(onSignInPress)}
+          onPress={handleSubmit(onSubmitPress)}
         />
       </View>
 
-      <View style={styles.list}>
-        <ToDo />
-      </View>
+      {/* <ScrollViewBase> */}
+        <View style={styles.list}>
+          {todo}
+        </View>
+      {/* </ScrollViewBase>   */}
 
       <View style={styles.footer}>
         <CustomButton
@@ -101,7 +147,6 @@ const styles = StyleSheet.create({
   },
   form: {
     alignItems: 'center',
-
     width: '100%'
   },
   list:{
