@@ -20,7 +20,7 @@ require('dotenv').config()
 todoRouter.get('/', async (req, res, next) => {
     try{
         const response = await ToDo.find()
-        console.log(response.data.todo)
+        console.log(response)
         res.status(200).send(response)
     }
     catch(err) {

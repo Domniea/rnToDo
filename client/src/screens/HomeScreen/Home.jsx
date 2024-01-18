@@ -17,8 +17,8 @@ const Home = (props) => {
   
   const {
     user,
-    allToDos,
-    setAllToDos
+    // allToDos,
+    // setAllToDos
   } = useContext(UserContext)
 
   const navigation = useNavigation()
@@ -30,7 +30,7 @@ const Home = (props) => {
 
   const {control, handleSubmit} = useForm()
 
-  // const [ allToDos, setAllToDos] = useState([])
+  const [ allToDos, setAllToDos] = useState([])
 
   async function getAllToDos() {
     try{
