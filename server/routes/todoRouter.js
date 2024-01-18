@@ -87,7 +87,7 @@ todoRouter.put('/:userId', async (req, res, next) => {
             req.body,
             {new: true}
         )
-        console.log(response.data.todo)
+        console.log(response)
         res.status(200).send(response)
     }
     catch(err) {
