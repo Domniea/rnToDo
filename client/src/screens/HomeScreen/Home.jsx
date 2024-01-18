@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { StyleSheet, Text, View, Pressable, ScrollViewBase } from 'react-native'
+import { StyleSheet, Text, View, Pressable, ScrollViewBase, TouchableWithoutFeedback,Keyboard } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useForm } from 'react-hook-form'
 import { signOut } from 'aws-amplify/auth'
@@ -9,24 +9,28 @@ import axios from 'axios'
 import CustomButton from '../../components/CustomButton'
 import CustomInput from '../../components/CustomInput'
 import ToDo from '../../components/ToDo'
+import PostToDo from '../PostToDo'
 
 
 
 const Home = (props) => {
   
-  const { user } = useContext(UserContext)
+  const {
+    user,
+    allToDos,
+    setAllToDos
+  } = useContext(UserContext)
 
   const navigation = useNavigation()
 
 
   const{
     username,
-    userId
   } = user
 
   const {control, handleSubmit} = useForm()
 
-  const [ allToDos, setAllToDos] = useState([])
+  // const [ allToDos, setAllToDos] = useState([])
 
   async function getAllToDos() {
     try{
@@ -55,6 +59,7 @@ const Home = (props) => {
   function onSubmitPress(data) {
     submitToDo(data)
     console.log('input', data)
+    getAllToDos()
   }
 
   async function handleSignOut() {
@@ -68,7 +73,7 @@ const Home = (props) => {
 
   useEffect(() => {
     getAllToDos()
-  }, [allToDos]) 
+  }, []) 
 
 
   const todo = allToDos.map((item, i) => {
@@ -79,18 +84,20 @@ const Home = (props) => {
   }) 
 
   return (
-    <View style={styles.container}>
- 
-      <Text style={styles.header}>Home Page</Text>
-      <View style={styles.form}>
-        <CustomInput 
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <CustomButton text='test' onPress={() => navigation.navigate(PostToDo)}/>
+        <Text style={styles.header}>Home Page</Text>
+        <View style={styles.form}>
+          <CustomInput 
           name='title'
           placeholder='What do you need to do?'
           control={control}
           rules={{
             required: 'Title is required'
           }}
-        />
+          keyboardType="default"
+          />
         
         {/* <CustomInput 
           name='description'
@@ -108,11 +115,11 @@ const Home = (props) => {
             required: 'Title is required'
           }}
         /> */}
-        <CustomButton 
+          <CustomButton 
           text='Submit'
           onPress={handleSubmit(onSubmitPress)}
-        />
-      </View>
+           />
+        </View>
 
       {/* <ScrollViewBase> */}
         <View style={styles.list}>
@@ -127,8 +134,11 @@ const Home = (props) => {
 
         />
       </View>
-    
-    </View>
+
+      </View>
+
+  </TouchableWithoutFeedback>
+
   )
 }
 

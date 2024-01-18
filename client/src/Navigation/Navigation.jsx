@@ -11,52 +11,54 @@ import ConfirmEmail from '../screens/ConfirmEmailScreen/ConfirmEmail';
 import ResetPassword from '../screens/ResetPasswordScreen/ResetPassword';
 import ForgotPaassword from '../screens/ForgotPaassword';
 import Home from '../screens/HomeScreen/Home';
-import ProtectedRoute from '../components/ProtectedRoute';
+import PostToDo from '../screens/PostToDo';
 
-import { getCurrentUser } from 'aws-amplify/auth';
 import { UserContext } from '../context/UserProvider';
 
 
 
 const Stack = createNativeStackNavigator();
 
-  const Navigation = () => {
+const Navigation = () => {
 
   const {user, setUser, checkUser} = useContext(UserContext)
-  
-  
-useEffect(() => {
-  function listener(data) {
-    if (data.payload.event === 'signedIn') {
-      checkUser()
+    
+    
+  useEffect(() => {
+    function listener(data) {
+      if (data.payload.event === 'signedIn') {
+        checkUser()
+      }
+      console.log(data.payload.event)
     }
-    console.log(data.payload.event)
-  }
 
-  Hub.listen('auth', listener)
-  return () => Hub.remove('auth', listener)
-}, [])
+    Hub.listen('auth', listener)
+    return () => Hub.remove('auth', listener)
+  }, [])
 
-useEffect(() => {
-  function listener(data) {
-    if (data.payload.event === 'signedOut') {
-      setUser(undefined)
+  useEffect(() => {
+    function listener(data) {
+      if (data.payload.event === 'signedOut') {
+        setUser(undefined)
+      }
+      console.log(data.payload.event)
     }
-    console.log(data.payload.event)
-  }
 
-  Hub.listen('auth', listener)
-  return () => Hub.remove('auth', listener)
-}, [])
+    Hub.listen('auth', listener)
+    return () => Hub.remove('auth', listener)
+  }, [])
 
-console.log(user)
+  console.log(user)
 
   return (
     <NavigationContainer>
         <Stack.Navigator>
           {
             user ? (
+              <Stack.Group>
                 <Stack.Screen name='Home' component={Home} user={user} test='poop'/>
+                <Stack.Screen name='PostToDo' component={PostToDo} options={{presentation: 'modal'}}/>
+              </Stack.Group>
 
             )
               :

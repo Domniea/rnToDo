@@ -8,7 +8,8 @@ const CustomInput = (props) => {
         placeholder,
         control,
         rules = {},
-        secureTextEntry
+        secureTextEntry,
+        keyboardType
     } = props
 
   return (
@@ -26,6 +27,7 @@ const CustomInput = (props) => {
                 placeholder={placeholder}
                 style={[styles.input]}
                 secureTextEntry={secureTextEntry}
+                keyboardType={keyboardType}
                 />
               </View>
               {

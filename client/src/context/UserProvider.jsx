@@ -15,6 +15,7 @@ function UserProvider(props) {
     // const navigation = useNavigation()
 
     const [user, setUser] = useState(undefined)
+    const [ allToDos, setAllToDos] = useState([])
 
     async function checkUser() {
         try {
@@ -23,16 +24,11 @@ function UserProvider(props) {
         } catch (err) {
             console.log(err);
         }
-        }
+    }
 
     useEffect(() => {
         checkUser()
     }, [])
-
-    
-    function onGoogle() {
-        console.log('Google In')
-    }
 
     function onFacebook() {
         console.log('Facebook In')
@@ -46,9 +42,10 @@ function UserProvider(props) {
         <UserContext.Provider
             value={{
                 user,
+                allToDos,
+                setAllToDos,
                 setUser,
                 checkUser,
-                onGoogle,
                 onFacebook,
                 onApple
             }}
