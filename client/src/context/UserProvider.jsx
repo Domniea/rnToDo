@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useState, createContext } from "react";
 
+import { signOut } from 'aws-amplify/auth'
 import { getCurrentUser } from 'aws-amplify/auth';
 
 const UserContext = createContext()
@@ -15,7 +16,7 @@ function UserProvider(props) {
     // const navigation = useNavigation()
 
     const [user, setUser] = useState(undefined)
-    const [ allToDos, setAllToDos] = useState([])
+    // const [ allToDos, setAllToDos] = useState([])
 
     async function checkUser() {
         try {
@@ -26,9 +27,20 @@ function UserProvider(props) {
         }
     }
 
+    async function handleSignOut() {
+        try {
+          await signOut();
+        } catch (error) {
+          console.log('error signing out: ', error);
+        }
+      }
+    
+
     useEffect(() => {
         checkUser()
     }, [])
+
+    
 
     function onFacebook() {
         console.log('Facebook In')
@@ -42,9 +54,8 @@ function UserProvider(props) {
         <UserContext.Provider
             value={{
                 user,
-                allToDos,
-                setAllToDos,
                 setUser,
+                handleSignOut,
                 checkUser,
                 onFacebook,
                 onApple

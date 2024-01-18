@@ -2,14 +2,14 @@ import React, { useEffect, useState, useContext } from 'react'
 import { StyleSheet, Text, View, Pressable, ScrollViewBase, TouchableWithoutFeedback,Keyboard } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useForm } from 'react-hook-form'
-import { signOut } from 'aws-amplify/auth'
 import { UserContext } from '../../context/UserProvider'
-import axios from 'axios'
+// import axios from 'axios'
 
 import CustomButton from '../../components/CustomButton'
 import CustomInput from '../../components/CustomInput'
 import ToDo from '../../components/ToDo'
 import PostToDo from '../PostToDo'
+import { ToDoContext } from '../../context/ToDoProvider'
 
 
 
@@ -17,9 +17,15 @@ const Home = (props) => {
   
   const {
     user,
-    // allToDos,
-    // setAllToDos
+    handleSignOut
   } = useContext(UserContext)
+
+  const {
+    allToDos,
+    // setAllToDos,
+    getAllToDos,
+    // submitToDo
+  } = useContext(ToDoContext)
 
   const navigation = useNavigation()
 
@@ -28,52 +34,52 @@ const Home = (props) => {
     username,
   } = user
 
-  const {control, handleSubmit} = useForm()
+  // const {control, handleSubmit} = useForm()
 
-  const [ allToDos, setAllToDos] = useState([])
+  // const [ allToDos, setAllToDos] = useState([])
 
-  async function getAllToDos() {
-    try{
-      const data = await axios.get('https://rntodo-production.up.railway.app/todo')
-      setAllToDos(data.data)
-    }
-    catch(error) {
-      console.log(error)
-    }
-  }
+  // async function getAllToDos() {
+  //   try{
+  //     const data = await axios.get('https://rntodo-production.up.railway.app/todo')
+  //     setAllToDos(data.data)
+  //   }
+  //   catch(error) {
+  //     console.log(error)
+  //   }
+  // }
   
-  async function submitToDo(data) {
-    try {
-      const response = await axios.post(`https://rntodo-production.up.railway.app/todo/${username}`, data)
-      console.log(response)
-      setAllToDos(prevState => {
-        return [...prevState,
-        response]
-      })
-    }
-    catch(error) {
-      console.log(error)
-    }
-  }
+  // async function submitToDo(data) {
+  //   try {
+  //     const response = await axios.post(`https://rntodo-production.up.railway.app/todo/${username}`, data)
+  //     console.log(response)
+  //     setAllToDos(prevState => {
+  //       return [...prevState,
+  //       response]
+  //     })
+  //   }
+  //   catch(error) {
+  //     console.log(error)
+  //   }
+  // }
 
-  function onSubmitPress(data) {
-    submitToDo(data)
-    console.log('input', data)
-    getAllToDos()
-  }
+  // function onSubmitPress(data) {
+  //   submitToDo(data)
+  //   console.log('input', data)
+  //   getAllToDos()
+  // }
 
-  async function handleSignOut() {
-    try {
-      await signOut();
-    } catch (error) {
-      console.log('error signing out: ', error);
-    }
-  }
-  
+  // async function handleSignOut() {
+  //   try {
+  //     await signOut();
+  //   } catch (error) {
+  //     console.log('error signing out: ', error);
+  //   }
+  // }
+
 
   useEffect(() => {
     getAllToDos()
-  }, []) 
+  }, [allToDos]) 
 
 
   const todo = allToDos.map((item, i) => {
@@ -86,9 +92,9 @@ const Home = (props) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        <CustomButton text='test' onPress={() => navigation.navigate(PostToDo)}/>
-        <Text style={styles.header}>Home Page</Text>
-        <View style={styles.form}>
+        <CustomButton text='Add ToDo' onPress={() => navigation.navigate(PostToDo)}/>
+        <Text style={styles.header}>ToDo's</Text>
+        {/* <View style={styles.form}>
           <CustomInput 
           name='title'
           placeholder='What do you need to do?'
@@ -98,28 +104,11 @@ const Home = (props) => {
           }}
           keyboardType="default"
           />
-        
-        {/* <CustomInput 
-          name='description'
-          placeholder='* Notes'
-          control={control}
-          rules={{
-            required: 'Title is required'
-          }}
-        /> */}
-        {/* <CustomInput 
-          name='title'
-          placeholder='What do you need to do?'
-          control={control}
-          rules={{
-            required: 'Title is required'
-          }}
-        /> */}
           <CustomButton 
           text='Submit'
           onPress={handleSubmit(onSubmitPress)}
            />
-        </View>
+        </View> */}
 
       {/* <ScrollViewBase> */}
         <View style={styles.list}>

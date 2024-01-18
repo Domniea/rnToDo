@@ -8,6 +8,7 @@ import {
 
 import Navigation from './src/Navigation/Navigation';
 import { UserProvider } from './src/context/UserProvider';
+import { ToDoProvider } from './src/context/ToDoProvider';
 
 // App.js
 
@@ -32,7 +33,9 @@ function App(): React.JSX.Element {
     // <SafeAreaView  >
       <View style={styles.root}>
         <UserProvider>
+          <ToDoProvider>
           <Navigation />
+          </ToDoProvider>
         </UserProvider>
       </View>
     // </SafeAreaView>
