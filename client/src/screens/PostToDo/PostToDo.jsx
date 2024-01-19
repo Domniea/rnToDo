@@ -31,7 +31,7 @@ const PostToDo = () => {
     
 
     function onSubmitPress(data) {
-        submitToDo(data, username)
+        submitToDo(username, data)
         getAllToDos()
         navigation.goBack()
 

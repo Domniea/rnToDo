@@ -19,10 +19,10 @@ function ToDoProvider(props) {
         }
       }
       
-    async function submitToDo(data, path) {
+    async function submitToDo(path, data) {
         try {
           const response = await axios.post(`https://rntodo-production.up.railway.app/todo/${path}`, data)
-          console.log(response.data)
+          console.log(response.params)
           setAllToDos(prevState => {
             return [...prevState,
             response]

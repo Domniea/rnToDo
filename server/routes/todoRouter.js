@@ -19,16 +19,18 @@ todoRouter.get('/', async (req, res, next) => {
 
 
 //Get Users ToDo
-async function getUsersToDo(user) {
+todoRouter.get('/:userId', async (req, res, next) => {
     try{
-      const data = await axios.get(`https://rntodo-production.up.railway.app/todo/${user}`)
-      setAllToDos(data.data)
+        const response = await ToDo.find(
+          { _id: req.params.userId }
+        )
+        res.status(200).send(response)
     }
-    catch(error) {
-      console.log(error)
+    catch(err) {
+        next(err)
     }
-  }
-  
+
+})
 
 //Post ToDo
 todoRouter.post('/:username', async (req, res, next) => {
