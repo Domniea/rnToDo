@@ -90,7 +90,7 @@ const Home = (props) => {
     return <ToDo 
       key={i}
       title={item.title}
-      onPress={() => deleteToDo(username)}
+      onPress={() => deleteToDo(item._id)}
     />
   }) 
 

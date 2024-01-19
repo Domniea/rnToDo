@@ -61,10 +61,9 @@ todoRouter.post('/:userId', async (req, res, next) => {
 //    })
 // })
 
-todoRouter.delete('/:userId', async (req, res, next) => {
+todoRouter.delete('/:todoid', async (req, res, next) => {
     try{
-        const response = await ToDo.findOneAndDelete({ userId: req.params.userId})
-        console.log(response)
+        const response = await ToDo.findOneAndDelete({ _id: req.params.todoid})
         res.status(200).send('Item was deleted')
     }
     catch(err) {
