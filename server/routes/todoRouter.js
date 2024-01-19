@@ -5,18 +5,7 @@ const todo = require('../models/todo')
 require('dotenv').config()
 
 
-// todoRouter.get('/', (req, res, next) => {
-//     const response = ToDo.find(
-//         (err, allToDo) => {
-//             if(err) {
-//                 res.status(500)
-//                 return next(err)
-//             }
-//             return res.status(200).send(allToDo)
-//         }
-//     )
-// })
-
+//Get All
 todoRouter.get('/', async (req, res, next) => {
     try{
         const response = await ToDo.find()
@@ -28,6 +17,20 @@ todoRouter.get('/', async (req, res, next) => {
 
 })
 
+
+//Get Users ToDo
+async function getUsersToDo(user) {
+    try{
+      const data = await axios.get(`https://rntodo-production.up.railway.app/todo/${user}`)
+      setAllToDos(data.data)
+    }
+    catch(error) {
+      console.log(error)
+    }
+  }
+  
+
+//Post ToDo
 todoRouter.post('/:username', async (req, res, next) => {
     const newToDo = new ToDo(req.body)
     try{
