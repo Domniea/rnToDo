@@ -60,6 +60,7 @@ todoRouter.delete('/:userId', async (req, res, next) => {
         res.status(200).send('Item was deleted')
     }
     catch(err) {
+        console.log(err)
         res.status(500)
         next(err)
     }
