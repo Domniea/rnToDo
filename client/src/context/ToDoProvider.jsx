@@ -9,6 +9,7 @@ function ToDoProvider(props) {
 
     const [ allToDos, setAllToDos] = useState([])
 
+    //Get All
     async function getAllToDos() {
         try{
           const data = await axios.get('https://rntodo-production.up.railway.app/todo/')
@@ -18,31 +19,44 @@ function ToDoProvider(props) {
           console.log(error)
         }
       }
-      
-    async function submitToDo(path, data) {
-        try {
-          const response = await axios.post(`https://rntodo-production.up.railway.app/todo/${path}`, data)
-          console.log(response)
-          setAllToDos(prevState => {
-            return [...prevState,
-            response]
-          })
+    
+    //Get Users ToDo
+    async function getUsersToDo(userId) {
+        try{
+          const data = await axios.get(`https://rntodo-production.up.railway.app/todo/${userId}`)
+          setAllToDos(data.data)
         }
         catch(error) {
           console.log(error)
         }
       }
 
-      async function deleteToDo(path) {
-        console.log('deleted')
+    //Post ToDo
+    async function submitToDo(path, data) {
         try {
-          const response = await axios.delete(`https://rntodo-production.up.railway.app/todo/${path}`)
-          console.log(response)
+        const response = await axios.post(`https://rntodo-production.up.railway.app/todo/${path}`, data)
+        console.log(response)
+        setAllToDos(prevState => {
+            return [...prevState,
+            response]
+        })
         }
         catch(error) {
-          console.log(error)
+        console.log(error)
         }
-      }
+    }
+      
+    //Delete ToDo
+    async function deleteToDo(path) {
+        console.log('deleted')
+        try {
+            const response = await axios.delete(`https://rntodo-production.up.railway.app/todo/${path}`)
+            console.log(response)
+        }
+        catch(error) {
+            console.log(error)
+        }
+    }
 
     return (
         <ToDoContext.Provider
@@ -50,6 +64,7 @@ function ToDoProvider(props) {
                 allToDos,
                 setAllToDos,
                 getAllToDos,
+                getUsersToDo,
                 submitToDo,
                 deleteToDo
             }}

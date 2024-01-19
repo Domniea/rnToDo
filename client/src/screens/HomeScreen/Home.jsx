@@ -26,6 +26,7 @@ const Home = (props) => {
     allToDos,
     // setAllToDos,
     getAllToDos,
+    getUsersToDo,
     deleteToDo
   } = useContext(ToDoContext)
 
@@ -80,7 +81,8 @@ const Home = (props) => {
 
 
   useEffect(() => {
-    getAllToDos()
+    // getAllToDos()
+    getUsersToDo(username)
   }, [allToDos]) 
 
 
