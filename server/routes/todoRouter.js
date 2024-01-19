@@ -22,7 +22,7 @@ todoRouter.get('/', async (req, res, next) => {
 todoRouter.get('/:userId', async (req, res, next) => {
     try{
         const response = await ToDo.find(
-          { userId: req.params.username }
+          { userId: req.params.userId }
         )
         res.status(200).send(response)
     }
