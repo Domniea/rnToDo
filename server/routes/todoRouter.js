@@ -20,7 +20,6 @@ require('dotenv').config()
 todoRouter.get('/', async (req, res, next) => {
     try{
         const response = await ToDo.find()
-        console.log(response)
         res.status(200).send(response)
     }
     catch(err) {
@@ -33,7 +32,6 @@ todoRouter.post('/:username', async (req, res, next) => {
     const newToDo = new ToDo(req.body)
     try{
        const todo =  await newToDo.save()
-       console.log('Here', newToDo)
        res.status(200).send({todo})
     }
     catch(err) {
@@ -87,7 +85,6 @@ todoRouter.put('/:userId', async (req, res, next) => {
             req.body,
             {new: true}
         )
-        console.log(response.data.todo)
         res.status(200).send(response)
     }
     catch(err) {

@@ -32,7 +32,6 @@ const PostToDo = () => {
 
     function onSubmitPress(data) {
         submitToDo(data, username)
-        console.log('input', data)
         getAllToDos()
         navigation.goBack()
 

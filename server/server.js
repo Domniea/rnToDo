@@ -24,7 +24,6 @@ app.use(
   );
 
 app.get('/', (req, res) => {
-    console.log(req)
     res.status(200).send('Welcome to the server')
 })
 
@@ -36,7 +35,6 @@ app.use('/todo', require('./routes/todoRouter'))
 // })
 
 app.use((err, req, res, next) => {
-    console.log(err)
         if(err.name === 'Unauthorized'){
             res.status(err.status)
         }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { StyleSheet, Text, View, Pressable, ScrollViewBase, TouchableWithoutFeedback,Keyboard } from 'react-native'
+import { StyleSheet, Text, View, useWindowDimensions, ScrollView, TouchableWithoutFeedback,Keyboard } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useForm } from 'react-hook-form'
 import { UserContext } from '../../context/UserProvider'
@@ -15,6 +15,8 @@ import { ToDoContext } from '../../context/ToDoProvider'
 
 const Home = (props) => {
   
+  const { height,width } = useWindowDimensions()
+
   const {
     user,
     handleSignOut
@@ -24,7 +26,7 @@ const Home = (props) => {
     allToDos,
     // setAllToDos,
     getAllToDos,
-    // submitToDo
+    deleteToDo
   } = useContext(ToDoContext)
 
   const navigation = useNavigation()
@@ -86,6 +88,7 @@ const Home = (props) => {
     return <ToDo 
       key={i}
       title={item.title}
+      onPress={() => deleteToDo(username)}
     />
   }) 
 
@@ -109,12 +112,13 @@ const Home = (props) => {
           onPress={handleSubmit(onSubmitPress)}
            />
         </View> */}
-
-      {/* <ScrollViewBase> */}
-        <View style={styles.list}>
-          {todo}
-        </View>
-      {/* </ScrollViewBase>   */}
+      <View style={[{height: height * .6}, {width: width * .8}]}>
+        <ScrollView >
+          <View style={[styles.list]}>
+            {todo}
+          </View>
+        </ScrollView>  
+      </View>
 
       <View style={styles.footer}>
         <CustomButton
@@ -149,7 +153,6 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   list:{
-
   },
   footer: {
     position: 'absolute',

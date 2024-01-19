@@ -22,11 +22,22 @@ function ToDoProvider(props) {
     async function submitToDo(data, path) {
         try {
           const response = await axios.post(`https://rntodo-production.up.railway.app/todo/${path}`, data)
-          console.log(response)
+          console.log(response.data)
           setAllToDos(prevState => {
             return [...prevState,
             response]
           })
+        }
+        catch(error) {
+          console.log(error)
+        }
+      }
+
+      async function deleteToDo(path) {
+        console.log('deleted')
+        try {
+          const response = await axios.delete(`https://rntodo-production.up.railway.app/todo/${path}`)
+          console.log(response)
         }
         catch(error) {
           console.log(error)
@@ -39,7 +50,8 @@ function ToDoProvider(props) {
                 allToDos,
                 setAllToDos,
                 getAllToDos,
-                submitToDo
+                submitToDo,
+                deleteToDo
             }}
         >
             {props.children}

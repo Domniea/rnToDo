@@ -8,7 +8,8 @@ const CustomButton = (props) => {
         onPress,
         type='PRIMARY', 
         bgColor,
-        fgColor
+        fgColor,
+        btnWidth
         
     } = props
 
@@ -17,7 +18,8 @@ const CustomButton = (props) => {
         style={[
             styles.container,
             styles[`container_${type}`],
-            bgColor ? {backgroundColor: bgColor} : {}
+            bgColor ? {backgroundColor: bgColor} : {},
+            btnWidth ? {width: btnWidth} : {width: '100%'}
         ]}
         onPress={onPress}
     >
@@ -39,7 +41,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginVertical: 5,
         padding: 15,
-        width: '100%'
+        // width: '100%'
     },
     text: {
         color: 'white',
