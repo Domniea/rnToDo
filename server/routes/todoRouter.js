@@ -33,11 +33,13 @@ todoRouter.get('/:userId', async (req, res, next) => {
 })
 
 //Post ToDo
-todoRouter.post('/:username', async (req, res, next) => {
+todoRouter.post('/:userId', async (req, res, next) => {
+    console.log('req', req)
     const newToDo = new ToDo(req.body)
     try{
        const todo =  await newToDo.save()
        res.status(200).send({todo})
+       console.log('res', res)
     }
     catch(err) {
         next(err)
