@@ -22,7 +22,7 @@ todoRouter.get('/', async (req, res, next) => {
 todoRouter.get('/:userId', async (req, res, next) => {
     try{
         const response = await ToDo.find(
-          { _id: req.params.userId }
+          { username: req.params.username }
         )
         res.status(200).send(response)
     }
@@ -35,6 +35,7 @@ todoRouter.get('/:userId', async (req, res, next) => {
 //Post ToDo
 todoRouter.post('/:userId', async (req, res, next) => {
     console.log('req', req)
+    req.body.userId = req.params.userId
     const newToDo = new ToDo(req.body)
     try{
        const todo =  await newToDo.save()

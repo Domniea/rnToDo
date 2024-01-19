@@ -3,6 +3,9 @@ const Schema = mongoose.Schema
 
 
 const todoSchema = new Schema({
+    userId: {
+        type: String
+    },
     title: {
         type: String,
         required: true
