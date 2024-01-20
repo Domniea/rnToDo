@@ -39,38 +39,30 @@ const PostToDo = () => {
 
 
   return (
-    <View>
-       <View style={styles.form}>
-          <CustomInput 
-          name='title'
-          placeholder='What do you need to do?'
-          control={control}
-          rules={{
+    <View style={styles.container}>
+        <View style={styles.form}>
+            <CustomInput 
+            name='title'
+            placeholder='What do you need to do?'
+            control={control}
+            rules={{
             required: 'Title is required'
-          }}
-          keyboardType="default"
-          />
-        
-        {/* <CustomInput 
-          name='description'
-          placeholder='* Notes'
-          control={control}
-          rules={{
-            required: 'Title is required'
-          }}
-        /> */}
-        {/* <CustomInput 
-          name='title'
-          placeholder='What do you need to do?'
-          control={control}
-          rules={{
-            required: 'Title is required'
-          }}
-        /> */}
-          <CustomButton 
-          text='Submit'
-          onPress={handleSubmit(onSubmitPress)}
-           />
+            }}
+            keyboardType="default"
+            />
+            <CustomInput 
+            name='description'
+            placeholder='* Notes'
+            control={control}
+            rules={{
+                required: 'Title is required'
+            }}
+            />
+    
+            <CustomButton 
+            text='Submit'
+            onPress={handleSubmit(onSubmitPress)}
+            />
         </View>
     </View>
   )
@@ -78,4 +70,9 @@ const PostToDo = () => {
 
 export default PostToDo
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    container: {
+        // flex: 1,
+        // justifyContent: 'center',
+    }
+})

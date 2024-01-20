@@ -35,7 +35,6 @@ function ToDoProvider(props) {
     async function submitToDo(path, data) {
         try {
         const response = await axios.post(`https://rntodo-production.up.railway.app/todo/${path}`, data)
-        console.log(response)
         setAllToDos(prevState => {
             return [...prevState,
             response]
@@ -45,13 +44,22 @@ function ToDoProvider(props) {
         console.log(error)
         }
     }
-      
+    
+    //Edit ToDo
+    async function editToDO(path, data) {
+        try {
+            const response = await axios.put(`https://rntodo-production.up.railway.app/todo/${path}`, data)
+        }
+        catch(error) {
+            console.log(error)
+        }
+    }
+
     //Delete ToDo
     async function deleteToDo(path) {
         console.log('deleted')
         try {
             const response = await axios.delete(`https://rntodo-production.up.railway.app/todo/${path}`)
-            console.log(response)
         }
         catch(error) {
             console.log(error)

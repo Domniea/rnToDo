@@ -34,58 +34,18 @@ todoRouter.get('/:userId', async (req, res, next) => {
 
 //Post ToDo
 todoRouter.post('/:userId', async (req, res, next) => {
-    console.log('req', req)
     req.body.userId = req.params.userId
     const newToDo = new ToDo(req.body)
     try{
        const todo =  await newToDo.save()
        res.status(200).send({todo})
-       console.log('res', res)
     }
     catch(err) {
         next(err)
     }
 })
 
-
-
-// todoRouter.post('/:userId', (req, res, next) => {
-// //    req.body.user = req.auth._id
-//    const newTodo = new ToDo(req.body)
-//    newTodo.save((err, savedTodo) => {
-//     if(err) {
-//         res.status(500)
-//         return next(err)
-//     }
-//     return res.status(200).send(savedTodo)
-//    })
-// })
-
-todoRouter.delete('/:todoid', async (req, res, next) => {
-    try{
-        const response = await ToDo.findOneAndDelete({ _id: req.params.todoid})
-        res.status(200).send('Item was deleted')
-    }
-    catch(err) {
-        console.log(err)
-        res.status(500)
-        next(err)
-    }
-})
-
-// todoRouter.delete('/:userId', (req, res, next) => {
-//     ToDo.findOneAndDelete(
-//         { _id: req.params.userId },
-//         (err, deletedToDo) => {
-//             if(err) {
-//                 res.status(500)
-//                 return next(err)
-//             }
-//             return res.status(200).send('Item has Been Deleted')
-//         }
-//     )
-// })
-
+//Edit Todo
 todoRouter.put('/:userId', async (req, res, next) => {
     try {
         const response = await ToDo.findOneAndUpdate(
@@ -100,4 +60,19 @@ todoRouter.put('/:userId', async (req, res, next) => {
         next(err)
     }
 })
+
+//Delete ToDo
+todoRouter.delete('/:todoid', async (req, res, next) => {
+    try{
+        const response = await ToDo.findOneAndDelete({ _id: req.params.todoid})
+        res.status(200).send('Item was deleted')
+    }
+    catch(err) {
+        console.log(err)
+        res.status(500)
+        next(err)
+    }
+})
+
+
 module.exports = todoRouter

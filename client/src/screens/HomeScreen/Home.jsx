@@ -37,49 +37,6 @@ const Home = (props) => {
     username,
   } = user
 
-  // const {control, handleSubmit} = useForm()
-
-  // const [ allToDos, setAllToDos] = useState([])
-
-  // async function getAllToDos() {
-  //   try{
-  //     const data = await axios.get('https://rntodo-production.up.railway.app/todo')
-  //     setAllToDos(data.data)
-  //   }
-  //   catch(error) {
-  //     console.log(error)
-  //   }
-  // }
-  
-  // async function submitToDo(data) {
-  //   try {
-  //     const response = await axios.post(`https://rntodo-production.up.railway.app/todo/${username}`, data)
-  //     console.log(response)
-  //     setAllToDos(prevState => {
-  //       return [...prevState,
-  //       response]
-  //     })
-  //   }
-  //   catch(error) {
-  //     console.log(error)
-  //   }
-  // }
-
-  // function onSubmitPress(data) {
-  //   submitToDo(data)
-  //   console.log('input', data)
-  //   getAllToDos()
-  // }
-
-  // async function handleSignOut() {
-  //   try {
-  //     await signOut();
-  //   } catch (error) {
-  //     console.log('error signing out: ', error);
-  //   }
-  // }
-
-
   useEffect(() => {
     // getAllToDos()
     getUsersToDo(username)
@@ -90,14 +47,18 @@ const Home = (props) => {
     return <ToDo 
       key={i}
       title={item.title}
+      _id={item._id}
+      notes={item.description}
       onPress={() => deleteToDo(item._id)}
+      navigation={navigation}
     />
+    // return <Text key={i}>Test</Text>
   }) 
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        <CustomButton text='Add ToDo' onPress={() => navigation.navigate(PostToDo)}/>
+        <CustomButton text='Add ToDo' onPress={() => navigation.navigate(PostToDo,{navigation})}/>
         <Text style={styles.header}>ToDo's</Text>
         {/* <View style={styles.form}>
           <CustomInput 

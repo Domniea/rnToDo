@@ -12,8 +12,11 @@ import ResetPassword from '../screens/ResetPasswordScreen/ResetPassword';
 import ForgotPaassword from '../screens/ForgotPaassword';
 import Home from '../screens/HomeScreen/Home';
 import PostToDo from '../screens/PostToDo';
+import ToDo from '../components/ToDo'
+import ToDoDescription from '../screens/ToDoDescription/ToDoDescription';
 
 import { UserContext } from '../context/UserProvider';
+import { ToDoProvider } from '../context/ToDoProvider';
 
 
 
@@ -52,12 +55,35 @@ const Navigation = () => {
 
   return (
     <NavigationContainer>
+      <ToDoProvider>
         <Stack.Navigator>
           {
             user ? (
               <Stack.Group>
-                <Stack.Screen name='Home' component={Home} user={user} test='poop'/>
-                <Stack.Screen name='PostToDo' component={PostToDo} options={{presentation: 'modal'}}/>
+                <Stack.Screen 
+                  name='Home' 
+                  component={Home} 
+                  user={user}
+                  options={{title: 'Welcome'}}
+                />
+                {/* <Stack.Screen name='ToDo' component={ToDo}/> */}
+                <Stack.Screen 
+                  name='PostToDo' 
+                  component={PostToDo} 
+                  options={{
+                    presentation: 'modal', 
+                    title: 'Add a todo'
+                  }}
+                />
+                <Stack.Screen 
+                  name='ToDoDescription' 
+                  component={ToDoDescription} 
+                  options={({route}) => 
+                  ({ presentation: 'modal', 
+                  title: `${route.params.title} Details`})
+                }
+           
+                />
               </Stack.Group>
 
             )
@@ -74,6 +100,7 @@ const Navigation = () => {
               )
           }
         </Stack.Navigator>
+        </ToDoProvider>
     </NavigationContainer>
   )
 }

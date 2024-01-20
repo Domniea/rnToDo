@@ -105,7 +105,7 @@ const SignIn = () => {
                     {/* <Pressable onPress={onPressSignOut}>
                         <Text>Sign Out</Text>
                     </Pressable> */}
-                    
+                        
                         <CustomInput 
                             placeholder='Username'
                             name='username'
