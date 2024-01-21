@@ -51,8 +51,6 @@ const Navigation = () => {
     return () => Hub.remove('auth', listener)
   }, [])
 
-  console.log(user)
-
   return (
     <NavigationContainer>
       <ToDoProvider>
@@ -80,7 +78,8 @@ const Navigation = () => {
                   component={ToDoDescription} 
                   options={({route}) => 
                   ({ presentation: 'modal', 
-                  title: `${route.params.title} Details`})
+                  title: `${route.params.title} Details`,
+                  })
                 }
            
                 />

@@ -23,7 +23,7 @@ const ToDoDescription = ({route,navigation}) => {
 
     
     return (
-        <View style={{height: '60%'}}>
+        <View style={styles.container}>
             {
                 !edit ?
                 <>
@@ -42,11 +42,11 @@ const ToDoDescription = ({route,navigation}) => {
                     <Text>Edit Inputs</Text>
                 </>
             }
-        
-        <CustomButton 
-            text='Edit'
-            onPress={() => toggleEdit()}
-        />
+            
+            <CustomButton 
+                text='Edit'
+                onPress={() => toggleEdit()}
+            />
     
         
         </View>

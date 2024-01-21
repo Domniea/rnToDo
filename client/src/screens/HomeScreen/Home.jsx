@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { StyleSheet, Text, View, useWindowDimensions, ScrollView, TouchableWithoutFeedback,Keyboard } from 'react-native'
+import { StyleSheet, Text, View, useWindowDimensions, ScrollView, TouchableWithoutFeedback,Keyboard, Pressable } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useForm } from 'react-hook-form'
 import { UserContext } from '../../context/UserProvider'
@@ -10,6 +10,8 @@ import CustomInput from '../../components/CustomInput'
 import ToDo from '../../components/ToDo'
 import PostToDo from '../PostToDo'
 import { ToDoContext } from '../../context/ToDoProvider'
+import TestModal from '../../components/TestModal'
+import { Button } from '@aws-amplify/ui-react-native/dist/primitives'
 
 
 
@@ -24,24 +26,32 @@ const Home = (props) => {
 
   const {
     allToDos,
-    // setAllToDos,
-    getAllToDos,
     getUsersToDo,
     deleteToDo
   } = useContext(ToDoContext)
 
   const navigation = useNavigation()
 
+  function submitDelete(id) {
+    deleteToDo(id)
+    getUsersToDo(username)
+  }
 
   const{
     username,
   } = user
 
-  useEffect(() => {
-    // getAllToDos()
-    getUsersToDo(username)
-  }, [allToDos]) 
+  const [modalShown, setModalShown] = useState(false)
 
+  function toggleModal() {
+    setModalShown(prevState => !prevState)
+  }
+
+  useEffect(() => {
+    getUsersToDo(username)
+  }, [allToDos.length]) 
+
+  console.log(modalShown)
 
   const todo = allToDos.map((item, i) => {
     return <ToDo 
@@ -49,7 +59,7 @@ const Home = (props) => {
       title={item.title}
       _id={item._id}
       notes={item.description}
-      onPress={() => deleteToDo(item._id)}
+      onPress={() => submitDelete(item._id)}
       navigation={navigation}
     />
     // return <Text key={i}>Test</Text>
@@ -59,23 +69,10 @@ const Home = (props) => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <CustomButton text='Add ToDo' onPress={() => navigation.navigate(PostToDo,{navigation})}/>
+        <CustomButton onPress={() => toggleModal()} text='test'  />
         <Text style={styles.header}>ToDo's</Text>
-        {/* <View style={styles.form}>
-          <CustomInput 
-          name='title'
-          placeholder='What do you need to do?'
-          control={control}
-          rules={{
-            required: 'Title is required'
-          }}
-          keyboardType="default"
-          />
-          <CustomButton 
-          text='Submit'
-          onPress={handleSubmit(onSubmitPress)}
-           />
-        </View> */}
       <View style={[{height: height * .6}, {width: width * .8}]}>
+       { modalShown && <TestModal test='boobs' toggleModal={toggleModal}/> }
         <ScrollView >
           <View style={[styles.list]}>
             {todo}
@@ -83,14 +80,14 @@ const Home = (props) => {
         </ScrollView>  
       </View>
 
-      <View style={styles.footer}>
-        <CustomButton
-          text='Log Out'
-          onPress={handleSignOut}
+        <View style={styles.footer}>
+          <CustomButton
+            text='Log Out'
+            onPress={handleSignOut}
 
-        />
-      </View>
-
+          />
+        </View>
+      
       </View>
 
   </TouchableWithoutFeedback>

@@ -1,6 +1,8 @@
 import React from "react";
-import {useState, createContext,useContext} from 'react'
+import {useState, createContext, useContext} from 'react'
 import axios from 'axios'
+
+import { UserContext } from "./UserProvider";
 
 
 const ToDoContext = createContext()
@@ -9,10 +11,17 @@ function ToDoProvider(props) {
 
     const [ allToDos, setAllToDos] = useState([])
 
+    const { user } = useContext(UserContext)
+
+    // const { username} = user
+    
+    // console.log('user', user)
+    
+
     //Get All
     async function getAllToDos() {
         try{
-          const data = await axios.get('https://rntodo-production.up.railway.app/todo/')
+          const data = await axios.get('http://localhost:9000/todo/')
           setAllToDos(data.data)
         }
         catch(error) {
@@ -23,8 +32,9 @@ function ToDoProvider(props) {
     //Get Users ToDo
     async function getUsersToDo(userId) {
         try{
-          const data = await axios.get(`https://rntodo-production.up.railway.app/todo/${userId}`)
+          const data = await axios.get(`http://localhost:9000/todo/${userId}`)
           setAllToDos(data.data)
+        
         }
         catch(error) {
           console.log(error)
@@ -34,11 +44,12 @@ function ToDoProvider(props) {
     //Post ToDo
     async function submitToDo(path, data) {
         try {
-        const response = await axios.post(`https://rntodo-production.up.railway.app/todo/${path}`, data)
-        setAllToDos(prevState => {
-            return [...prevState,
-            response]
-        })
+            const response = await axios.post(`http://localhost:9000/todo/${path}`, data)
+            setAllToDos(prevState => {
+                return [...prevState,
+                response]
+            })
+
         }
         catch(error) {
         console.log(error)
@@ -46,9 +57,9 @@ function ToDoProvider(props) {
     }
     
     //Edit ToDo
-    async function editToDO(path, data) {
+    async function editToDo(path, data) {
         try {
-            const response = await axios.put(`https://rntodo-production.up.railway.app/todo/${path}`, data)
+            const response = await axios.put(`http://localhost:9000/todo/${path}`, data)
         }
         catch(error) {
             console.log(error)
@@ -59,7 +70,7 @@ function ToDoProvider(props) {
     async function deleteToDo(path) {
         console.log('deleted')
         try {
-            const response = await axios.delete(`https://rntodo-production.up.railway.app/todo/${path}`)
+            const response = await axios.delete(`http://localhost:9000/todo/${path}`)
         }
         catch(error) {
             console.log(error)

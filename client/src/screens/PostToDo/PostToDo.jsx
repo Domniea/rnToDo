@@ -20,6 +20,7 @@ const PostToDo = () => {
 
     const {
         getAllToDos,
+        getUsersToDo,
         submitToDo
     } = useContext(ToDoContext)
 
@@ -32,11 +33,10 @@ const PostToDo = () => {
 
     function onSubmitPress(data) {
         submitToDo(username, data)
-        getAllToDos()
+        // getUsersToDo(username)
         navigation.goBack()
-
     }
-
+    console.log(username)
 
   return (
     <View style={styles.container}>

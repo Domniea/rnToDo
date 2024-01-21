@@ -1,4 +1,13 @@
-import { View, Text, StyleSheet, useWindowDimensions } from 'react-native'
+import { 
+        View,
+        Text,
+        StyleSheet,
+        useWindowDimensions,
+        TouchableWithoutFeedback,
+        Keyboard,
+        SafeAreaView,
+        ScrollView
+    } from 'react-native'
 import React, { useContext } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useForm } from 'react-hook-form'
@@ -53,88 +62,94 @@ const CreateAccount = () => {
     }
 
   return (
-    <View style={styles.root}>
-        <Text style={styles.header}>Create Account</Text>
+    <SafeAreaView>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={styles.root}>
+                    <Text style={styles.header}>Create Account</Text>
 
-        <CustomInput 
-            name= 'username'
-            placeholder='username' 
-            control={control}
-            rules={{
-                required: 'Username is REQUIRED',
-                minLength: {
-                    value: 8,
-                    message: 'Minimum 8 characters'   
-                },
-                maxLength: {
-                    value: 15,
-                    message: 'Maximum 15 characters'
-                }
-            }}
-        />
-        <CustomInput 
-            name='email'
-            placeholder='Email'
-            control={control}
-            rules={{
-                required: 'Email is REQUIRED',
-                pattern: {
-                    value: EMAIL_REGEX,
-                    message: 'Email is invalid'
-                },
-                maxLength: {
-                    value: 24,
-                    message: 'Maimum 24 characters'
-                }
-            }}
-        />
-        <CustomInput 
-            name='password'
-            placeholder='Password'
-            control={control}
-            rules={{
-                required: 'Password is REQUIRED',
-                minLength: {
-                    value: 8,
-                    message: 'minimum 8 characters'
-                },
-                maxLength: {
-                    value: 15,
-                    message: 'Maximum 15 characters'
-                }
-            }}
-        />
+                    <CustomInput 
+                        name= 'username'
+                        placeholder='username' 
+                        control={control}
+                        rules={{
+                            required: 'Username is REQUIRED',
+                            minLength: {
+                                value: 8,
+                                message: 'Minimum 8 characters'   
+                            },
+                            maxLength: {
+                                value: 15,
+                                message: 'Maximum 15 characters'
+                            }
+                        }}
+                    />
+                    <CustomInput 
+                        name='email'
+                        placeholder='Email'
+                        control={control}
+                        rules={{
+                            required: 'Email is REQUIRED',
+                            pattern: {
+                                value: EMAIL_REGEX,
+                                message: 'Email is invalid'
+                            },
+                            maxLength: {
+                                value: 24,
+                                message: 'Maimum 24 characters'
+                            }
+                        }}
+                    />
+                    <CustomInput 
+                        name='password'
+                        placeholder='Password'
+                        control={control}
+                        rules={{
+                            required: 'Password is REQUIRED',
+                            minLength: {
+                                value: 8,
+                                message: 'minimum 8 characters'
+                            },
+                            maxLength: {
+                                value: 15,
+                                message: 'Maximum 15 characters'
+                            }
+                        }}
+                    />
 
-        <CustomInput 
-            name='passwordRetyped'
-            placeholder='re-type password'
-            control={control}
-            rules={{
-                required: 'Passwords do not match',
-                validate: value => value === pwd || 'Passwords do not match'
-            }}
-           
-        />
+                    <CustomInput 
+                        name='passwordRetyped'
+                        placeholder='re-type password'
+                        control={control}
+                        rules={{
+                            required: 'Passwords do not match',
+                            validate: value => value === pwd || 'Passwords do not match'
+                        }}
+                    
+                    />
 
-        <CustomButton 
-            text='Register'
-            onPress={handleSubmit(handleSignUp)}
-        />
+                    <CustomButton 
+                        text='Register'
+                        onPress={handleSubmit(handleSignUp)}
+                    />
 
-        <Text style={styles.text}>
-            By registering you agree to out{' '}
-            <Text style={styles.link}>Terms of Use</Text> and 
-            <Text style={styles.link}>Privicy Policy</Text>
-        </Text>
+                    <Text style={styles.text}>
+                        By registering you agree to out{' '}
+                        <Text style={styles.link}>Terms of Use</Text> and 
+                        <Text style={styles.link}> Privicy Policy</Text>
+                    </Text>
 
-        <SocialSignInButtons />
+                    <SocialSignInButtons />
 
-        <CustomButton 
-        text="Already have an account?"
-        onPress={onBacktoSignIn}
-        type='TERTIARY'
-         />
-    </View>
+                    <CustomButton 
+                    text="Already have an account?"
+                    onPress={onBacktoSignIn}
+                    type='TERTIARY'
+                    />
+                </View>
+            </ScrollView>
+        </TouchableWithoutFeedback>
+    </SafeAreaView>
   )
 }
 

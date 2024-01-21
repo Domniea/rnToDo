@@ -16,7 +16,6 @@ function UserProvider(props) {
     // const navigation = useNavigation()
 
     const [user, setUser] = useState(undefined)
-    // const [ allToDos, setAllToDos] = useState([])
 
     async function checkUser() {
         try {

@@ -33,9 +33,9 @@ function App(): React.JSX.Element {
     // <SafeAreaView  >
       <View style={styles.root}>
         <UserProvider>
-          {/* <ToDoProvider> */}
-          <Navigation />
-          {/* </ToDoProvider> */}
+          <ToDoProvider>
+            <Navigation />
+          </ToDoProvider>
         </UserProvider>
       </View>
     // </SafeAreaView>

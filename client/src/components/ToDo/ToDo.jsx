@@ -7,6 +7,7 @@ import PostToDo from '../../screens/PostToDo'
 // import Navigation from '../../Navigation'
 import ToDoDescription from '../../screens/ToDoDescription/ToDoDescription'
 
+
 const ToDo = (props) => {
 
     // const navigation = useNavigation()
@@ -21,7 +22,6 @@ const ToDo = (props) => {
         onPress,
         navigation
     } = props
-  
 
     return (
         <View style={styles.inline}>
