@@ -10,14 +10,24 @@ import CustomInput from '../../components/CustomInput'
 import ToDo from '../../components/ToDo'
 import PostToDo from '../PostToDo'
 import { ToDoContext } from '../../context/ToDoProvider'
-import TestModal from '../../components/TestModal'
-import { Button } from '@aws-amplify/ui-react-native/dist/primitives'
+import ToDoDetails from '../ToDoDetails/ToDoDetails'
 
 
 
 const Home = (props) => {
   
+  const [addToDoVisible, setAddToDoVisible] = useState(false)
+  const {detailsVisible, setDetailsVisible} = useState(false)
+
   const { height,width } = useWindowDimensions()
+
+  function toggleAddToDo(){
+    setAddToDoVisible(prevState => !addToDoVisible)
+  }
+
+  function toggleDetails() {
+    setDetailsVisible(prevState => !prevState)
+  }
 
   const {
     user,
@@ -41,17 +51,11 @@ const Home = (props) => {
     username,
   } = user
 
-  const [modalShown, setModalShown] = useState(false)
-
-  function toggleModal() {
-    setModalShown(prevState => !prevState)
-  }
-
   useEffect(() => {
     getUsersToDo(username)
   }, [allToDos.length]) 
 
-  console.log(modalShown)
+  // console.log(modalShown)
 
   const todo = allToDos.map((item, i) => {
     return <ToDo 
@@ -68,11 +72,11 @@ const Home = (props) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        <CustomButton text='Add ToDo' onPress={() => navigation.navigate(PostToDo,{navigation})}/>
-        <CustomButton onPress={() => toggleModal()} text='test'  />
+        <CustomButton text='Add ToDo' onPress={toggleAddToDo}/>
         <Text style={styles.header}>ToDo's</Text>
+       { addToDoVisible && <PostToDo toggleModal={toggleAddToDo}/> }
+       {/* { addToDoVisible && <ToDoDetails toggleModal={toggleDetails}/> } */}
       <View style={[{height: height * .6}, {width: width * .8}]}>
-       { modalShown && <TestModal test='boobs' toggleModal={toggleModal}/> }
         <ScrollView >
           <View style={[styles.list]}>
             {todo}

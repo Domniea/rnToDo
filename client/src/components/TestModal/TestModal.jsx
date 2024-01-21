@@ -11,24 +11,24 @@ const TestModal = (props) => {
 
   return (
         <KeyboardAvoidingView behavior='padding'>
-    <Modal transparent={true} animationType='slide'>
-        <View style={styles.container}>
-            <View style={styles.popUp}>
-                {/* <Text>{test}</Text> */}
-                <CustomInput
-                    name='title'
-                    placeholder='Type title here'
-                    control={control}
-                />
-                <CustomInput
-                    name='description'
-                    placeholder='Type notes here'
-                    control={control}
-                />
-                <CustomButton text='hide' onPress={toggleModal} />
-            </View>
-        </View>
-    </Modal>
+            <Modal transparent={true} animationType='slide'>
+                <View style={styles.container}>
+                    <View style={styles.popUp}>
+                        <Text>Add ToDo</Text>
+                        <CustomInput
+                            name='title'
+                            placeholder='Type title here'
+                            control={control}
+                        />
+                        <CustomInput
+                            name='description'
+                            placeholder='Type notes here'
+                            control={control}
+                        />
+                        <CustomButton text='hide' onPress={toggleModal} />
+                    </View>
+                </View>
+            </Modal>
         </KeyboardAvoidingView>
   )
 }

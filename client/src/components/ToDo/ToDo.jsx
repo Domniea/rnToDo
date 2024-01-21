@@ -4,11 +4,17 @@ import React, { useState } from 'react'
 
 import CustomButton from '../CustomButton'
 import PostToDo from '../../screens/PostToDo'
-// import Navigation from '../../Navigation'
-import ToDoDescription from '../../screens/ToDoDescription/ToDoDescription'
+import ToDoDetails from '../../screens/ToDoDetails/ToDoDetails'
 
 
 const ToDo = (props) => {
+
+    const [detailsVisible, setDetailsVisible] = useState(false)
+
+    function toggleDetails() {
+        setDetailsVisible(prevState => !prevState)
+      }
+    
 
     // const navigation = useNavigation()
 
@@ -18,16 +24,15 @@ const ToDo = (props) => {
         title,
         _id,
         notes,
-        isDone,
-        onPress,
-        navigation
+        onPress
     } = props
 
     return (
         <View style={styles.inline}>
+           { detailsVisible && <ToDoDetails title={title} _id={_id} notes={notes} toggleModal={toggleDetails}/> }
             <Text 
                 style={styles.todo} 
-                onPress={() => navigation.navigate('ToDoDescription', {title: title, notes: notes, _id: _id})} 
+                onPress={toggleDetails}
             >
                 {title}
             </Text>
@@ -46,9 +51,6 @@ const styles = StyleSheet.create({
     },
     todo: {
         fontSize: 25,
-        margin: 5
-    },
-    checkbox: {
         margin: 5
     }
 

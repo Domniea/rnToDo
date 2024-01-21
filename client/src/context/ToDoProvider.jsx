@@ -85,6 +85,7 @@ function ToDoProvider(props) {
                 getAllToDos,
                 getUsersToDo,
                 submitToDo,
+                editToDo,
                 deleteToDo
             }}
         >

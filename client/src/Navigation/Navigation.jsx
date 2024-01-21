@@ -13,7 +13,7 @@ import ForgotPaassword from '../screens/ForgotPaassword';
 import Home from '../screens/HomeScreen/Home';
 import PostToDo from '../screens/PostToDo';
 import ToDo from '../components/ToDo'
-import ToDoDescription from '../screens/ToDoDescription/ToDoDescription';
+import ToDoDescription from '../screens/ToDoDetails/ToDoDetails';
 
 import { UserContext } from '../context/UserProvider';
 import { ToDoProvider } from '../context/ToDoProvider';
@@ -65,20 +65,21 @@ const Navigation = () => {
                   options={{title: 'Welcome'}}
                 />
                 {/* <Stack.Screen name='ToDo' component={ToDo}/> */}
-                <Stack.Screen 
+                {/* <Stack.Screen 
                   name='PostToDo' 
                   component={PostToDo} 
                   options={{
                     presentation: 'modal', 
                     title: 'Add a todo'
                   }}
-                />
+                /> */}
                 <Stack.Screen 
                   name='ToDoDescription' 
                   component={ToDoDescription} 
                   options={({route}) => 
                   ({ presentation: 'modal', 
                   title: `${route.params.title} Details`,
+                  
                   })
                 }
            
