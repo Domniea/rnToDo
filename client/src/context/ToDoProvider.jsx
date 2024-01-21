@@ -21,7 +21,7 @@ function ToDoProvider(props) {
     //Get All
     async function getAllToDos() {
         try{
-          const data = await axios.get('http://localhost:9000/todo/')
+          const data = await axios.get('https://rntodo-production.up.railway.app/todo/')
           setAllToDos(data.data)
         }
         catch(error) {
@@ -32,7 +32,7 @@ function ToDoProvider(props) {
     //Get Users ToDo
     async function getUsersToDo(userId) {
         try{
-          const data = await axios.get(`http://localhost:9000/todo/${userId}`)
+          const data = await axios.get(`https://rntodo-production.up.railway.app/todo/${userId}`)
           setAllToDos(data.data)
         
         }
@@ -44,7 +44,7 @@ function ToDoProvider(props) {
     //Post ToDo
     async function submitToDo(path, data) {
         try {
-            const response = await axios.post(`http://localhost:9000/todo/${path}`, data)
+            const response = await axios.post(`https://rntodo-production.up.railway.app/todo/${path}`, data)
             setAllToDos(prevState => {
                 return [...prevState,
                 response]
@@ -59,7 +59,7 @@ function ToDoProvider(props) {
     //Edit ToDo
     async function editToDo(path, data) {
         try {
-            const response = await axios.put(`http://localhost:9000/todo/${path}`, data)
+            const response = await axios.put(`https://rntodo-production.up.railway.app/todo/${path}`, data)
         }
         catch(error) {
             console.log(error)
@@ -70,7 +70,7 @@ function ToDoProvider(props) {
     async function deleteToDo(path) {
         console.log('deleted')
         try {
-            const response = await axios.delete(`http://localhost:9000/todo/${path}`)
+            const response = await axios.delete(`https://rntodo-production.up.railway.app/todo/${path}`)
         }
         catch(error) {
             console.log(error)
