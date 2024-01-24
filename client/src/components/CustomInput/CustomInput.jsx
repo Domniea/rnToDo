@@ -28,6 +28,7 @@ const CustomInput = (props) => {
                 style={[styles.input]}
                 secureTextEntry={secureTextEntry}
                 keyboardType={keyboardType}
+                placeholderTextColor='#333'
                 />
               </View>
               {
