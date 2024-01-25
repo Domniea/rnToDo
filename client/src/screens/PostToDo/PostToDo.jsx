@@ -28,18 +28,22 @@ const PostToDo = (props) => {
     const {
         username
     } = user
-
+    
     const {
+        fromToggle,
         toggleModal
     } = props
+
+    
+
     const {control, handleSubmit} = useForm()
     
-    console.log(toggleModal)
     function onSubmitPress(data) {
         submitToDo(username, data)
         // getUsersToDo(username)
         // navigation.goBack()
-        toggleModal()
+        {props.route && navigation.goBack() }
+        {fromToggle && toggleModal()}
     }
     console.log(username)
 

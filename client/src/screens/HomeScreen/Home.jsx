@@ -15,7 +15,7 @@ import ToDoDetails from '../ToDoDetails/ToDoDetails'
 
 
 const Home = (props) => {
-  
+
   const [addToDoVisible, setAddToDoVisible] = useState(false)
   const {detailsVisible, setDetailsVisible} = useState(false)
 
@@ -72,9 +72,13 @@ const Home = (props) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
+      <CustomButton
+            text='test'
+            onPress={() => navigation.navigate('TestScreen')}
+          />
         <CustomButton text='Add ToDo' onPress={toggleAddToDo}/>
         <Text style={styles.header}>ToDo's</Text>
-       { addToDoVisible && <PostToDo toggleModal={toggleAddToDo}/> }
+       { addToDoVisible && <PostToDo  fromToggle='fromToggle' toggleModal={toggleAddToDo}/> }
        {/* { addToDoVisible && <ToDoDetails toggleModal={toggleDetails}/> } */}
       <View style={[{height: height * .6}, {width: width * .8}]}>
         <ScrollView >
@@ -88,7 +92,6 @@ const Home = (props) => {
           <CustomButton
             text='Log Out'
             onPress={handleSignOut}
-
           />
         </View>
       

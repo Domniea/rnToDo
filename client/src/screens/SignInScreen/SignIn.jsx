@@ -65,7 +65,7 @@ const SignIn = () => {
         } catch (error) {
           console.log('error signing in', error);
         }
-      }
+    }
 
     async function onPressSignOut() {
         try{

@@ -7,6 +7,10 @@ import CustomInput from '../../components/CustomInput/CustomInput'
 import CustomButton from '../../components/CustomButton/CustomButton'
 import { UserContext } from '../../context/UserProvider'
 
+import { resetPassword } from 'aws-amplify/auth'
+ 
+
+
 const ForgotPassword = () => {
 
     const navigation = useNavigation()  
@@ -18,14 +22,50 @@ const ForgotPassword = () => {
 
     const {height} = useWindowDimensions()
 
-    function onForgotPasswordSubmit() {
-        console.log('Forgot Password Submited')
-        navigation.navigate('ResetPassword')
-    }
 
     function onBacktoSignIn() {
         console.log('On back to sign in')
         navigation.navigate('SignIn')
+    }
+
+    async function forgotPassword(data) {
+        try{
+            console.log(data)
+            const response = await resetPassword(data)
+            console.log(response)
+            // handleNextStep(response)
+
+        }
+        catch(error) {
+            console.log(error)
+        }
+    }
+    
+    async function handleNextStep(output) {
+        try{
+            const {nextStep} = output
+            const deliveredTo = nextStep.codeDeliveryDetails
+            if(nextStep.resetPasswordStep === 'CONFIRM_RESET_PASSWORD_WITH_CODE'){
+                console.log(`Code Sent to ${deliveredTo}`)
+            }
+            else {
+                console.log("it didn't work")
+            }
+        }
+        catch(error) {
+            console.log(error)
+        }
+    }
+
+    async function onForgotPasswordSubmit(data) {
+        try{
+            forgotPassword(data)
+            console.log('Forgot Password Submited')
+            navigation.navigate('ResetPassword', {username: data.username})
+        }
+        catch(error) {
+            console.log(error)
+        }
     }
 
   return (
@@ -33,11 +73,11 @@ const ForgotPassword = () => {
         <Text style={styles.header}>Forgot Your Password?</Text>
 
         <CustomInput 
-            name='email'
-            placeholder='Email'
+            name='username'
+            placeholder='Username'
             control={control}
             rule={{
-                requiered: 'Email is REQUIRED'
+                requiered: 'Username is REQUIRED'
             }}
         />
         

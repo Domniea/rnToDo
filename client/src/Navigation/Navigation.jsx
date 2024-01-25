@@ -14,6 +14,7 @@ import Home from '../screens/HomeScreen/Home';
 import PostToDo from '../screens/PostToDo';
 import ToDo from '../components/ToDo'
 import ToDoDescription from '../screens/ToDoDetails/ToDoDetails';
+import TestScreen from '../screens/TestScreen';
 
 import { UserContext } from '../context/UserProvider';
 import { ToDoProvider } from '../context/ToDoProvider';
@@ -25,8 +26,20 @@ const Stack = createNativeStackNavigator();
 const Navigation = () => {
 
   const {user, setUser, checkUser} = useContext(UserContext)
-    
-    
+  
+  const linking = {
+    prefixes: ['todoapp://'],
+    config: {
+      initialRouteName: 'TestScreen',
+      screens:{
+        TestScreen: 'test/boob',
+        Home: 'home',
+        PostToDo: 'post'
+      }
+    }
+  }
+
+
   useEffect(() => {
     function listener(data) {
       if (data.payload.event === 'signedIn') {
@@ -52,27 +65,36 @@ const Navigation = () => {
   }, [])
 
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <ToDoProvider>
-        <Stack.Navigator>
+        <Stack.Navigator >
           {
             user ? (
+              <>
               <Stack.Group>
-                <Stack.Screen 
+              {/* <Stack.Screen 
+               name='Test'
+               component={TestScreen}
+               options={{
+                 title: 'It Works'
+               }}
+             /> */}
+                 <Stack.Screen 
                   name='Home' 
                   component={Home} 
-                  user={user}
+                  // user={user}
                   options={{title: 'Welcome'}}
                 />
                 {/* <Stack.Screen name='ToDo' component={ToDo}/> */}
-                {/* <Stack.Screen 
+                <Stack.Screen 
                   name='PostToDo' 
                   component={PostToDo} 
                   options={{
                     presentation: 'modal', 
                     title: 'Add a todo'
                   }}
-                /> */}
+                  initialParams={'test'}
+                />
                 <Stack.Screen 
                   name='ToDoDescription' 
                   component={ToDoDescription} 
@@ -84,7 +106,16 @@ const Navigation = () => {
                 }
            
                 />
+                <Stack.Screen 
+                  name='TestScreen'
+                  component={TestScreen}
+                  options={{
+                    title: 'It Works'
+                  }}
+                />
               </Stack.Group>
+           
+             </>
 
             )
               :

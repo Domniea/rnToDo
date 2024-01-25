@@ -8,7 +8,9 @@ import CustomInput from '../../components/CustomInput/CustomInput'
 import CustomButton from '../../components/CustomButton/CustomButton'
 import { UserContext } from '../../context/UserProvider'
 
-const ResetPassword = () => {
+import { confirmResetPassword } from 'aws-amplify/auth'
+
+const ResetPassword = ({route}) => {
 
     const navigation = useNavigation()
     
@@ -18,17 +20,36 @@ const ResetPassword = () => {
         watch
     } = useForm()
 
+    const {
+        username
+    } = route.params
+
+    
     const {height} = useWindowDimensions()
 
     const pwd = watch('newPassword')
-    console.log(pwd)
+    // console.log(pwd)
+    
+    async function handleResetSubmit(data) {
+        const info = {username: username, confirmationCode: data.confirmationCode, newPassword: data.newPasswordRetyped}
+        console.log(info)
+        try {
+            const response = await confirmResetPassword(info)
+            console.log(response)
+        }
+        catch(error) {
+            console.log(error)
+        }
+    }
 
     function onResendCode() {
         console.log('Code re-sent')
         Alert.alert("Resent Code.")
     }
 
-    function onBacktoSignIn() {
+    function onBacktoSignIn(data) {
+        // console.log({username: username, conformationCode: data.conformationCode, newPassword: data.newPasswordRetyped})
+        handleResetSubmit(data)
         console.log('On back to sign in')
         navigation.navigate('SignIn')
     }
@@ -36,7 +57,11 @@ const ResetPassword = () => {
   return (
     <View style={styles.root}>
         <Text style={styles.header}>Reset Your Password</Text>
-
+        <CustomInput 
+            name='confirmationCode'
+            placeholder='Conformation Code'
+            control={control}
+        />
         <CustomInput 
             name='newPassword'
             placeholder='Password'
