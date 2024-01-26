@@ -72,10 +72,10 @@ const Home = (props) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-      <CustomButton
+      {/* <CustomButton
             text='test'
             onPress={() => navigation.navigate('TestScreen')}
-          />
+          /> */}
         <CustomButton text='Add ToDo' onPress={toggleAddToDo}/>
         <Text style={styles.header}>ToDo's</Text>
        { addToDoVisible && <PostToDo  fromToggle='fromToggle' toggleModal={toggleAddToDo}/> }

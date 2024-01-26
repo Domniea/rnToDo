@@ -9,7 +9,8 @@ const CustomInput = (props) => {
         control,
         rules = {},
         secureTextEntry,
-        keyboardType
+        keyboardType,
+        errMessage
     } = props
 
   return (
@@ -36,6 +37,14 @@ const CustomInput = (props) => {
                  <Text style={styles.error}>{error.message}</Text>
                  )
               }
+              {/* {
+                 errMessage && 
+                 <>
+                 
+                 <Text style={styles.error}>{errMessage.message}</Text>
+                 </>
+                 
+              } */}
             </>
           )}
         />  

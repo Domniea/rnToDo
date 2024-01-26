@@ -4,13 +4,20 @@ import React, { useContext } from 'react'
 import { UserContext } from '../../context/UserProvider'
 import CustomButton from '../CustomButton'
 
-const SocialSignInButtons = ({onPressGoogle}) => {
+const SocialSignInButtons = (props) => {
 
     const {
         onGoogle,
         onFacebook,
         onApple
     }= useContext(UserContext)
+    
+    const {
+        onPressGoogle,
+        onPressFacebook,
+        onPressApple,
+        onPressAmazon
+    } = props
 
   return (
     <>
@@ -22,7 +29,7 @@ const SocialSignInButtons = ({onPressGoogle}) => {
         />
         <CustomButton 
             text='Sign in with Facebook'
-            onPress={onFacebook}
+            onPress={onPressFacebook}
             bgColor='#FAE9EA'
             fgColor='#DD4D44'
         />
@@ -31,6 +38,12 @@ const SocialSignInButtons = ({onPressGoogle}) => {
             onPress={onApple}
             bgColor='#e3e3e3'
             fgColor='#363636'
+        />
+        <CustomButton 
+            text='Sign in with Amazon'
+            onPress={onPressAmazon}
+            bgColor='#aaaaaa'
+            fgColor='#ffffff'
         />
     </>
   )

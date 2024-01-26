@@ -28,7 +28,7 @@ import { getCurrentUser } from 'aws-amplify/auth';
 
 const SignIn = () => {
 
-    
+    const [errMessage, setErrMessage] = useState('')
     const navigation = useNavigation()
 
     const {height} = useWindowDimensions()
@@ -64,6 +64,7 @@ const SignIn = () => {
 
         } catch (error) {
           console.log('error signing in', error);
+          setErrMessage(error.message)
         }
     }
 
@@ -89,7 +90,7 @@ const SignIn = () => {
     function onCreateAccount() {
         navigation.navigate('CreateAccount')
     }
-
+    console.log(errMessage)
   return (
     <SafeAreaView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -106,6 +107,12 @@ const SignIn = () => {
                         <Text>Sign Out</Text>
                     </Pressable> */}
                         
+                        {
+                            errMessage && (
+                            <Text style={styles.error}>{errMessage}</Text>
+                            )
+                        }
+
                         <CustomInput 
                             placeholder='Username'
                             name='username'
@@ -121,6 +128,7 @@ const SignIn = () => {
                                     message: 'Maimum 24 characters'
                                 }
                             }}
+                            errMessage={errMessage}
                             
                         />
                         <CustomInput 
@@ -131,8 +139,9 @@ const SignIn = () => {
                             rules={{
                                 required: 'Password is REQUIRED'
                             }}
+                            errMessage={errMessage}
                         />
-                    
+                       
                     <CustomButton 
                         text='Sign In'
                         onPress={handleSubmit(onPressSignIn)}
@@ -145,6 +154,8 @@ const SignIn = () => {
                     
                     <SocialSignInButtons 
                         onPressGoogle={() => signInWithRedirect({provider: 'Google'})} 
+                        onPressFacebook={() => signInWithRedirect({provider: 'Facebook'})} 
+                        onPressAmazon={() => signInWithRedirect({provider: 'Amazon'})} 
                     />
 
                     <CustomButton 
@@ -174,5 +185,9 @@ const styles = StyleSheet.create({
     header: {
         fontSize: 40,
         margin: 20
-    }
+    },
+    error: {
+        color: 'red',
+        alignSelf: 'stretch'
+      }
 })
