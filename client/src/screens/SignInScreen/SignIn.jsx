@@ -1,8 +1,6 @@
 import { 
     View, 
     Text,
-    TextInput,
-    Pressable,
     Image,
     StyleSheet, 
     useWindowDimensions,
@@ -11,17 +9,16 @@ import {
     Keyboard,
     SafeAreaView
 } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
+
+import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useForm } from 'react-hook-form'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-
 
 import Logo from '../../../assets/logo.png'
 import CustomInput from '../../components/CustomInput/CustomInput'
 import CustomButton from '../../components/CustomButton/CustomButton'
 import SocialSignInButtons from '../../components/SocialSignInButtons'
-import { UserContext } from '../../context/UserProvider'
+
 
 import { signOut, signIn, signInWithRedirect } from 'aws-amplify/auth'
 import { getCurrentUser } from 'aws-amplify/auth';
@@ -39,11 +36,6 @@ const SignIn = () => {
         formState: {errors}
     } = useForm()
 
-    function onSignIn(data) {
-        console.log(data)
-        navigation.navigate('Home')
-    }
-
     async function currentAuthenticatedUser() {
       try {
         const { username, userId, signInDetails } = await getCurrentUser();
@@ -60,7 +52,6 @@ const SignIn = () => {
         try {
           const response = await signIn(data);
           console.log(response)
-        //   navigation.navigate('Home', {screen: 'Home'})
 
         } catch (error) {
           console.log('error signing in', error);
@@ -77,11 +68,6 @@ const SignIn = () => {
         }
     }
 
-    
-    // useEffect(() => {
-    //     currentAuthenticatedUser()
-    // })
-
     function onForgotPassword() {
         console.log('Forgot Password')
         navigation.navigate('ForgotPassword')
@@ -90,22 +76,22 @@ const SignIn = () => {
     function onCreateAccount() {
         navigation.navigate('CreateAccount')
     }
-    console.log(errMessage)
+    function test() {
+        console.log('test')
+    }
   return (
     <SafeAreaView>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss()}>
+
             <ScrollView showsVerticalScrollIndicator={false}>
+
                 <View style={styles.root}>
                     <Image 
                         source={Logo}
                         style={[styles.logo, {height: height * 0.3}]}
                         resizeMode='contain'
                     />
-                    {/* <Text style={styles.header}>Sign in Screen</Text> */}
-        
-                    {/* <Pressable onPress={onPressSignOut}>
-                        <Text>Sign Out</Text>
-                    </Pressable> */}
                         
                         {
                             errMessage && (
@@ -164,8 +150,11 @@ const SignIn = () => {
                     type='TERTIARY'
                     />
                 </View>
+
             </ScrollView>
+
         </TouchableWithoutFeedback>
+
     </SafeAreaView>
   )
 }

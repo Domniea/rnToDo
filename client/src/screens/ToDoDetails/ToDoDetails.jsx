@@ -1,4 +1,4 @@
-import { Modal, StyleSheet, Text, View, useWindowDimensions } from 'react-native'
+import { Modal, StyleSheet, Text, TouchableWithoutFeedback, View, useWindowDimensions } from 'react-native'
 import React, { useState, useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { ToDoContext } from '../../context/ToDoProvider'
@@ -16,74 +16,75 @@ const ToDoDescription = (props) => {
         editToDo,
         setAllToDos
     } = useContext(ToDoContext)
-    // const {
-    //     title,
-    //     notes,
-    //     _id
-    // } = route.params
 
     const {
         toggleModal,
         title,
         notes,
-        _id
+        _id,
+        setDetailsVisible
     } = props
 
+    //Modal dismiss
+    function disregardDetailsModal() {
+        setDetailsVisible(false)
+    }
+
+    //Toggle edit inputs
     function toggleEdit() {
         setEdit(prevState => !prevState)
-        
     }
+
+    //Submit Edits
     function onSubmit(data) {
         editToDo( _id, data)
         setAllToDos([])
         toggleModal()
     }
 
-    
     return (
-        <Modal transparent={true}>
-            <View style={styles.container}>
-                <View style={styles.modal}>
-                    {
-                        !edit ?
-                        <View style={styles.notes}>
-                            <Text style={styles.header}>{title}</Text>
-                            <Text style={styles.secondary}>{notes}</Text>
-                            <CustomButton 
-                                text='Edit'
-                                onPress={() => toggleEdit()}
-                            />
-                        </View>
-                        :
-                        <View style={styles.edit}>
-                            <CustomInput 
-                                name='title'
-                                placeholder={title}
-                                control={control}
-                                keyboardType='default'
-                            />
-                            <CustomInput 
-                                name='description'
-                                placeholder={notes}
-                                control={control}
-                                keyboardType='default'
-                            />
-                            <CustomButton 
-                                text='Edit'
-                                onPress={() => toggleEdit()}
-                            />
-                            <CustomButton 
-                                text='Save'
-                                onPress={handleSubmit(onSubmit)}
-                            />
-                        </View>
-                    }
-                    
-                   
-            
-                
+        <Modal animationType='slide' transparent={true}>
+            <TouchableWithoutFeedback onPress={disregardDetailsModal}>
+                <View style={styles.container}>
+                    <View style={styles.modal}>
+                        {
+                            !edit ?
+                            <View style={styles.notes}>
+                                <Text style={styles.header}>{title}</Text>
+                                <Text style={styles.secondary}>{notes}</Text>
+                                <CustomButton 
+                                    text='Edit'
+                                    onPress={() => toggleEdit()}
+                                />
+                            </View>
+                            :
+                            <View style={styles.edit}>
+                                <CustomInput 
+                                    name='title'
+                                    placeholder={title}
+                                    control={control}
+                                    keyboardType='default'
+                                />
+                                <CustomInput 
+                                    name='description'
+                                    placeholder={notes}
+                                    control={control}
+                                    keyboardType='default'
+                                />
+                                <CustomButton 
+                                    text='Edit'
+                                    onPress={() => toggleEdit()}
+                                />
+                                <CustomButton 
+                                    text='Save'
+                                    onPress={handleSubmit(onSubmit)}
+                                />
+                            </View>
+                        }
+                            
+                    </View>
                 </View>
-            </View>
+            </TouchableWithoutFeedback>
         </Modal>
   )
 }
@@ -122,6 +123,5 @@ const styles = StyleSheet.create({
     edit: {
         backgroundColor: 'white',
         width: '100%'
-        // width: '90%'
     }
 })

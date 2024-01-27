@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useContext } from 'react'
-import { StyleSheet, Text, View, Pressable, ScrollViewBase, TouchableWithoutFeedback,Keyboard, Modal } from 'react-native'
+import React, { useContext } from 'react'
+import { StyleSheet, Text, View, Pressable, ScrollViewBase, TouchableWithoutFeedback, Keyboard, Modal } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useForm } from 'react-hook-form'
 
@@ -31,50 +31,53 @@ const PostToDo = (props) => {
     
     const {
         fromToggle,
-        toggleModal
+        toggleModal,
+        setAddToDoVisible
     } = props
 
-    
+    function disregardModal() {
+        setAddToDoVisible(false)
+    }
 
     const {control, handleSubmit} = useForm()
     
     function onSubmitPress(data) {
         submitToDo(username, data)
-        // getUsersToDo(username)
-        // navigation.goBack()
         {props.route && navigation.goBack() }
         {fromToggle && toggleModal()}
     }
     console.log(username)
 
   return (
-    <Modal animationType='slide' transparent={true}>
-        <View style={styles.container}>
-            <View style={styles.form}>
-                <CustomInput 
-                name='title'
-                placeholder='What do you need to do?'
-                control={control}
-                rules={{
-                required: 'Title is required'
-                }}
-                keyboardType="default"
-                />
-                <CustomInput 
-                name='description'
-                placeholder='* Notes'
-                control={control}
-                rules={{
+      <Modal animationType='slide' transparent={true}>
+        <TouchableWithoutFeedback onPress={disregardModal}>
+            <View style={styles.container}>
+                <View style={styles.form}>
+                    <CustomInput 
+                    name='title'
+                    placeholder='What do you need to do?'
+                    control={control}
+                    rules={{
                     required: 'Title is required'
-                }}
-                />
-        
-                <CustomButton 
-                text='Submit'
-                onPress={handleSubmit(onSubmitPress)}
-                />
+                    }}
+                    keyboardType="default"
+                    />
+                    <CustomInput 
+                    name='description'
+                    placeholder='* Notes'
+                    control={control}
+                    rules={{
+                        required: 'Title is required'
+                    }}
+                    />
+            
+                    <CustomButton 
+                    text='Submit'
+                    onPress={handleSubmit(onSubmitPress)}
+                    />
+                </View>
             </View>
-        </View>
+        </TouchableWithoutFeedback>
     </Modal>
   )
 }

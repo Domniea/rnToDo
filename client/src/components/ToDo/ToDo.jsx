@@ -14,9 +14,6 @@ const ToDo = (props) => {
     function toggleDetails() {
         setDetailsVisible(prevState => !prevState)
       }
-    
-
-    // const navigation = useNavigation()
 
     const { height, width } = useWindowDimensions()
 
@@ -29,14 +26,28 @@ const ToDo = (props) => {
 
     return (
         <View style={styles.inline}>
-           { detailsVisible && <ToDoDetails title={title} _id={_id} notes={notes} toggleModal={toggleDetails}/> }
+           { 
+            detailsVisible && 
+                <ToDoDetails 
+                    title={title} 
+                    _id={_id} notes={notes} 
+                    toggleModal={toggleDetails}
+                    setDetailsVisible={setDetailsVisible}
+                /> 
+            }
             <Text 
                 style={styles.todo} 
                 onPress={toggleDetails}
             >
                 {title}
             </Text>
-            <CustomButton text='delete' onPress={onPress} bgColor='#e3e3e3' fgColor='#666666' btnWidth={width * .25}/>
+            <CustomButton 
+                text='delete' 
+                onPress={onPress} 
+                bgColor='#e3e3e3' 
+                fgColor='#666666' 
+                btnWidth={width * .25}
+            />
         </View>
   )
 }

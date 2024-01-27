@@ -71,22 +71,35 @@ const Home = (props) => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+
       <View style={styles.container}>
-      {/* <CustomButton
-            text='test'
-            onPress={() => navigation.navigate('TestScreen')}
-          /> */}
-        <CustomButton text='Add ToDo' onPress={toggleAddToDo}/>
+
+        <CustomButton 
+          text='Add ToDo' 
+          onPress={toggleAddToDo}
+        />
         <Text style={styles.header}>ToDo's</Text>
-       { addToDoVisible && <PostToDo  fromToggle='fromToggle' toggleModal={toggleAddToDo}/> }
-       {/* { addToDoVisible && <ToDoDetails toggleModal={toggleDetails}/> } */}
-      <View style={[{height: height * .6}, {width: width * .8}]}>
-        <ScrollView >
-          <View style={[styles.list]}>
-            {todo}
-          </View>
-        </ScrollView>  
-      </View>
+       {
+         addToDoVisible && 
+          <PostToDo 
+            fromToggle='fromToggle' 
+            toggleModal={toggleAddToDo} 
+            setAddToDoVisible={setAddToDoVisible}
+          />
+        }
+       
+        <View 
+          style={
+              [{height: height * .6}, 
+              {width: width * .8}]
+            }
+        >
+          <ScrollView >
+            <View style={[styles.list]}>
+              {todo}
+            </View>
+          </ScrollView>  
+        </View>
 
         <View style={styles.footer}>
           <CustomButton
