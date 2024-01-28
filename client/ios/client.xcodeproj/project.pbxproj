@@ -471,6 +471,7 @@
 				DEVELOPMENT_TEAM = YQ7R82X88X;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = client/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -483,8 +484,11 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.todoapp.test.v1;
 				PRODUCT_NAME = client;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "2,iPhone";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -498,6 +502,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = YQ7R82X88X;
 				INFOPLIST_FILE = client/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -510,7 +515,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.todoapp.test.v1;
 				PRODUCT_NAME = client;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "2,iPhone";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -591,6 +599,7 @@
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = iPhone;
 				USE_HERMES = true;
 			};
 			name = Debug;
@@ -663,6 +672,7 @@
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = iPhone;
 				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};

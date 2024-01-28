@@ -17,16 +17,11 @@ import ToDoDetails from '../ToDoDetails/ToDoDetails'
 const Home = (props) => {
 
   const [addToDoVisible, setAddToDoVisible] = useState(false)
-  const {detailsVisible, setDetailsVisible} = useState(false)
 
-  const { height,width } = useWindowDimensions()
+  const { height, width } = useWindowDimensions()
 
   function toggleAddToDo(){
     setAddToDoVisible(prevState => !addToDoVisible)
-  }
-
-  function toggleDetails() {
-    setDetailsVisible(prevState => !prevState)
   }
 
   const {
@@ -54,8 +49,6 @@ const Home = (props) => {
   useEffect(() => {
     getUsersToDo(username)
   }, [allToDos.length]) 
-
-  // console.log(modalShown)
 
   const todo = allToDos.map((item, i) => {
     return <ToDo 

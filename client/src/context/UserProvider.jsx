@@ -8,12 +8,6 @@ const UserContext = createContext()
 
 
 function UserProvider(props) {
-    // const [user, setUser] = useState({
-        //     username: '',
-        //     password: ''
-        // })
-        
-    // const navigation = useNavigation()
 
     const [user, setUser] = useState(undefined)
 
@@ -40,7 +34,6 @@ function UserProvider(props) {
     }, [])
 
     
-
     function onFacebook() {
         console.log('Facebook In')
     }

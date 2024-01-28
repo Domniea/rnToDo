@@ -33,24 +33,14 @@ const ConfirmEmail = (props) => {
         }
       }
 
-    function onRegisterPress() {
-        console.log('Registered')
-        navigation.navigate('Home')
-    }
-
     function onResendCode() {
         resendSignUpCode({clientId: route.params.userId, username: route.params.username})
         console.log('RESENT')
     }
 
-    function onBacktoSignIn() {
-        console.log('On back to sign in')
-        navigation.navigate('SignIn')
-    }
-
-
   return (
     <View style={styles.root}>
+
         <Text style={styles.header}>Confirm Your Email</Text>
         <CustomInput 
             name='username'
@@ -80,9 +70,10 @@ const ConfirmEmail = (props) => {
          />
         <CustomButton 
         text="Back to sign in"
-        onPress={onBacktoSignIn}
+        onPress={() => navigation.navigate('SignIn')}
         type='TERTIARY'
          />
+         
     </View>
   )
 }

@@ -60,7 +60,6 @@ const ForgotPassword = () => {
     async function onForgotPasswordSubmit(data) {
         try{
             forgotPassword(data)
-            console.log('Forgot Password Submited')
             navigation.navigate('ResetPassword', {username: data.username})
         }
         catch(error) {
@@ -70,8 +69,8 @@ const ForgotPassword = () => {
 
   return (
     <View style={styles.root}>
-        <Text style={styles.header}>Forgot Your Password?</Text>
 
+        <Text style={styles.header}>Forgot Your Password?</Text>
         <CustomInput 
             name='username'
             placeholder='Username'
@@ -80,7 +79,6 @@ const ForgotPassword = () => {
                 requiered: 'Username is REQUIRED'
             }}
         />
-        
         <CustomButton 
             text='Submit'
             onPress={handleSubmit(onForgotPasswordSubmit)}
@@ -90,6 +88,7 @@ const ForgotPassword = () => {
         onPress={onBacktoSignIn}
         type='TERTIARY'
          />
+         
     </View>
   )
 }

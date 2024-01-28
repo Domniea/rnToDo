@@ -19,9 +19,8 @@ import CustomInput from '../../components/CustomInput/CustomInput'
 import CustomButton from '../../components/CustomButton/CustomButton'
 import SocialSignInButtons from '../../components/SocialSignInButtons'
 
+import { signIn, signInWithRedirect } from 'aws-amplify/auth'
 
-import { signOut, signIn, signInWithRedirect } from 'aws-amplify/auth'
-import { getCurrentUser } from 'aws-amplify/auth';
 
 const SignIn = () => {
 
@@ -36,18 +35,6 @@ const SignIn = () => {
         formState: {errors}
     } = useForm()
 
-    async function currentAuthenticatedUser() {
-      try {
-        const { username, userId, signInDetails } = await getCurrentUser();
-        console.log(`The username: ${username}`);
-        console.log(`The userId: ${userId}`);
-        console.log(`The signInDetails: ${signInDetails}`);
-        
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
     async function onPressSignIn(data) {
         try {
           const response = await signIn(data);
@@ -59,26 +46,6 @@ const SignIn = () => {
         }
     }
 
-    async function onPressSignOut() {
-        try{
-            await signOut()
-        }
-        catch(error) {
-            console.log('error: ', error)
-        }
-    }
-
-    function onForgotPassword() {
-        console.log('Forgot Password')
-        navigation.navigate('ForgotPassword')
-    }
-
-    function onCreateAccount() {
-        navigation.navigate('CreateAccount')
-    }
-    function test() {
-        console.log('test')
-    }
   return (
     <SafeAreaView>
 
@@ -134,19 +101,20 @@ const SignIn = () => {
                     />
                     <CustomButton 
                         text='Forgot Password'
-                        onPress={onForgotPassword}
+                        onPress={() => navigation.navigate('ForgotPassword')}
                         type='TERTIARY'
                     />
                     
                     <SocialSignInButtons 
                         onPressGoogle={() => signInWithRedirect({provider: 'Google'})} 
                         onPressFacebook={() => signInWithRedirect({provider: 'Facebook'})} 
+                        onPressApple={() => signInWithRedirect({provider: 'Apple'})}
                         onPressAmazon={() => signInWithRedirect({provider: 'Amazon'})} 
                     />
 
                     <CustomButton 
                     text="Don't have an account? Create on here"
-                    onPress={onCreateAccount}
+                    onPress={() => navigation.navigate('CreateAccount')}
                     type='TERTIARY'
                     />
                 </View>

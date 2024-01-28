@@ -19,10 +19,7 @@ const PostToDo = (props) => {
     } = useContext(UserContext)
 
     const {
-        getAllToDos,
-        getUsersToDo,
-        submitToDo,
-        editToDo
+        submitToDo
     } = useContext(ToDoContext)
 
     const {
@@ -35,11 +32,13 @@ const PostToDo = (props) => {
         setAddToDoVisible
     } = props
 
+    const {control, handleSubmit} = useForm()
+    
+    //Dismiss modal
     function disregardModal() {
         setAddToDoVisible(false)
     }
 
-    const {control, handleSubmit} = useForm()
     
     function onSubmitPress(data) {
         submitToDo(username, data)
@@ -50,8 +49,11 @@ const PostToDo = (props) => {
 
   return (
       <Modal animationType='slide' transparent={true}>
+
         <TouchableWithoutFeedback onPress={disregardModal}>
+
             <View style={styles.container}>
+
                 <View style={styles.form}>
                     <CustomInput 
                     name='title'
@@ -76,8 +78,11 @@ const PostToDo = (props) => {
                     onPress={handleSubmit(onSubmitPress)}
                     />
                 </View>
+                
             </View>
+            
         </TouchableWithoutFeedback>
+
     </Modal>
   )
 }

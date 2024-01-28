@@ -30,25 +30,21 @@ const CreateAccount = () => {
     } = useForm()
 
     const pwd = watch('password')
-    console.log(pwd)
+  
     const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
-
-    const {height} = useWindowDimensions()
    
     async function handleSignUp({ username, password, email }) {
         try {
-          const { isSignUpComplete, userId, nextStep } = await signUp({
+          const { userId } = await signUp({
             username,
             password,
             options: {
               userAttributes: {
                 email
-              },
-              // optional
-              autoSignIn: true // or SignInOptions e.g { authFlowType: "USER_SRP_AUTH" }
+              }
             }
           });
-        //   console.log(userId);
+
           navigation.navigate('ConfirmEmail', {userId, username})
           
         } catch (error) {
@@ -63,11 +59,14 @@ const CreateAccount = () => {
 
   return (
     <SafeAreaView>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={styles.root}>
-                    <Text style={styles.header}>Create Account</Text>
 
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+
+            <ScrollView showsVerticalScrollIndicator={false}>
+
+                <View style={styles.root}>
+
+                    <Text style={styles.header}>Create Account</Text>
                     <CustomInput 
                         name= 'username'
                         placeholder='username' 
@@ -116,7 +115,6 @@ const CreateAccount = () => {
                             }
                         }}
                     />
-
                     <CustomInput 
                         name='passwordRetyped'
                         placeholder='re-type password'
@@ -147,8 +145,11 @@ const CreateAccount = () => {
                     type='TERTIARY'
                     />
                 </View>
+
             </ScrollView>
+
         </TouchableWithoutFeedback>
+        
     </SafeAreaView>
   )
 }

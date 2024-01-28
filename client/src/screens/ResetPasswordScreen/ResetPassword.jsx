@@ -3,10 +3,8 @@ import React, { useContext } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useForm } from 'react-hook-form'
 
-
 import CustomInput from '../../components/CustomInput/CustomInput'
 import CustomButton from '../../components/CustomButton/CustomButton'
-import { UserContext } from '../../context/UserProvider'
 
 import { confirmResetPassword } from 'aws-amplify/auth'
 
@@ -24,11 +22,7 @@ const ResetPassword = ({route}) => {
         username
     } = route.params
 
-    
-    const {height} = useWindowDimensions()
-
     const pwd = watch('newPassword')
-    // console.log(pwd)
     
     async function handleResetSubmit(data) {
         const info = {username: username, confirmationCode: data.confirmationCode, newPassword: data.newPasswordRetyped}
@@ -48,7 +42,6 @@ const ResetPassword = ({route}) => {
     }
 
     function onBacktoSignIn(data) {
-        // console.log({username: username, conformationCode: data.conformationCode, newPassword: data.newPasswordRetyped})
         handleResetSubmit(data)
         console.log('On back to sign in')
         navigation.navigate('SignIn')
@@ -56,6 +49,7 @@ const ResetPassword = ({route}) => {
 
   return (
     <View style={styles.root}>
+
         <Text style={styles.header}>Reset Your Password</Text>
         <CustomInput 
             name='confirmationCode'
@@ -103,6 +97,7 @@ const ResetPassword = ({route}) => {
         onPress={onBacktoSignIn}
         type='TERTIARY'
          />
+
     </View>
   )
 }
