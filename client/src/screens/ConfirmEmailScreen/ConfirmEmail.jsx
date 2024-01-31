@@ -70,10 +70,10 @@ const ConfirmEmail = (props) => {
          />
         <CustomButton 
         text="Back to sign in"
-        onPress={() => navigation.navigate('SignIn')}
+        onPress={() => navigation.navigate('Home')}
         type='TERTIARY'
          />
-         
+
     </View>
   )
 }

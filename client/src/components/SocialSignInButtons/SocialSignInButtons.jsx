@@ -35,7 +35,7 @@ const SocialSignInButtons = (props) => {
         />
         <CustomButton 
             text='Sign in with Apple'
-            onPress={onApple}
+            onPress={onPressApple}
             bgColor='#e3e3e3'
             fgColor='#363636'
         />

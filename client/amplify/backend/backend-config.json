@@ -19,7 +19,8 @@
         "socialProviders": [
           "FACEBOOK",
           "GOOGLE",
-          "AMAZON"
+          "AMAZON",
+          "APPLE"
         ],
         "usernameAttributes": [],
         "verificationMechanisms": [
