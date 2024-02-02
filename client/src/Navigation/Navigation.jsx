@@ -14,11 +14,16 @@ import Home from '../screens/HomeScreen/Home';
 import PostToDo from '../screens/PostToDo';
 import ToDo from '../components/ToDo'
 import ToDoDescription from '../screens/ToDoDetails/ToDoDetails';
+import Preferences from '../screens/Preferences';
 import TestScreen from '../screens/TestScreen';
 
 import { UserContext } from '../context/UserProvider';
 import { ToDoProvider } from '../context/ToDoProvider';
 
+import { createDrawerNavigator } from '@react-navigation/drawer';
+
+
+const Drawer = createDrawerNavigator();
 
 
 const Stack = createNativeStackNavigator();
@@ -37,6 +42,18 @@ const Navigation = () => {
         PostToDo: 'post'
       }
     }
+  }
+
+  function MyDrawer() {
+    return (
+      <Drawer.Navigator>
+        <Drawer.Screen
+          name="Home" 
+          component={Home}
+          />
+        <Drawer.Screen name="Preferences" component={Preferences} />
+      </Drawer.Navigator>
+    );
   }
 
 
@@ -72,19 +89,18 @@ const Navigation = () => {
             user ? (
               <>
               <Stack.Group>
-              {/* <Stack.Screen 
-               name='Test'
-               component={TestScreen}
-               options={{
-                 title: 'It Works'
-               }}
-             /> */}
                  <Stack.Screen 
+                  name='MyDrawer' 
+                  component={MyDrawer} 
+                  // user={user}
+                  options={{title: 'The Best ToDo List'}}
+                />
+                 {/* <Stack.Screen 
                   name='Home' 
                   component={Home} 
                   // user={user}
                   options={{title: 'Welcome'}}
-                />
+                /> */}
                 {/* <Stack.Screen name='ToDo' component={ToDo}/> */}
                 <Stack.Screen 
                   name='PostToDo' 
@@ -101,17 +117,9 @@ const Navigation = () => {
                   options={({route}) => 
                   ({ presentation: 'modal', 
                   title: `${route.params.title} Details`,
-                  
                   })
                 }
            
-                />
-                <Stack.Screen 
-                  name='TestScreen'
-                  component={TestScreen}
-                  options={{
-                    title: 'It Works'
-                  }}
                 />
               </Stack.Group>
            
