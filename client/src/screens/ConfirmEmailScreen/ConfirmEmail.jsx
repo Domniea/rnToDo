@@ -1,33 +1,45 @@
 import { View, Text, StyleSheet, useWindowDimensions } from 'react-native'
-import React, { useContext } from 'react'
+import React from 'react'
+import { useContext } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useForm } from 'react-hook-form'
 
 import CustomInput from '../../components/CustomInput/CustomInput'
 import CustomButton from '../../components/CustomButton/CustomButton'
 
-import { UserContext } from '../../context/UserProvider'
-
-import { confirmSignUp, resendSignUpCode } from 'aws-amplify/auth';
+import { confirmSignUp, autoSignIn, resendSignUpCode } from 'aws-amplify/auth';
 
 const ConfirmEmail = (props) => {
     const {route} = props
     const navigation = useNavigation()
     console.log(route.params.userId, route.params.username)
+
     const {
         control,
         handleSubmit
     } = useForm()
 
-    const {height} = useWindowDimensions()
+
+    async function handleAutoSignIn() {
+        try {
+            const signInOutput = await autoSignIn()
+            console.log('sign in output:', signInOutput)
+        }
+        catch(error) {
+            console.log(error)
+        }
+    }
 
     async function handleSignUpConfirmation({ username, confirmationCode }) {
         try {
-          const { isSignUpComplete, nextStep } = await confirmSignUp({
+          const confirmResponse = await confirmSignUp({
             username,
             confirmationCode
           });
-          navigation.navigate('Home')
+          console.log('handle Sign Up Conformation response:', confirmResponse)
+          handleAutoSignIn()
+        //   setUser({username: username.toLowerCase()})
+        navigation.navigate('SignUpComplete', { username })
         } catch (error) {
           console.log('error confirming sign up', error);
         }
@@ -70,7 +82,7 @@ const ConfirmEmail = (props) => {
          />
         <CustomButton 
         text="Back to sign in"
-        onPress={() => navigation.navigate('Home')}
+        onPress={() => navigation.navigate('SignIn')}
         type='TERTIARY'
          />
 

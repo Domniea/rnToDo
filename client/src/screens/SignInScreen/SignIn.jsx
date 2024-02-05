@@ -10,7 +10,8 @@ import {
     SafeAreaView
 } from 'react-native'
 
-import React, { useState } from 'react'
+import React from 'react'
+import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useForm } from 'react-hook-form'
 

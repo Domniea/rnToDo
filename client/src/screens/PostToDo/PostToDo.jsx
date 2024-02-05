@@ -31,7 +31,7 @@ const PostToDo = (props) => {
         toggleModal,
         setAddToDoVisible
     } = props
-
+    
     const {control, handleSubmit} = useForm()
     
     //Dismiss modal
@@ -41,11 +41,12 @@ const PostToDo = (props) => {
 
     
     function onSubmitPress(data) {
+        console.log('sending to route', username, data)
         submitToDo(username, data)
         {props.route && navigation.goBack() }
         {fromToggle && toggleModal()}
     }
-    console.log(username)
+    console.log('username',username)
 
   return (
       <Modal animationType='slide' transparent={true}>

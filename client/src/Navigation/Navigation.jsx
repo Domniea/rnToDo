@@ -1,10 +1,17 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, { useState, useEffect, useContext } from 'react'
-import { NavigationContainer } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { StyleSheet, Text, View, useColorScheme } from 'react-native'
+import React, { useEffect, useContext } from 'react'
 import { Hub } from 'aws-amplify/utils';
+import { Appearance } from 'react-native';
 
 
+import { UserContext } from '../context/UserProvider';
+import { ToDoProvider } from '../context/ToDoProvider';
+
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+
+//Screens for Navigator
 import SignIn from '../screens/SignInScreen/SignIn';
 import CreateAccount from '../screens/CreateAccountScreen/CreateAccount';
 import ConfirmEmail from '../screens/ConfirmEmailScreen/ConfirmEmail';
@@ -12,19 +19,12 @@ import ResetPassword from '../screens/ResetPasswordScreen/ResetPassword';
 import ForgotPaassword from '../screens/ForgotPaassword';
 import Home from '../screens/HomeScreen/Home';
 import PostToDo from '../screens/PostToDo';
-import ToDo from '../components/ToDo'
 import ToDoDescription from '../screens/ToDoDetails/ToDoDetails';
 import Preferences from '../screens/Preferences';
+import SignUpComplete from '../screens/SignUpComplete';
 import TestScreen from '../screens/TestScreen';
 
-import { UserContext } from '../context/UserProvider';
-import { ToDoProvider } from '../context/ToDoProvider';
-
-import { createDrawerNavigator } from '@react-navigation/drawer';
-
-
 const Drawer = createDrawerNavigator();
-
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +32,11 @@ const Navigation = () => {
 
   const {user, setUser, checkUser} = useContext(UserContext)
   
+  // console.log(Appearance)
+
+  
+  
+  //Deep Linking
   const linking = {
     prefixes: ['todoapp://'],
     config: {
@@ -44,6 +49,7 @@ const Navigation = () => {
     }
   }
 
+  //Main App Drawer
   function MyDrawer() {
     return (
       <Drawer.Navigator>
@@ -56,7 +62,7 @@ const Navigation = () => {
     );
   }
 
-
+ //SignIn Listiner
   useEffect(() => {
     function listener(data) {
       if (data.payload.event === 'signedIn') {
@@ -69,6 +75,7 @@ const Navigation = () => {
     return () => Hub.remove('auth', listener)
   }, [])
 
+  //SignOut Listener
   useEffect(() => {
     function listener(data) {
       if (data.payload.event === 'signedOut') {
@@ -81,8 +88,11 @@ const Navigation = () => {
     return () => Hub.remove('auth', listener)
   }, [])
 
+  const scheme = useColorScheme();
+
+
   return (
-    <NavigationContainer linking={linking}>
+    <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme} linking={linking}>
       <ToDoProvider>
         <Stack.Navigator >
           {
@@ -135,6 +145,7 @@ const Navigation = () => {
                   <Stack.Screen name='ConfirmEmail' component={ConfirmEmail} />
                   <Stack.Screen name='ForgotPassword' component={ForgotPaassword} />
                   <Stack.Screen name='ResetPassword' component={ResetPassword} />
+                  <Stack.Screen name='SignUpComplete' component={SignUpComplete} />
                 </>
               )
           }

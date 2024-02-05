@@ -1,13 +1,19 @@
 import { Modal, StyleSheet, Text, TouchableWithoutFeedback, View, useWindowDimensions } from 'react-native'
 import React, { useState, useContext } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTheme } from '@react-navigation/native'
+
 import { ToDoContext } from '../../context/ToDoProvider'
 
 import CustomInput from '../../components/CustomInput'
 import CustomButton from '../../components/CustomButton'
 
 const ToDoDescription = (props) => {
+
+    const { colors } = useTheme()
+
     const { height } = useWindowDimensions()
+
     const [edit, setEdit] = useState(false)
 
     const {control, handleSubmit} = useForm()
@@ -100,7 +106,7 @@ const styles = StyleSheet.create({
     modal: {
         backgroundColor: 'white',
         padding: '5%',
-        height: '50%',
+        height: '38%',
         width: '80%',
         justifyContent: 'center',
         alignItems: 'center',
@@ -112,11 +118,12 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     header: {
-        fontSize: 40,
-        margin:'5%'
+        fontSize: 30,
+        margin:'5%',
+        textAlign: 'center'
     },
     secondary: {
-        fontSize: 25,
+        fontSize: 20,
         marginBottom: '5%',
         textAlign: 'center'
     },

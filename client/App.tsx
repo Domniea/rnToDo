@@ -2,6 +2,9 @@ import 'react-native-gesture-handler';
 
 import React, {useState, useEffect} from 'react';
 
+import { Appearance } from 'react-native';
+import { useColorScheme } from 'react-native';
+
 import {
   View,
   SafeAreaView,
@@ -24,11 +27,12 @@ import {
 } from '@aws-amplify/ui-react-native';
 import { getCurrentUser } from 'aws-amplify/auth';
 
-console.log('Amplify Auth Test')
-
 
 function App(): React.JSX.Element {
 
+  // const colorScheme1 = Appearance.getColorScheme();
+  // const colorScheme2 = useColorScheme();
+  // console.log(colorScheme2)
 
 
   return (

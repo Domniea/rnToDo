@@ -59,7 +59,6 @@ const Home = (props) => {
       onPress={() => submitDelete(item._id)}
       navigation={navigation}
     />
-    // return <Text key={i}>Test</Text>
   }) 
 
   return (
@@ -95,10 +94,10 @@ const Home = (props) => {
         </View>
 
         <View style={styles.footer}>
-          <CustomButton
+          {/* <CustomButton
             text='Log Out'
             onPress={handleSignOut}
-          />
+          /> */}
         </View>
       
       </View>
@@ -126,10 +125,6 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   list:{
-  },
-  footer: {
-    position: 'absolute',
-    bottom: 0,
   }
 
 })

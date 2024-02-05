@@ -8,7 +8,8 @@ import {
         SafeAreaView,
         ScrollView
     } from 'react-native'
-import React, { useContext } from 'react'
+import React from 'react'
+import { useContext } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useForm } from 'react-hook-form'
 
@@ -41,8 +42,9 @@ const CreateAccount = () => {
             options: {
               userAttributes: {
                 email
-              }
-            }
+              },
+              autoSignIn: true
+            },
           });
 
           navigation.navigate('ConfirmEmail', {userId, username})

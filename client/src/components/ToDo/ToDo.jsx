@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View,useWindowDimensions } from 'react-native'
 import React, { useState } from 'react'
-// import { useNavigation } from '@react-navigation/native'
+import { useTheme } from '@react-navigation/native'
 
 import CustomButton from '../CustomButton'
 import PostToDo from '../../screens/PostToDo'
@@ -9,6 +9,8 @@ import ToDoDetails from '../../screens/ToDoDetails/ToDoDetails'
 
 const ToDo = (props) => {
 
+    const {colors} = useTheme()
+    
     const [detailsVisible, setDetailsVisible] = useState(false)
 
     function toggleDetails() {
@@ -36,7 +38,7 @@ const ToDo = (props) => {
                 /> 
             }
             <Text 
-                style={styles.todo} 
+                style={[{color: colors.text},styles.todo]} 
                 onPress={toggleDetails}
             >
                 {title}
@@ -62,7 +64,8 @@ const styles = StyleSheet.create({
     },
     todo: {
         fontSize: 25,
-        margin: 5
+        margin: 5,
+      
     }
 
 })
