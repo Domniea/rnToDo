@@ -7,6 +7,7 @@ import { Appearance } from 'react-native';
 import { UserContext } from '../context/UserProvider';
 import { ToDoProvider } from '../context/ToDoProvider';
 
+//Navigator
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
