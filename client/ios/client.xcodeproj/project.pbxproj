@@ -482,6 +482,7 @@
 				DEVELOPMENT_TEAM = YQ7R82X88X;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = client/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "The Best ToDo List";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -517,6 +518,7 @@
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = YQ7R82X88X;
 				INFOPLIST_FILE = client/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "The Best ToDo List";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -656,6 +658,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
 				GCC_C_LANGUAGE_STANDARD = gnu99;

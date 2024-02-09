@@ -8,7 +8,7 @@ function ThemeProvider(props) {
  
     const colorScheme = useColorScheme()
     
-    const [theme, setTheme] = useState(false)
+    const [theme, setTheme] = useState(colorScheme)
     
     function getTheme() {
         colorScheme === 'light' ? false : true

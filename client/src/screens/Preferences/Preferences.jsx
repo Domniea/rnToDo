@@ -28,37 +28,13 @@ const Preferences = () => {
 
     const [toggle, setToggle] = useState()
 
-    // function onThemeChange() {
-    //     const newColor = Appearance.getColorScheme()
-    //     setTheme(newColor)
-    // }
-
-
-    // function changeTheme() {
-    //     if(theme === 'dark') {
-    //         setTheme('light')
-    //         Appearance.setColorScheme('light')
-    //     }
-    //     else {
-    //         setTheme('dark')
-    //         Appearance.setColorScheme('dark')
-    //     }
-    // }
-
-    // function darkSet(){
-    //     Appearance.setColorScheme('dark')
-    // }    
-
-    // function lightSet(){
-    //     Appearance.setColorScheme('light')
-    // }    
-
-
     const {
         setUser,
         handleSignOut
     } = useContext(UserContext)
 
+
+    //Delete User
     const [toggleDeleteWarn, setToggleDeleteWarn] = useState(false)
 
     function toggleDeleteWarning() {
@@ -69,6 +45,7 @@ const Preferences = () => {
         try {
             await deleteUser()
             Alert.alert('Your account has been permanently deleted')
+            
             setTimeout(() => {
                 setUser(undefined)
                 }, 2000

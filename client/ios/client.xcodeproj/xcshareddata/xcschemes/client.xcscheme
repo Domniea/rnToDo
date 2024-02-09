@@ -87,6 +87,7 @@
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release"
+      customArchiveName = "rnToDo"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>
