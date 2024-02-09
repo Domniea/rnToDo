@@ -17,7 +17,8 @@ const Preferences = () => {
     const {
         theme,
         setTheme,
-        changeTheme
+        changeTheme,
+        switchState
     }  = useContext(ThemeContext)
     
     const { width, height } = useWindowDimensions()
@@ -26,7 +27,6 @@ const Preferences = () => {
 
     const { colors } = useTheme()
 
-    const [toggle, setToggle] = useState()
 
     const {
         setUser,
@@ -45,7 +45,7 @@ const Preferences = () => {
         try {
             await deleteUser()
             Alert.alert('Your account has been permanently deleted')
-            
+
             setTimeout(() => {
                 setUser(undefined)
                 }, 2000
@@ -85,7 +85,7 @@ const Preferences = () => {
                         <Text style={[{color: colors.text}, styles.test]}>Toggle Theme</Text>
                         <Switch 
                             onChange={() => changeTheme()}
-                            value={theme}
+                            value={switchState}
                         />
                     </View>
                     

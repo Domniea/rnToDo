@@ -9,20 +9,22 @@ function ThemeProvider(props) {
     const colorScheme = useColorScheme()
     
     const [theme, setTheme] = useState(colorScheme)
+    const [switchState, setSwitchState] = useState(false)
     
     function getTheme() {
-        colorScheme === 'light' ? false : true
+        colorScheme === 'light' ? 'false' : true
     }
 
     useEffect(() => {
         getTheme()
+        console.log('Get Theme:', theme)
     }, [])
 
     useEffect(() => {
         const subscription = Appearance.addChangeListener((theme) => {
-            theme.colorScheme === "dark" ? setTheme(false) : setTheme(true)
+            theme.colorScheme === "dark" ? setTheme(true) : setTheme(false)
         })
-
+        console.log('Listener:', theme)
         return () => subscription.remove()
     }, [])
 
@@ -31,15 +33,16 @@ function ThemeProvider(props) {
     // }
 
     function changeTheme() {
-        // if(theme === 'dark') {
-        //     setTheme('light')
-        //     // Appearance.setColorScheme('light')
-        // }
-        // else {
-        //     setTheme('dark')
-        //     // Appearance.setColorScheme('dark')
-        // }
-        setTheme( theme === false ? true : false)
+        if(theme === 'dark') {
+            setTheme('light')
+            // Appearance.setColorScheme('light')
+        }
+        else {
+            setTheme('dark')
+            // Appearance.setColorScheme('dark')
+        }
+        // setTheme( theme === false ? true : false)
+        setSwitchState(prevState => !prevState)
     }
 
     return (
@@ -47,7 +50,9 @@ function ThemeProvider(props) {
             value={{
                 theme,
                 setTheme,
-                changeTheme
+                changeTheme,
+                switchState,
+                setSwitchState
             }}
         >
             {props.children}

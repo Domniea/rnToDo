@@ -44,7 +44,7 @@ const Navigation = () => {
     setTheme
   } = useContext(ThemeContext)
 
-  console.log('theme:', theme)
+  console.log('Navigator:', theme)
 
   //Deep Linking
   const linking = {
@@ -108,11 +108,8 @@ const Navigation = () => {
     return () => Hub.remove('auth', listener)
   }, [])
 
-  const scheme = useColorScheme();
-
-
   return (
-    <NavigationContainer theme={theme === true ? DarkTheme : DefaultTheme} linking={linking}>
+    <NavigationContainer theme={theme === 'dark' ? DarkTheme : DefaultTheme} linking={linking}>
       <ToDoProvider>
         <Stack.Navigator >
           {
