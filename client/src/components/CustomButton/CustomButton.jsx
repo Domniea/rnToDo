@@ -9,7 +9,8 @@ const CustomButton = (props) => {
         type='PRIMARY', 
         bgColor,
         fgColor,
-        btnWidth
+        btnWidth,
+        btnMargin
         
     } = props
 
@@ -19,7 +20,8 @@ const CustomButton = (props) => {
             styles.container,
             styles[`container_${type}`],
             bgColor ? {backgroundColor: bgColor} : {},
-            btnWidth ? {width: btnWidth} : {width: '100%'}
+            btnWidth ? {width: btnWidth} : {width: '100%'},
+            btnMargin ? {margin: btnMargin} : {marginVertical: 5}
         ]}
         onPress={onPress}
     >

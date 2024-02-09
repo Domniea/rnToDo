@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, useWindowDimensions } from 'react-native'
+import { Alert, StyleSheet, Text, View, useWindowDimensions } from 'react-native'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { updatePassword } from 'aws-amplify/auth'
@@ -6,7 +6,7 @@ import { useTheme } from '@react-navigation/native'
 import CustomInput from '../../components/CustomInput'
 import CustomButton from '../../components/CustomButton'
 
-const EditPassword = () => {
+const EditPassword = ({navigation}) => {
 
   const { width, height } = useWindowDimensions()
 
@@ -23,14 +23,15 @@ const EditPassword = () => {
   async function handlePasswordUpdate(data) {
     const oldPassword = data.oldPassword
     const newPassword = data.newPasswordRetyped
-    console.log('clicked')
+    
     try {
       await updatePassword({ oldPassword, newPassword })
-      console.log('caught')
-     
+      Alert.alert('Your password has been updated.')
+      navigation.navigate('Home')
     }
     catch(error) {
       console.log(error)
+      Alert.alert('Incorrect USERNAME or PASSWORD')
     }
   }
 
@@ -69,6 +70,7 @@ const EditPassword = () => {
             }}
         />
         <CustomButton text='Submit' onPress={handleSubmit(handlePasswordUpdate)}/>
+        <CustomButton text='Back' onPress={() => navigation.navigate('Preferences')}/>
 
     </View>
   )

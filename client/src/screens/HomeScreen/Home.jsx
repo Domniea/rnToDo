@@ -58,9 +58,6 @@ const Home = (props) => {
     />
   }) 
 
-
-  console.log(height)
-
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 
@@ -69,7 +66,8 @@ const Home = (props) => {
         <CustomButton 
           text='Add ToDo' 
           onPress={toggleAddToDo}
-          style={{fontSize: 'green' }}
+          style={styles.test}
+          btnMargin={0}
         />
         <Text style={styles.header}>ToDo's</Text>
        {
@@ -121,6 +119,9 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 40,
     margin: 15
+  },
+  test: {
+    color: 'green'
   },
   form: {
     alignItems: 'center',

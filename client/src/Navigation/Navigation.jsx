@@ -6,6 +6,7 @@ import { Appearance } from 'react-native';
 
 import { UserContext } from '../context/UserProvider';
 import { ToDoProvider } from '../context/ToDoProvider';
+import { ThemeContext } from '../context/ThemeProvider';
 
 //Navigator
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native'
@@ -32,8 +33,19 @@ const Stack = createNativeStackNavigator();
 
 const Navigation = () => {
 
-  const {user, setUser, checkUser} = useContext(UserContext)
+  const {
+    user, 
+    setUser, 
+    checkUser
+  } = useContext(UserContext)
   
+  const {
+    theme,
+    setTheme
+  } = useContext(ThemeContext)
+
+  console.log('theme:', theme)
+
   //Deep Linking
   const linking = {
     prefixes: ['todoapp://'],
@@ -100,7 +112,7 @@ const Navigation = () => {
 
 
   return (
-    <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme} linking={linking}>
+    <NavigationContainer theme={theme === true ? DarkTheme : DefaultTheme} linking={linking}>
       <ToDoProvider>
         <Stack.Navigator >
           {
@@ -114,16 +126,6 @@ const Navigation = () => {
                   options={{title: 'The Best ToDo List'}}
                
                 />
-                {/* <Stack.Screen 
-                  name='EditPassword'
-                  component={EditPassword}
-                  options={
-                    {
-                      headerBackTitleVisible: false,
-                      headerTitle: 'The Best ToDo List'
-                    }
-                  }
-                /> */}
                 <Stack.Screen 
                   name='PostToDo' 
                   component={PostToDo} 

@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     notes: {
         backgroundColor: 'white',
         paddingHorizontal: '3%',
-        height: '30%',
+        height: '35%',
         width: '80%',
         justifyContent: 'center',
         alignItems: 'center',
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     edit: {
         backgroundColor: 'white',
         padding: '5%',
-        height: '30%',
+        height: '35%',
         width: '80%',
         justifyContent: 'center',
         alignItems: 'center',

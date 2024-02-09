@@ -12,12 +12,7 @@ function ToDoProvider(props) {
     const [ allToDos, setAllToDos] = useState([])
 
     const { user } = useContext(UserContext)
-
-    // const { username} = user
     
-    // console.log('user', user)
-    
-
     //Get All
     async function getAllToDos() {
         try{

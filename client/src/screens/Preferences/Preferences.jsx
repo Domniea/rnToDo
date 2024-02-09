@@ -1,6 +1,6 @@
-import { Alert, StyleSheet, useWindowDimensions, Text, View } from 'react-native'
+import { Alert, StyleSheet, useWindowDimensions, ScrollView, Text, View, Switch } from 'react-native'
 import React from 'react'
-import { useState, useContext} from 'react'
+import { useState, useEffect, useContext} from 'react'
 import { UserContext } from '../../context/UserProvider';
 import { useTheme } from '@react-navigation/native'
 import { Appearance } from 'react-native';
@@ -9,25 +9,49 @@ import { useNavigation } from '@react-navigation/native';
 import { deleteUser } from 'aws-amplify/auth';
 
 import CustomButton from '../../components/CustomButton'
+import { ThemeContext } from '../../context/ThemeProvider';
 
 
 const Preferences = () => {
 
+    const {
+        theme,
+        setTheme,
+        changeTheme
+    }  = useContext(ThemeContext)
+    
     const { width, height } = useWindowDimensions()
 
     const navigation = useNavigation()
 
     const { colors } = useTheme()
 
-    const [toggleTheme, setToggleTheme] = useState(true)
+    const [toggle, setToggle] = useState()
 
-    function darkSet(){
-        Appearance.setColorScheme('dark')
-    }    
+    // function onThemeChange() {
+    //     const newColor = Appearance.getColorScheme()
+    //     setTheme(newColor)
+    // }
 
-    function lightSet(){
-        Appearance.setColorScheme('light')
-    }    
+
+    // function changeTheme() {
+    //     if(theme === 'dark') {
+    //         setTheme('light')
+    //         Appearance.setColorScheme('light')
+    //     }
+    //     else {
+    //         setTheme('dark')
+    //         Appearance.setColorScheme('dark')
+    //     }
+    // }
+
+    // function darkSet(){
+    //     Appearance.setColorScheme('dark')
+    // }    
+
+    // function lightSet(){
+    //     Appearance.setColorScheme('light')
+    // }    
 
 
     const {
@@ -57,40 +81,59 @@ const Preferences = () => {
 
 
   return (
-    <View style={height >= 500 ? styles.containerScreen : styles.containerScreenLANDSCAPE}>
-        <Text style={[{color: colors.text}, styles.header]}>Preferences</Text>
-        
-        { 
-            !toggleDeleteWarn ?
-            <>
-             <CustomButton
-                    text='Change Password'
-                    onPress={()=> navigation.navigate('EditPassword')}
-                />
-                <CustomButton
-                    text='Log Out'
-                    onPress={handleSignOut}
-                />
-                <CustomButton 
-                    text='Delete Account' 
-                    onPress={toggleDeleteWarning}
-                />
-                <CustomButton text='Dark Theme' onPress={() => darkSet()}/>
-                <CustomButton text='Light Theme' onPress={() => lightSet()}/>
-            </>
-            :
-            <>
-                <View style={styles.containerDeleteWarning}>
-                    <Text style={styles.modalText}>Are you sure you want to delete your account?</Text>
-                    <CustomButton text ='Delete Account' onPress={handleDelete} />
-                    <CustomButton text='Go Back' onPress={toggleDeleteWarning}/>
-                </View>
-            </>     
-        }
-        {/* <View style={styles.footer}> */}
+    <ScrollView>
+        <View style={height >= 500 ? styles.containerScreen : styles.containerScreenLANDSCAPE}>
+            <Text style={[{color: colors.text}, styles.header]}>Preferences</Text>
             
-        {/* </View> */}
-    </View>
+            { 
+                !toggleDeleteWarn ?
+                <>
+                    <CustomButton
+                        text='Change Password'
+                        onPress={()=> navigation.navigate('EditPassword')}
+                    />
+                    <CustomButton
+                        text='Log Out'
+                        onPress={handleSignOut}
+                    />
+                    <CustomButton 
+                        text='Delete Account' 
+                        onPress={toggleDeleteWarning}
+                    />
+                     {/* <CustomButton 
+                            text='Toggle' 
+                            onPress={()=> changeTheme()}
+                        /> */}
+                    <View style={styles.toggleContainer}>
+                        <Text style={[{color: colors.text}, styles.test]}>Toggle Theme</Text>
+                        <Switch 
+                            onChange={() => changeTheme()}
+                            value={theme}
+                        />
+                    </View>
+                    
+                </>
+                :
+                <>
+                    <View style={styles.containerDeleteWarning}>
+                        <Text style={styles.modalText}>Are you sure you want to delete your account?</Text>
+                        <CustomButton 
+                            text ='Delete Account' 
+                            onPress={handleDelete} 
+                        />
+                        <CustomButton 
+                            text='Go Back' 
+                            onPress={toggleDeleteWarning}
+                        />
+                       
+                    </View>
+                </>     
+            }
+            {/* <View style={styles.footer}> */}
+                
+            {/* </View> */}
+        </View>
+    </ScrollView>
   )
 }
 
@@ -128,9 +171,12 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center'
     },
-    // footer: {
-    //     position: 'absolute',
-    //     width: '100%',
-    //     bottom: 0,
-    // }
+    toggleContainer: {
+        alignItems: 'center',
+        fontSize: 35,
+    },
+    test: {
+        // padding: '5%',
+        fontSize: 20
+    }
 })
