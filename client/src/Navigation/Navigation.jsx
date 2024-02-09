@@ -22,6 +22,7 @@ import Home from '../screens/HomeScreen/Home';
 import PostToDo from '../screens/PostToDo';
 import ToDoDescription from '../screens/ToDoDetails/ToDoDetails';
 import Preferences from '../screens/Preferences';
+import EditPassword from '../screens/EditPassword';
 import SignUpComplete from '../screens/SignUpComplete';
 import TestScreen from '../screens/TestScreen';
 
@@ -32,10 +33,6 @@ const Stack = createNativeStackNavigator();
 const Navigation = () => {
 
   const {user, setUser, checkUser} = useContext(UserContext)
-  
-  // console.log(Appearance)
-
-  
   
   //Deep Linking
   const linking = {
@@ -58,7 +55,17 @@ const Navigation = () => {
           name="Home" 
           component={Home}
           />
-        <Drawer.Screen name="Preferences" component={Preferences} />
+        <Drawer.Screen 
+          name="Preferences" 
+          component={Preferences} 
+        />
+        <Drawer.Screen 
+          name='EditPassword' 
+          component={EditPassword} 
+          options={{
+            drawerItemStyle: {display: 'none'}
+          }}
+        />
       </Drawer.Navigator>
     );
   }
@@ -105,14 +112,18 @@ const Navigation = () => {
                   component={MyDrawer} 
                   // user={user}
                   options={{title: 'The Best ToDo List'}}
+               
                 />
-                 {/* <Stack.Screen 
-                  name='Home' 
-                  component={Home} 
-                  // user={user}
-                  options={{title: 'Welcome'}}
+                {/* <Stack.Screen 
+                  name='EditPassword'
+                  component={EditPassword}
+                  options={
+                    {
+                      headerBackTitleVisible: false,
+                      headerTitle: 'The Best ToDo List'
+                    }
+                  }
                 /> */}
-                {/* <Stack.Screen name='ToDo' component={ToDo}/> */}
                 <Stack.Screen 
                   name='PostToDo' 
                   component={PostToDo} 
@@ -120,7 +131,6 @@ const Navigation = () => {
                     presentation: 'modal', 
                     title: 'Add a todo'
                   }}
-                  initialParams={'test'}
                 />
                 <Stack.Screen 
                   name='ToDoDescription' 

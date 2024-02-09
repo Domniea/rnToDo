@@ -49,13 +49,21 @@ const ToDoDescription = (props) => {
     }
 
     return (
-        <Modal animationType='slide' transparent={true}>
+        <Modal 
+            supportedOrientations={[
+                'portrait', 
+                'landscape',
+                'landscape-left', 
+                'landscape-right'
+            ]} 
+            animationType='slide' 
+            transparent={true}
+        >
             <TouchableWithoutFeedback onPress={disregardDetailsModal}>
                 <View style={styles.container}>
-                    <View style={styles.modal}>
                         {
                             !edit ?
-                            <View style={styles.notes}>
+                            <View style={height >=500 ? styles.notes : styles.notesLANDSCAPE}>
                                 <Text style={styles.header}>{title}</Text>
                                 <Text style={styles.secondary}>{notes}</Text>
                                 <CustomButton 
@@ -64,7 +72,7 @@ const ToDoDescription = (props) => {
                                 />
                             </View>
                             :
-                            <View style={styles.edit}>
+                            <View style={height >=500 ? styles.edit : styles.editLANDSCAPE}>
                                 <CustomInput 
                                     name='title'
                                     placeholder={title}
@@ -87,8 +95,6 @@ const ToDoDescription = (props) => {
                                 />
                             </View>
                         }
-                            
-                    </View>
                 </View>
             </TouchableWithoutFeedback>
         </Modal>
@@ -103,19 +109,25 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    modal: {
+    test:{
+        backgroundColor: 'green'
+    },
+    notes: {
         backgroundColor: 'white',
-        padding: '5%',
-        height: '38%',
+        paddingHorizontal: '3%',
+        height: '30%',
         width: '80%',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10
     },
-    notes: {
-        width: '100%',
+    notesLANDSCAPE: {
+        backgroundColor: '#FFF',
+        paddingHorizontal: '10%',
+        height: '60%',
+        width: '80%',
         justifyContent: 'center',
-        alignItems: 'center'
+        borderRadius: 10
     },
     header: {
         fontSize: 30,
@@ -129,6 +141,20 @@ const styles = StyleSheet.create({
     },
     edit: {
         backgroundColor: 'white',
-        width: '100%'
+        padding: '5%',
+        height: '30%',
+        width: '80%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10
+        
+    },
+    editLANDSCAPE: {
+        backgroundColor: '#FFF',
+        padding: '10%',
+        height: '60%',
+        width: '80%',
+        justifyContent: 'center',
+        borderRadius: 10
     }
 })

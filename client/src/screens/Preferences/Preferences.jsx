@@ -1,30 +1,31 @@
-import { Alert, StyleSheet, Text, View } from 'react-native'
+import { Alert, StyleSheet, useWindowDimensions, Text, View } from 'react-native'
 import React from 'react'
 import { useState, useContext} from 'react'
 import { UserContext } from '../../context/UserProvider';
 import { useTheme } from '@react-navigation/native'
 import { Appearance } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import { deleteUser } from 'aws-amplify/auth';
 
 import CustomButton from '../../components/CustomButton'
 
+
 const Preferences = () => {
+
+    const { width, height } = useWindowDimensions()
+
+    const navigation = useNavigation()
 
     const { colors } = useTheme()
 
     const [toggleTheme, setToggleTheme] = useState(true)
 
-    // function toggleColors() {
-    //     setToggleTheme(prevState => !prevState)
-    // }
-
     function darkSet(){
-
         Appearance.setColorScheme('dark')
     }    
-    function lightSet(){
 
+    function lightSet(){
         Appearance.setColorScheme('light')
     }    
 
@@ -56,12 +57,16 @@ const Preferences = () => {
 
 
   return (
-    <View style={styles.containerScreen}>
+    <View style={height >= 500 ? styles.containerScreen : styles.containerScreenLANDSCAPE}>
         <Text style={[{color: colors.text}, styles.header]}>Preferences</Text>
         
         { 
             !toggleDeleteWarn ?
             <>
+             <CustomButton
+                    text='Change Password'
+                    onPress={()=> navigation.navigate('EditPassword')}
+                />
                 <CustomButton
                     text='Log Out'
                     onPress={handleSignOut}
@@ -98,8 +103,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         // justifyContent: 'space-around'
     },
+    containerScreenLANDSCAPE: {
+        marginHorizontal: '10%',
+        marginVertical: '2%',
+        flex: 1,
+        alignItems: 'center',
+        // justifyContent: 'space-around'
+    },
     header: {
-        margin: '5%',
+        margin: '2%',
         fontSize: 35
     },
     containerDeleteWarning: {

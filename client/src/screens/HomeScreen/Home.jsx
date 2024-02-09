@@ -1,20 +1,19 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { StyleSheet, Text, View, useWindowDimensions, ScrollView, TouchableWithoutFeedback,Keyboard, Pressable } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { useForm } from 'react-hook-form'
 import { UserContext } from '../../context/UserProvider'
-// import axios from 'axios'
 
 import CustomButton from '../../components/CustomButton'
-import CustomInput from '../../components/CustomInput'
+
 import ToDo from '../../components/ToDo'
 import PostToDo from '../PostToDo'
 import { ToDoContext } from '../../context/ToDoProvider'
-import ToDoDetails from '../ToDoDetails/ToDoDetails'
 
 
 
 const Home = (props) => {
+
+  const navigation = useNavigation()
 
   const [addToDoVisible, setAddToDoVisible] = useState(false)
 
@@ -34,8 +33,6 @@ const Home = (props) => {
     getUsersToDo,
     deleteToDo
   } = useContext(ToDoContext)
-
-  const navigation = useNavigation()
 
   function submitDelete(id) {
     deleteToDo(id)
@@ -61,14 +58,18 @@ const Home = (props) => {
     />
   }) 
 
+
+  console.log(height)
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 
-      <View style={styles.container}>
+      <View style={ height >= 500 ? styles.container : styles.containerLANDSCAPE }>
 
         <CustomButton 
           text='Add ToDo' 
           onPress={toggleAddToDo}
+          style={{fontSize: 'green' }}
         />
         <Text style={styles.header}>ToDo's</Text>
        {
@@ -94,10 +95,6 @@ const Home = (props) => {
         </View>
 
         <View style={styles.footer}>
-          {/* <CustomButton
-            text='Log Out'
-            onPress={handleSignOut}
-          /> */}
         </View>
       
       </View>
@@ -112,9 +109,14 @@ export default Home
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
     alignItems: 'center',
     margin: '10%'
+  },
+  containerLANDSCAPE: {
+    flex: 1,
+    alignItems: 'center',
+    marginHorizontal: '10%',
+    marginVertical: '2%'
   },
   header: {
     fontSize: 40,

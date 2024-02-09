@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { StyleSheet, Text, View, Pressable, ScrollViewBase, TouchableWithoutFeedback, Keyboard, Modal } from 'react-native'
+import { StyleSheet, useWindowDimensions, Text, View, TouchableWithoutFeedback, Modal } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useForm } from 'react-hook-form'
 
@@ -11,6 +11,8 @@ import { UserContext } from '../../context/UserProvider'
 import { ToDoContext } from '../../context/ToDoProvider'
 
 const PostToDo = (props) => {
+
+    const { height } = useWindowDimensions()
 
     const navigation = useNavigation()
 
@@ -49,13 +51,22 @@ const PostToDo = (props) => {
     console.log('username',username)
 
   return (
-      <Modal animationType='slide' transparent={true}>
+      <Modal 
+        supportedOrientations={[
+            'portrait', 
+            'landscape',
+            'landscape-left', 
+            'landscape-right'
+            ]} 
+            animationType='slide' 
+            transparent={true}
+        >
 
         <TouchableWithoutFeedback onPress={disregardModal}>
 
             <View style={styles.container}>
 
-                <View style={styles.form}>
+                <View style={height >= 500 ? styles.form : styles.formLANDSCAPE}>
                     <CustomInput 
                     name='title'
                     placeholder='What do you need to do?'
@@ -104,5 +115,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 10,
         marginBottom: 100
-    }
+    },
+    formLANDSCAPE: {
+        backgroundColor: '#FFF',
+        padding: '10%',
+        height: '60%',
+        width: '80%',
+        justifyContent: 'center',
+        borderRadius: 10
+    },
 })
