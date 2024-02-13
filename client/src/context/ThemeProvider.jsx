@@ -17,14 +17,14 @@ function ThemeProvider(props) {
 
     useEffect(() => {
         getTheme()
-        console.log('Get Theme:', theme)
+        // console.log('Get Theme:', theme)
     }, [])
 
     useEffect(() => {
         const subscription = Appearance.addChangeListener((theme) => {
             theme.colorScheme === "dark" ? setTheme(true) : setTheme(false)
         })
-        console.log('Listener:', theme)
+        // console.log('Listener:', theme)
         return () => subscription.remove()
     }, [])
 

@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useState, createContext } from "react";
-import axios from 'axios'
 import { signOut } from 'aws-amplify/auth'
 import { getCurrentUser } from 'aws-amplify/auth';
 
@@ -29,7 +28,7 @@ function UserProvider(props) {
         }
       }
 
-      async function handleDelete() {
+      async function handleDeleteAccount() {
           try {
               await deleteUser()
               Alert.alert('Your account has been permanently deleted')
@@ -48,16 +47,6 @@ function UserProvider(props) {
         checkUser()
     }, [])
 
-    
-    function onFacebook() {
-        console.log('Facebook In')
-    }
-
-     function onApple() {
-        console.log('Apple In')
-    }
-
-
     return (
         <UserContext.Provider
             value={{
@@ -65,10 +54,7 @@ function UserProvider(props) {
                 setUser,
                 handleSignOut,
                 checkUser,
-                onFacebook,
-                onApple,
-                // deleteAllToDos,
-                handleDelete
+                handleDeleteAccount
             }}
         >
             {props.children}

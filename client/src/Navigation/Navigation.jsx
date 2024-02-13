@@ -44,8 +44,6 @@ const Navigation = () => {
     setTheme
   } = useContext(ThemeContext)
 
-  console.log('Navigator:', theme)
-
   //Deep Linking
   const linking = {
     prefixes: ['todoapp://'],

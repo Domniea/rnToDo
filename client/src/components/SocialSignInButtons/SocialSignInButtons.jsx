@@ -5,12 +5,6 @@ import { UserContext } from '../../context/UserProvider'
 import CustomButton from '../CustomButton'
 
 const SocialSignInButtons = (props) => {
-
-    const {
-        onGoogle,
-        onFacebook,
-        onApple
-    }= useContext(UserContext)
     
     const {
         onPressGoogle,

@@ -79,7 +79,7 @@ function ToDoProvider(props) {
         }
     }
 
-    async function deleteAll(username) {
+    async function deleteAllToDos(username) {
         try {
             const responseData = await axios.delete(`https://rntodo-production.up.railway.app/todo/delete/${username}`)
             // const responseData = await axios.delete(`http://localhost:9000/todo/delete/${username}`)
@@ -90,8 +90,6 @@ function ToDoProvider(props) {
             console.log(error)
         }
     }
-
-    console.log(allToDos)
     
     return (
         <ToDoContext.Provider
@@ -103,7 +101,7 @@ function ToDoProvider(props) {
                 submitToDo,
                 editToDo,
                 deleteToDo,
-                deleteAll
+                deleteAllToDos
             }}
         >
             {props.children}

@@ -33,19 +33,19 @@ const Preferences = () => {
         user,
         setUser,
         handleSignOut,
-        // deleteAllToDos,
-        handleDelete
+        handleDeleteAccount
     } = useContext(UserContext)
 
     const {
-        deleteAll      
+        deleteAllToDos 
     } = useContext(ToDoContext)
 
 
     const { username } = user
 
-    function handleDeleteSubmit(username) {
-        deleteAll(username)
+    function handleDeleteUserSubmit(username) {
+        deleteAllToDos(username)
+        handleDeleteAccount(username)
         navigation.navigate('Home')
      }
 
@@ -78,7 +78,7 @@ const Preferences = () => {
                     />
                      <CustomButton 
                             text='Delete ToDOs' 
-                            onPress={()=> handleDeleteSubmit(username)}
+                            onPress={()=> handleDeleteUserSubmit(username)}
                         />
                     <View style={styles.toggleContainer}>
                         <Text style={[{color: colors.text}, styles.test]}>Toggle Theme</Text>
