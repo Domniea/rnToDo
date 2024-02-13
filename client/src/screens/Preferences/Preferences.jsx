@@ -1,15 +1,16 @@
 import { Alert, StyleSheet, useWindowDimensions, ScrollView, Text, View, Switch } from 'react-native'
 import React from 'react'
 import { useState, useEffect, useContext} from 'react'
-import { UserContext } from '../../context/UserProvider';
 import { useTheme } from '@react-navigation/native'
-import { Appearance } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { deleteUser } from 'aws-amplify/auth';
 
 import CustomButton from '../../components/CustomButton'
+
+import { UserContext } from '../../context/UserProvider';
 import { ThemeContext } from '../../context/ThemeProvider';
+import { ToDoContext } from '../../context/ToDoProvider';
 
 
 const Preferences = () => {
@@ -29,10 +30,24 @@ const Preferences = () => {
 
 
     const {
+        user,
         setUser,
-        handleSignOut
+        handleSignOut,
+        // deleteAllToDos,
+        handleDelete
     } = useContext(UserContext)
 
+    const {
+        deleteAll      
+    } = useContext(ToDoContext)
+
+
+    const { username } = user
+
+    function handleDeleteSubmit(username) {
+        deleteAll(username)
+        navigation.navigate('Home')
+     }
 
     //Delete User
     const [toggleDeleteWarn, setToggleDeleteWarn] = useState(false)
@@ -40,22 +55,6 @@ const Preferences = () => {
     function toggleDeleteWarning() {
         setToggleDeleteWarn(prevState => !prevState)
     }
-
-    async function handleDelete() {
-        try {
-            await deleteUser()
-            Alert.alert('Your account has been permanently deleted')
-
-            setTimeout(() => {
-                setUser(undefined)
-                }, 2000
-            )
-        }
-        catch(error) {
-            console.log(error)
-        }
-    }
-
 
   return (
     <ScrollView>
@@ -77,10 +76,10 @@ const Preferences = () => {
                         text='Delete Account' 
                         onPress={toggleDeleteWarning}
                     />
-                     {/* <CustomButton 
-                            text='Toggle' 
-                            onPress={()=> changeTheme()}
-                        /> */}
+                     <CustomButton 
+                            text='Delete ToDOs' 
+                            onPress={()=> handleDeleteSubmit(username)}
+                        />
                     <View style={styles.toggleContainer}>
                         <Text style={[{color: colors.text}, styles.test]}>Toggle Theme</Text>
                         <Switch 

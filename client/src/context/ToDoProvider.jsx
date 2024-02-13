@@ -16,19 +16,21 @@ function ToDoProvider(props) {
     //Get All
     async function getAllToDos() {
         try{
-          const data = await axios.get('https://rntodo-production.up.railway.app/todo/')
-          setAllToDos(data.data)
-        }
+            const data = await axios.get('https://rntodo-production.up.railway.app/todo/')
+        // const data = await axios.get('http://localhost:9000/todo/')
+            setAllToDos(data.data)
+            }
         catch(error) {
           console.log(error)
         }
       }
     
     //Get Users ToDo
-    async function getUsersToDo(userId) {
+    async function getUsersToDo(username) {
         try{
-          const data = await axios.get(`https://rntodo-production.up.railway.app/todo/${userId}`)
-          setAllToDos(data.data)
+            const data = await axios.get(`https://rntodo-production.up.railway.app/todo/${username}`)
+            // const data = await axios.get(`http://localhost:9000/todo/${username}`)
+            setAllToDos(data.data)
         
         }
         catch(error) {
@@ -37,14 +39,14 @@ function ToDoProvider(props) {
       }
 
     //Post ToDo
-    async function submitToDo(path, data) {
+    async function submitToDo(path, userData) {
         try {
-            const response = await axios.post(`https://rntodo-production.up.railway.app/todo/${path}`, data)
+            const data = await axios.post(`https://rntodo-production.up.railway.app/todo/${path}`, userData)
+            // const data = await axios.post(`http://localhost:9000/todo/${path}`, userData)
             setAllToDos(prevState => {
                 return [...prevState,
-                response]
+                data.data]
             })
-
         }
         catch(error) {
         console.log(error)
@@ -52,9 +54,10 @@ function ToDoProvider(props) {
     }
     
     //Edit ToDo
-    async function editToDo(path, data) {
+    async function editToDo(path, userData) {
         try {
-            const response = await axios.put(`https://rntodo-production.up.railway.app/todo/${path}`, data)
+            const data = await axios.put(`https://rntodo-production.up.railway.app/todo/${path}`, userData)
+            // const data = await axios.put(`http://localhost:9000/todo/${path}`, userData)
         }
         catch(error) {
             console.log(error)
@@ -62,16 +65,34 @@ function ToDoProvider(props) {
     }
 
     //Delete ToDo
-    async function deleteToDo(path) {
+    async function deleteToDo(id) {
         console.log('deleted')
         try {
-            const response = await axios.delete(`https://rntodo-production.up.railway.app/todo/${path}`)
+            const data = await axios.delete(`https://rntodo-production.up.railway.app/todo/${id}`)
+            // const data = await axios.delete(`http://localhost:9000/todo/${id}`)
+            setAllToDos(prevState => {
+                return prevState.filter(person => person._id !== id)
+            })
         }
         catch(error) {
             console.log(error)
         }
     }
 
+    async function deleteAll(username) {
+        try {
+            const responseData = await axios.delete(`https://rntodo-production.up.railway.app/todo/delete/${username}`)
+            // const responseData = await axios.delete(`http://localhost:9000/todo/delete/${username}`)
+            setAllToDos([])
+            console.log('All USER DATA DELETED')
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
+    console.log(allToDos)
+    
     return (
         <ToDoContext.Provider
             value={{
@@ -81,7 +102,8 @@ function ToDoProvider(props) {
                 getUsersToDo,
                 submitToDo,
                 editToDo,
-                deleteToDo
+                deleteToDo,
+                deleteAll
             }}
         >
             {props.children}

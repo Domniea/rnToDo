@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import { useTheme } from '@react-navigation/native'
 
 import CustomButton from '../CustomButton'
-import PostToDo from '../../screens/PostToDo'
 import ToDoDetails from '../../screens/ToDoDetails/ToDoDetails'
 
 

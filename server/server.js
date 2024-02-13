@@ -14,14 +14,14 @@ app.use(morgan('dev'))
 mongoose.connect(`${process.env.MONGO_URI}`)
     .then(console.log('Connected to DB'))
 
-app.use(
-    cors({
-      origin: ["https://rntodo-production.up.railway.app/"],
-      methods: ["GET", "POST", "PUT","DELETE"],
-      credentials: true,
-      origin: true,
-    })
-  );
+// app.use(
+//     cors({
+//       origin: ["https://rntodo-production.up.railway.app/"],
+//       methods: ["GET", "POST", "PUT","DELETE"],
+//       credentials: true,
+//       origin: true,
+//     })
+//   );
 
 app.get('/', (req, res) => {
     res.status(200).send('Welcome to the server')

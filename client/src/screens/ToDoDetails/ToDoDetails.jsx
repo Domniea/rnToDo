@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { useTheme } from '@react-navigation/native'
 
 import { ToDoContext } from '../../context/ToDoProvider'
+import { UserContext } from '../../context/UserProvider'
 
 import CustomInput from '../../components/CustomInput'
 import CustomButton from '../../components/CustomButton'
@@ -22,6 +23,14 @@ const ToDoDescription = (props) => {
         editToDo,
         setAllToDos
     } = useContext(ToDoContext)
+
+    const {
+        user
+    } = useContext(UserContext)
+
+    const {
+        username
+    } = user
 
     const {
         toggleModal,

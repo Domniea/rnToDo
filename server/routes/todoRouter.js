@@ -1,7 +1,6 @@
 const express = require('express')
 const todoRouter = express.Router()
 const ToDo = require('../models/todo')
-const todo = require('../models/todo')
 require('dotenv').config()
 
 
@@ -19,10 +18,10 @@ todoRouter.get('/', async (req, res, next) => {
 
 
 //Get Users ToDo
-todoRouter.get('/:userId', async (req, res, next) => {
+todoRouter.get('/:username', async (req, res, next) => {
     try{
         const response = await ToDo.find(
-          { userId: req.params.userId }
+          { username: req.params.username }
         )
         res.status(200).send(response)
     }
@@ -33,8 +32,8 @@ todoRouter.get('/:userId', async (req, res, next) => {
 })
 
 //Post ToDo
-todoRouter.post('/:userId', async (req, res, next) => {
-    req.body.userId = req.params.userId
+todoRouter.post('/:username', async (req, res, next) => {
+    req.body.username = req.params.username
     const newToDo = new ToDo(req.body)
     try{
        const todo =  await newToDo.save()
@@ -62,9 +61,9 @@ todoRouter.put('/:userId', async (req, res, next) => {
 })
 
 //Delete ToDo
-todoRouter.delete('/:todoid', async (req, res, next) => {
+todoRouter.delete('/:todoId', async (req, res, next) => {
     try{
-        const response = await ToDo.findOneAndDelete({ _id: req.params.todoid})
+        const response = await ToDo.findOneAndDelete({ _id: req.params.todoId})
         res.status(200).send('Item was deleted')
     }
     catch(err) {
@@ -73,6 +72,21 @@ todoRouter.delete('/:todoid', async (req, res, next) => {
         next(err)
     }
 })
+
+//Delete All Users ToDO
+todoRouter.delete(`/delete/:username`, async (req, res, next) => {
+    try {
+        const resData = await ToDo.deleteMany({username: req.params.username})
+        res.status(200).send('All USER DATA DELETED')
+    }
+    catch(err) {
+        console.log(err)
+        res.status(500)
+        next(err.response)
+    }
+})
+
+
 
 
 module.exports = todoRouter

@@ -43,12 +43,10 @@ const PostToDo = (props) => {
 
     
     function onSubmitPress(data) {
-        console.log('sending to route', username, data)
         submitToDo(username, data)
         {props.route && navigation.goBack() }
         {fromToggle && toggleModal()}
     }
-    console.log('username',username)
 
   return (
       <Modal 

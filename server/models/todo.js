@@ -4,7 +4,12 @@ const Schema = mongoose.Schema
 
 const todoSchema = new Schema({
     userId: {
-        type: String
+        type: String,
+        default: this._id
+    },
+    username: {
+        type: String,
+   
     },
     title: {
         type: String,
