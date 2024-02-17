@@ -78,11 +78,7 @@ const PostToDo = (props) => {
                     name='description'
                     placeholder='* Notes'
                     control={control}
-                    rules={{
-                        required: 'Title is required'
-                    }}
                     />
-            
                     <CustomButton 
                     text='Submit'
                     onPress={handleSubmit(onSubmitPress)}

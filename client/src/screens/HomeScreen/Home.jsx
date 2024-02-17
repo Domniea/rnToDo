@@ -82,7 +82,7 @@ const Home = (props) => {
         <View 
           style={
               [{height: height * .6}, 
-              {width: width * .8}]
+              {width: width * .9}]
             }
         >
           <ScrollView >

@@ -16,7 +16,7 @@ const ToDo = (props) => {
         setDetailsVisible(prevState => !prevState)
       }
 
-    const { height, width } = useWindowDimensions()
+    const { height , width } = useWindowDimensions()
 
     const {
         title,
@@ -39,6 +39,7 @@ const ToDo = (props) => {
             <Text 
                 style={[{color: colors.text},styles.todo]} 
                 onPress={toggleDetails}
+                numberOfLines={1}
             >
                 {title}
             </Text>
@@ -59,12 +60,16 @@ const styles = StyleSheet.create({
     inline: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center',
+        // backgroundColor: 'grey'
 
     },
     todo: {
         fontSize: 25,
         margin: 5,
-      
+        maxWidth: '60%',
+        
+        
     }
 
 })
