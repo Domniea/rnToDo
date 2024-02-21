@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, Text, TextInput, View } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
+import { useTheme } from '@react-navigation/native'
+
+import { ThemeContext } from '../../context/ThemeProvider' 
 
 const CustomInput = (props) => {
     const {
@@ -12,6 +15,12 @@ const CustomInput = (props) => {
         keyboardType,
         errMessage
     } = props
+
+    const {
+      theme
+    } = useContext(ThemeContext)
+
+    const { colors } = useTheme()
 
   return (
         <Controller 
@@ -26,7 +35,7 @@ const CustomInput = (props) => {
                 onChangeText={onChange}
                 onBlur={onBlur}
                 placeholder={placeholder}
-                style={[styles.input]}
+                style={[theme === 'dark' ? {color : 'black'} : {color: colors.text}, styles.input]}
                 secureTextEntry={secureTextEntry}
                 keyboardType={keyboardType}
                 placeholderTextColor='#333'

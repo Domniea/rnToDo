@@ -79,8 +79,8 @@ android {
         applicationId "com.thebesttodolist"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2
-        versionName "2.5"
+        versionCode 4
+        versionName "1.0"
     }
     signingConfigs {
         release {

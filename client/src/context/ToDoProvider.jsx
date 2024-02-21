@@ -84,7 +84,7 @@ function ToDoProvider(props) {
             const responseData = await axios.delete(`https://rntodo-production.up.railway.app/todo/delete/${username}`)
             // const responseData = await axios.delete(`http://localhost:9000/todo/delete/${username}`)
             setAllToDos([])
-            console.log('All USER DATA DELETED')
+            console.log("All USER TODO's DELETED")
         }
         catch (error) {
             console.log(error)

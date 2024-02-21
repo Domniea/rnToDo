@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useState, createContext } from "react";
 import { signOut } from 'aws-amplify/auth'
 import { getCurrentUser } from 'aws-amplify/auth';
-
+import { deleteUser } from "aws-amplify/auth"; 
 const UserContext = createContext()
 
 

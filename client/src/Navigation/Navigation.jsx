@@ -48,7 +48,7 @@ const Navigation = () => {
   const linking = {
     prefixes: ['todoapp://'],
     config: {
-      initialRouteName: 'TestScreen',
+      initialRouteName: 'home',
       screens:{
         TestScreen: 'test/boob',
         Home: 'home',

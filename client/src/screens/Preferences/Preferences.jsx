@@ -4,7 +4,6 @@ import { useState, useEffect, useContext} from 'react'
 import { useTheme } from '@react-navigation/native'
 import { useNavigation } from '@react-navigation/native';
 
-import { deleteUser } from 'aws-amplify/auth';
 
 import CustomButton from '../../components/CustomButton'
 
@@ -37,11 +36,17 @@ const Preferences = () => {
     } = useContext(UserContext)
 
     const {
+        allToDos,
         deleteAllToDos 
     } = useContext(ToDoContext)
 
 
     const { username } = user
+
+    function handleDeleteToDoSubmit(username) {
+        deleteAllToDos(username)
+        navigation.navigate('Home')
+    }
 
     function handleDeleteUserSubmit(username) {
         deleteAllToDos(username)
@@ -73,13 +78,13 @@ const Preferences = () => {
                         onPress={handleSignOut}
                     />
                     <CustomButton 
+                            text='Delete ToDOs' 
+                            onPress={()=> handleDeleteToDoSubmit(username)}
+                    />
+                    <CustomButton 
                         text='Delete Account' 
                         onPress={toggleDeleteWarning}
                     />
-                     <CustomButton 
-                            text='Delete ToDOs' 
-                            onPress={()=> handleDeleteUserSubmit(username)}
-                        />
                     <View style={styles.toggleContainer}>
                         <Text style={[{color: colors.text}, styles.test]}>Toggle Theme</Text>
                         <Switch 
@@ -95,7 +100,7 @@ const Preferences = () => {
                         <Text style={styles.modalText}>Are you sure you want to delete your account?</Text>
                         <CustomButton 
                             text ='Delete Account' 
-                            onPress={handleDelete} 
+                            onPress={() => handleDeleteUserSubmit(username)} 
                         />
                         <CustomButton 
                             text='Go Back' 
@@ -136,7 +141,7 @@ const styles = StyleSheet.create({
     containerDeleteWarning: {
         width: '100%',
         padding: '5%',
-        backgroundColor: '#a6a6a650',
+        backgroundColor: '#FFF',
         alignItems: 'center',
         borderWidth: 1,
         borderColor: 'black',
