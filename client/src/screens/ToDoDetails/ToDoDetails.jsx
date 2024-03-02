@@ -87,15 +87,33 @@ const ToDoDescription = (props) => {
                                     placeholder={title}
                                     control={control}
                                     keyboardType='default'
+                                    rules={{
+                                        required: true,
+                                        validate: (value) => {
+                                          if (value && value.length > 32) {
+                                            // this will give you the correct value for your error message
+                                            return `Please, enter a title with less than 32 characters (${value.length}/32)`;
+                                          }
+                                        }
+                                      }}
                                 />
                                 <CustomInput 
                                     name='description'
                                     placeholder={notes}
                                     control={control}
                                     keyboardType='default'
+                                    rules={{
+                                        validate: (value) => {
+                                          if (value && value.length > 128) {
+                                            // this will give you the correct value for your error message
+                                            return `Please, enter a title with less than 10 characters (${value.length}/128)`;
+                                          }
+                                        }
+                                      }}
+                                    
                                 />
                                 <CustomButton 
-                                    text='Edit'
+                                    text='Discard Changes'
                                     onPress={() => toggleEdit()}
                                 />
                                 <CustomButton 
@@ -124,18 +142,22 @@ const styles = StyleSheet.create({
     notes: {
         backgroundColor: 'white',
         paddingHorizontal: '3%',
-        height: '35%',
+        minHeight: '30%',
+        // height: '30%',
         width: '80%',
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 10
+        borderRadius: 10,
+        
     },
     notesLANDSCAPE: {
         backgroundColor: '#FFF',
-        paddingHorizontal: '10%',
-        height: '60%',
-        width: '80%',
-        justifyContent: 'center',
+        paddingHorizontal: '05%',
+        paddingVertical: '03%',
+        minHeight: '50%',
+        maxHeight:'90%',
+        width: '85%',
+        justifyConternt: 'center',
         borderRadius: 10
     },
     header: {
@@ -159,11 +181,19 @@ const styles = StyleSheet.create({
         
     },
     editLANDSCAPE: {
+        // backgroundColor: '#FFF',
+        // padding: '10%',
+        // height: '60%',
+        // width: '80%',
+        // justifyContent: 'center',
+        // borderRadius: 10
         backgroundColor: '#FFF',
-        padding: '10%',
-        height: '60%',
-        width: '80%',
-        justifyContent: 'center',
+        paddingHorizontal: '05%',
+        paddingVertical: '03%',
+        minHeight: '50%',
+        maxHeight:'90%',
+        width: '85%',
+        justifyConternt: 'center',
         borderRadius: 10
     }
 })

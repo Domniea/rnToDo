@@ -74,7 +74,7 @@ const CreateAccount = () => {
                     <Text style={styles.header}>Create Account</Text>
                     <CustomInput 
                         name= 'username'
-                        placeholder='username' 
+                        placeholder='username'
                         control={control}
                         rules={{
                             required: 'Username is REQUIRED',
@@ -92,6 +92,7 @@ const CreateAccount = () => {
                         name='email'
                         placeholder='Email'
                         control={control}
+                        keyboardType='email-address'
                         rules={{
                             required: 'Email is REQUIRED',
                             pattern: {
@@ -107,6 +108,7 @@ const CreateAccount = () => {
                     <CustomInput 
                         name='password'
                         placeholder='Password'
+                        secureTextEntry
                         control={control}
                         rules={{
                             required: 'Password is REQUIRED',
@@ -122,87 +124,8 @@ const CreateAccount = () => {
                     />
                     <CustomInput 
                         name='passwordRetyped'
-                        placeholder='re-type password'
-                        control={control}
-                        rules={{
-                            required: 'Passwords do not match',
-                            validate: value => value === pwd || 'Passwords do not match'
-                        }}
-                    
-                    />
-                    <CustomInput 
-                        name='passwordRetyped'
-                        placeholder='re-type password'
-                        control={control}
-                        rules={{
-                            required: 'Passwords do not match',
-                            validate: value => value === pwd || 'Passwords do not match'
-                        }}
-                    
-                    />
-                    <CustomInput 
-                        name='passwordRetyped'
-                        placeholder='re-type password'
-                        control={control}
-                        rules={{
-                            required: 'Passwords do not match',
-                            validate: value => value === pwd || 'Passwords do not match'
-                        }}
-                    
-                    />
-                    <CustomInput 
-                        name='passwordRetyped'
-                        placeholder='re-type password'
-                        control={control}
-                        rules={{
-                            required: 'Passwords do not match',
-                            validate: value => value === pwd || 'Passwords do not match'
-                        }}
-                    
-                    />
-                    <CustomInput 
-                        name='passwordRetyped'
-                        placeholder='re-type password'
-                        control={control}
-                        rules={{
-                            required: 'Passwords do not match',
-                            validate: value => value === pwd || 'Passwords do not match'
-                        }}
-                    
-                    />
-                    <CustomInput 
-                        name='passwordRetyped'
-                        placeholder='re-type password'
-                        control={control}
-                        rules={{
-                            required: 'Passwords do not match',
-                            validate: value => value === pwd || 'Passwords do not match'
-                        }}
-                    
-                    />
-                    <CustomInput 
-                        name='passwordRetyped'
-                        placeholder='re-type password'
-                        control={control}
-                        rules={{
-                            required: 'Passwords do not match',
-                            validate: value => value === pwd || 'Passwords do not match'
-                        }}
-                    
-                    />
-                    <CustomInput 
-                        name='passwordRetyped'
-                        placeholder='re-type password'
-                        control={control}
-                        rules={{
-                            required: 'Passwords do not match',
-                            validate: value => value === pwd || 'Passwords do not match'
-                        }}
-                    
-                    />
-                    <CustomInput 
-                        name='passwordRetyped'
-                        placeholder='TEST TEST TEST TEST'
+                        placeholder='Please re-type password'
+                        secureTextEntry
                         control={control}
                         rules={{
                             required: 'Passwords do not match',
@@ -211,16 +134,7 @@ const CreateAccount = () => {
                     
                     />
                    
-                   
-                   
-                   
-                   
-                   
-                   
-                   
-                   
-                   
-                    {/* <CustomButton 
+                    <CustomButton 
                         text='Register'
                         onPress={handleSubmit(handleSignUp)}
                     />
@@ -238,7 +152,7 @@ const CreateAccount = () => {
                     </Text>
 
                     <SocialSignInButtons />
-                        */}
+                       
                     <CustomButton 
                     text="Already have an account?"
                     onPress={onBacktoSignIn}

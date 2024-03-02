@@ -62,20 +62,7 @@ const Home = (props) => {
     getUsersToDo(username)
   }, [allToDos.length]) 
 
-  // const todo = allToDos.map((item, i) => {
-  //   return <ToDo 
-  //     key={i}
-  //     title={item.title}
-  //     _id={item._id}
-  //     notes={item.description}
-  //     onPress={() => submitDelete(item._id)}
-  //     navigation={navigation}
-  //   />
-  // }) 
-
-
-
-
+  
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 
@@ -98,15 +85,20 @@ const Home = (props) => {
         }
        
         <View 
-          style={
-              [{height: height * .6}, 
-              {width: width * .9}]
-            }
+          // style={
+          //     [{height: height * .6}, 
+          //     {width: width * .9}]
+          //   }
         >
           <FlatList
             nestedScrollEnabled={true}
+            // style={
+            //   [{height: height * .6}, 
+            //   {width: width * .9}]
+            // }
+            style={{height: '100%'}}
             data={allToDos}
-            keyExtractor={item => item._id}
+            keyExtractor={(item, id) => item._id + id}
             renderItem={({item}) => <ToDo
               key={item._id}
               {...item}

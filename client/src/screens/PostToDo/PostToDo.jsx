@@ -78,14 +78,28 @@ const PostToDo = (props) => {
                     placeholder='What do you need to do?'
                     control={control}
                     rules={{
-                    required: 'Title is required'
-                    }}
+                        required: 'Title is required',
+                        validate: (value) => {
+                          if (value && value.length >= 30) {
+                            // this will give you the correct value for your error message
+                            return `Please, enter a title with less than 30 characters (${value.length}/30)`;
+                          }
+                        }
+                      }}
                     keyboardType="default"
                     />
                     <CustomInput 
                     name='description'
                     placeholder='* Notes'
                     control={control}
+                    rules={{
+                        validate: (value) => {
+                          if (value && value.length >= 128) {
+                            // this will give you the correct value for your error message
+                            return `Please, enter a title with less than 128 characters (${value.length}/30)`;
+                          }
+                        }
+                      }}
                     />
                     <CustomButton 
                     text='Submit'
@@ -113,7 +127,7 @@ const styles = StyleSheet.create({
     },
     form: {
         backgroundColor: '#FFF',
-        padding: '10%',
+        padding: '05%',
         height: '30%',
         width: '80%',
         justifyContent: 'center',
@@ -122,7 +136,7 @@ const styles = StyleSheet.create({
     },
     formLANDSCAPE: {
         backgroundColor: '#FFF',
-        padding: '10%',
+        padding: '5%',
         height: '60%',
         width: '80%',
         justifyContent: 'center',

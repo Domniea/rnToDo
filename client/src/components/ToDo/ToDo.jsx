@@ -13,15 +13,14 @@ import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withSpring, withTi
 
 import CustomButton from '../CustomButton'
 import ToDoDetails from '../../screens/ToDoDetails/ToDoDetails'
-
-
+import Icon from 'react-native-vector-icons/FontAwesome5'
 
 
 
 const {width: SCREEN_WIDTH} = Dimensions.get('window')
 const {height: SCREEN_HEIGHT} = Dimensions.get('window')
 const TRANSLATE_X_THRESHOLD = -SCREEN_WIDTH * .3
-const TODO_HEIGHT = SCREEN_HEIGHT * .05
+const TODO_HEIGHT = SCREEN_WIDTH > SCREEN_HEIGHT ? SCREEN_HEIGHT * .15 :  SCREEN_HEIGHT * .05
 
 
 
@@ -61,7 +60,7 @@ const ToDo = (props) => {
 
     const rAnimatedIconStyle = useAnimatedStyle(() => {
         const opacity = withTiming(
-            translateX.value < TRANSLATE_X_THRESHOLD ? 1 : 0
+            translateX.value < -50 ? 1 : 0
         )
         return {opacity}
     })
@@ -103,20 +102,11 @@ const ToDo = (props) => {
     return (
         <Animated.View style={[styles.container, rAnimatedContainerStyle]}>
             <Animated.View style={[styles.iconDelete, rAnimatedIconStyle]}>
-                {/* <CustomButton 
-                        text='delete' 
-                        onPress={props.onPress} 
-                        bgColor='#e3e3e3' 
-                        fgColor='#666666' 
-                        btnWidth={width * .25}
-                /> */}
-                <Text>Delete</Text>
+                <Icon name='trash-alt' size={30} color='red'/>
             </Animated.View>
         <GestureDetector gesture={gestureHandler}>
             <Animated.View style={[rAnimatedSwipe]}>
-                <View style={styles.iconDelete}>
-                    <Text>Delete</Text>
-                </View>
+                
             { 
                 detailsVisible && 
                     <ToDoDetails 
@@ -126,7 +116,8 @@ const ToDo = (props) => {
                         setDetailsVisible={setDetailsVisible}
                     /> 
             }   
-                <View style={[{backgroundColor: colors.card},styles.inline]}>
+
+                <View style={[{backgroundColor: colors.card}, styles.inline]}>
                     <Text 
                         style={[{color: colors.text}, styles.todo]} 
                         onPress={toggleDetails}
@@ -146,20 +137,29 @@ export default ToDo
 
 const styles = StyleSheet.create({
     container: {
-        // backgroundColor: 'green',
         justifyContent: 'center',
         alignContent: 'center',
-        // height: TODO_HEIGHT
+        
+
     },
     inline: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        // marginTop: 10
-        // backgroundColor: 'grey'
+        // borderRadius: 5,
+        // backgroundColor: 'green',
+        // shadowColor: {color ? "#F0F0F0": '#FFF'},
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.36,
+        shadowRadius: 6.68,
+
+elevation: 11,
     },
     todo: {
-        fontSize: 25,
+        fontSize: 30,
         padding: '2.5%',
         maxWidth: '90%',  
         width: '100%',
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     },
     iconDelete: {
         height: '100%',
-        backgroundColor: 'red',
+        // backgroundColor: 'red',
         width: '30%',
         position: 'absolute',
         right: 0,
