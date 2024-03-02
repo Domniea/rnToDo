@@ -5,6 +5,10 @@ import { useTheme } from '@react-navigation/native'
 
 import { ThemeContext } from '../../context/ThemeProvider' 
 
+import KeyboardAvoidContainer from '../KeyboardAvoidingContainer'
+
+
+
 const CustomInput = (props) => {
     const {
         name,
@@ -23,6 +27,7 @@ const CustomInput = (props) => {
     const { colors } = useTheme()
 
   return (
+    
         <Controller 
           control={control}
           name={name}
@@ -46,14 +51,6 @@ const CustomInput = (props) => {
                  <Text style={styles.error}>{error.message}</Text>
                  )
               }
-              {/* {
-                 errMessage && 
-                 <>
-                 
-                 <Text style={styles.error}>{errMessage.message}</Text>
-                 </>
-                 
-              } */}
             </>
           )}
         />  

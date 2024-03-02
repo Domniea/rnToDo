@@ -15,6 +15,7 @@ import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useForm } from 'react-hook-form'
 
+import KeyboardAvoidingContainer from '../../components/KeyboardAvoidingContainer'
 import Logo from '../../../assets/logo.png'
 import CustomInput from '../../components/CustomInput/CustomInput'
 import CustomButton from '../../components/CustomButton/CustomButton'
@@ -48,7 +49,7 @@ const SignIn = () => {
     }
 
   return (
-    <SafeAreaView>
+    <KeyboardAvoidingContainer>
 
         <TouchableWithoutFeedback onPress={Keyboard.dismiss()}>
 
@@ -124,7 +125,7 @@ const SignIn = () => {
 
         </TouchableWithoutFeedback>
 
-    </SafeAreaView>
+    </KeyboardAvoidingContainer>
   )
 }
 
@@ -132,7 +133,7 @@ export default SignIn
 
 const styles = StyleSheet.create({
     root: {
-        padding: 20,
+        // padding: 20,
         alignItems:'center'
     },
     logo: {

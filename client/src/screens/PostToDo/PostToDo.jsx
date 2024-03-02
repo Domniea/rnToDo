@@ -1,14 +1,21 @@
 import React, { useContext } from 'react'
-import { StyleSheet, useWindowDimensions, Text, View, TouchableWithoutFeedback, Modal } from 'react-native'
+import { StyleSheet, 
+        useWindowDimensions, 
+        View, 
+        TouchableWithoutFeedback, 
+        Modal
+    } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useForm } from 'react-hook-form'
 
 
 import CustomButton from '../../components/CustomButton'
 import CustomInput from '../../components/CustomInput'
+import KeyboardAvoidingContainer from '../../components/KeyboardAvoidingContainer'
 
 import { UserContext } from '../../context/UserProvider'
 import { ToDoContext } from '../../context/ToDoProvider'
+
 
 const PostToDo = (props) => {
 
@@ -50,18 +57,19 @@ const PostToDo = (props) => {
 
   return (
       <Modal 
-        supportedOrientations={[
-            'portrait', 
+      supportedOrientations={[
+          'portrait', 
             'landscape',
             'landscape-left', 
             'landscape-right'
             ]} 
             animationType='slide' 
             transparent={true}
-        >
+            >
 
+       
         <TouchableWithoutFeedback onPress={disregardModal}>
-
+        
             <View style={styles.container}>
 
                 <View style={height >= 500 ? styles.form : styles.formLANDSCAPE}>
@@ -83,11 +91,13 @@ const PostToDo = (props) => {
                     text='Submit'
                     onPress={handleSubmit(onSubmitPress)}
                     />
+          
                 </View>
                 
             </View>
             
         </TouchableWithoutFeedback>
+
 
     </Modal>
   )

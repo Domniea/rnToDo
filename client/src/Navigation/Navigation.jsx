@@ -1,4 +1,6 @@
-import { StyleSheet, Text, View, useColorScheme } from 'react-native'
+import { StyleSheet, 
+Platform
+} from 'react-native'
 import React, { useEffect, useContext } from 'react'
 import { Hub } from 'aws-amplify/utils';
 import { Appearance } from 'react-native';
@@ -27,6 +29,7 @@ import EditPassword from '../screens/EditPassword';
 import SignUpComplete from '../screens/SignUpComplete';
 import TestScreen from '../screens/TestScreen';
 
+
 const Drawer = createDrawerNavigator();
 
 const Stack = createNativeStackNavigator();
@@ -40,8 +43,7 @@ const Navigation = () => {
   } = useContext(UserContext)
   
   const {
-    theme,
-    setTheme
+    theme
   } = useContext(ThemeContext)
 
   //Deep Linking
@@ -60,7 +62,11 @@ const Navigation = () => {
   //Main App Drawer
   function MyDrawer() {
     return (
-      <Drawer.Navigator>
+      <Drawer.Navigator
+        screenOptions={
+          Platform.OS === 'android' && theme === 'dark' ? {headerTintColor: 'white'} : {}
+          }
+      >
         <Drawer.Screen
           name="Home" 
           component={Home}
@@ -107,9 +113,16 @@ const Navigation = () => {
   }, [])
 
   return (
-    <NavigationContainer theme={theme === 'dark' ? DarkTheme : DefaultTheme} linking={linking}>
+    <NavigationContainer 
+      theme={theme === 'dark' ? DarkTheme : DefaultTheme} 
+      linking={linking}
+    >
       <ToDoProvider>
-        <Stack.Navigator >
+        <Stack.Navigator 
+          screenOptions={{
+            headerShown: false
+          }}
+        >
           {
             user ? (
               <>
@@ -117,7 +130,6 @@ const Navigation = () => {
                  <Stack.Screen 
                   name='MyDrawer' 
                   component={MyDrawer} 
-                  // user={user}
                   options={{title: 'The Best ToDo List'}}
                
                 />

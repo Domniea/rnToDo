@@ -1,7 +1,17 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { StyleSheet, Text, View, useWindowDimensions, ScrollView, TouchableWithoutFeedback,Keyboard, Pressable } from 'react-native'
+import { StyleSheet, 
+    Text, 
+    View, 
+    useWindowDimensions, 
+    ScrollView, 
+    TouchableWithoutFeedback,
+    Keyboard, 
+    FlatList 
+  } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { UserContext } from '../../context/UserProvider'
+import { useTheme } from '@react-navigation/native'
+
 
 import CustomButton from '../../components/CustomButton'
 
@@ -24,6 +34,10 @@ const Home = (props) => {
   }
 
   const {
+    colors
+  } = useTheme()
+
+  const {
     user,
     handleSignOut
   } = useContext(UserContext)
@@ -43,20 +57,24 @@ const Home = (props) => {
     username,
   } = user
 
+  
   useEffect(() => {
     getUsersToDo(username)
   }, [allToDos.length]) 
 
-  const todo = allToDos.map((item, i) => {
-    return <ToDo 
-      key={i}
-      title={item.title}
-      _id={item._id}
-      notes={item.description}
-      onPress={() => submitDelete(item._id)}
-      navigation={navigation}
-    />
-  }) 
+  // const todo = allToDos.map((item, i) => {
+  //   return <ToDo 
+  //     key={i}
+  //     title={item.title}
+  //     _id={item._id}
+  //     notes={item.description}
+  //     onPress={() => submitDelete(item._id)}
+  //     navigation={navigation}
+  //   />
+  // }) 
+
+
+
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -69,7 +87,7 @@ const Home = (props) => {
           style={styles.test}
           btnMargin={0}
         />
-        <Text style={styles.header}>ToDo's</Text>
+        <Text style={[{color: colors.text}, styles.header]}>ToDo's</Text>
        {
          addToDoVisible && 
           <PostToDo 
@@ -85,11 +103,18 @@ const Home = (props) => {
               {width: width * .9}]
             }
         >
-          <ScrollView >
-            <View style={[styles.list]}>
-              {todo}
-            </View>
-          </ScrollView>  
+          <FlatList
+            nestedScrollEnabled={true}
+            data={allToDos}
+            keyExtractor={item => item._id}
+            renderItem={({item}) => <ToDo
+              key={item._id}
+              {...item}
+              notes={item.description}
+              deleteToDo={deleteToDo}
+              navigation={navigation}
+            />}
+          />
         </View>
 
         <View style={styles.footer}>

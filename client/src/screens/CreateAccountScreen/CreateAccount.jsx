@@ -4,9 +4,11 @@ import {
         StyleSheet,
         useWindowDimensions,
         TouchableWithoutFeedback,
+        TouchableOpacity,
         Keyboard,
         SafeAreaView,
-        ScrollView
+        ScrollView,
+        Linking,
     } from 'react-native'
 import React from 'react'
 import { useContext } from 'react'
@@ -16,6 +18,7 @@ import { useForm } from 'react-hook-form'
 import CustomInput from '../../components/CustomInput/CustomInput'
 import CustomButton from '../../components/CustomButton/CustomButton'
 import SocialSignInButtons from '../../components/SocialSignInButtons'
+import KeyboardAvoidingContainer from '../../components/KeyboardAvoidingContainer'
 import { UserContext } from '../../context/UserProvider'
 
 import { signUp } from 'aws-amplify/auth'
@@ -60,11 +63,11 @@ const CreateAccount = () => {
     }
 
   return (
-    <SafeAreaView>
+    <KeyboardAvoidingContainer>
 
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 
-            <ScrollView showsVerticalScrollIndicator={false}>
+            {/* <ScrollView showsVerticalScrollIndicator={false}> */}
 
                 <View style={styles.root}>
 
@@ -127,32 +130,127 @@ const CreateAccount = () => {
                         }}
                     
                     />
-
-                    <CustomButton 
+                    <CustomInput 
+                        name='passwordRetyped'
+                        placeholder='re-type password'
+                        control={control}
+                        rules={{
+                            required: 'Passwords do not match',
+                            validate: value => value === pwd || 'Passwords do not match'
+                        }}
+                    
+                    />
+                    <CustomInput 
+                        name='passwordRetyped'
+                        placeholder='re-type password'
+                        control={control}
+                        rules={{
+                            required: 'Passwords do not match',
+                            validate: value => value === pwd || 'Passwords do not match'
+                        }}
+                    
+                    />
+                    <CustomInput 
+                        name='passwordRetyped'
+                        placeholder='re-type password'
+                        control={control}
+                        rules={{
+                            required: 'Passwords do not match',
+                            validate: value => value === pwd || 'Passwords do not match'
+                        }}
+                    
+                    />
+                    <CustomInput 
+                        name='passwordRetyped'
+                        placeholder='re-type password'
+                        control={control}
+                        rules={{
+                            required: 'Passwords do not match',
+                            validate: value => value === pwd || 'Passwords do not match'
+                        }}
+                    
+                    />
+                    <CustomInput 
+                        name='passwordRetyped'
+                        placeholder='re-type password'
+                        control={control}
+                        rules={{
+                            required: 'Passwords do not match',
+                            validate: value => value === pwd || 'Passwords do not match'
+                        }}
+                    
+                    />
+                    <CustomInput 
+                        name='passwordRetyped'
+                        placeholder='re-type password'
+                        control={control}
+                        rules={{
+                            required: 'Passwords do not match',
+                            validate: value => value === pwd || 'Passwords do not match'
+                        }}
+                    
+                    />
+                    <CustomInput 
+                        name='passwordRetyped'
+                        placeholder='re-type password'
+                        control={control}
+                        rules={{
+                            required: 'Passwords do not match',
+                            validate: value => value === pwd || 'Passwords do not match'
+                        }}
+                    
+                    />
+                    <CustomInput 
+                        name='passwordRetyped'
+                        placeholder='TEST TEST TEST TEST'
+                        control={control}
+                        rules={{
+                            required: 'Passwords do not match',
+                            validate: value => value === pwd || 'Passwords do not match'
+                        }}
+                    
+                    />
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                    {/* <CustomButton 
                         text='Register'
                         onPress={handleSubmit(handleSignUp)}
                     />
 
                     <Text style={styles.text}>
-                        By registering you agree to out{' '}
-                        <Text style={styles.link}>Terms of Use</Text> and 
-                        <Text style={styles.link}> Privicy Policy</Text>
+                        By registering you agree to our{' '}
+                        <TouchableOpacity 
+                            style={styles.link}
+                            onPress={() => Linking.openURL('https://privacy-central.securiti.ai/#/notices/f18400b2-4646-4961-9011-3944801e505f')}
+                        >
+                            <Text style={styles.link}>
+                                Privicy Policy
+                            </Text>
+                        </TouchableOpacity>
                     </Text>
 
                     <SocialSignInButtons />
-
+                        */}
                     <CustomButton 
                     text="Already have an account?"
                     onPress={onBacktoSignIn}
                     type='TERTIARY'
-                    />
+                    /> 
                 </View>
-
-            </ScrollView>
+{/* 
+            </ScrollView> */}
 
         </TouchableWithoutFeedback>
         
-    </SafeAreaView>
+    </KeyboardAvoidingContainer>
   )
 }
 
@@ -165,11 +263,13 @@ const styles = StyleSheet.create({
     },
     header: {
         fontSize: 40,
-        margin: 20
+        margin: 20,
+        color: 'white',
     },
     text: {
         color: 'gray',
-        marginVertical: 10
+        marginVertical: 10,
+        justifyContent: 'center'
     },
     link: {
         color: '#FDB075'
