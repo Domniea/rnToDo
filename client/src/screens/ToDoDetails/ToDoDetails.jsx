@@ -1,10 +1,18 @@
-import { Modal, StyleSheet, Text, TouchableWithoutFeedback, View, useWindowDimensions } from 'react-native'
+import { 
+        Modal, 
+        StyleSheet, 
+        Text, 
+        TouchableWithoutFeedback, 
+        View, 
+        useWindowDimensions 
+    } from 'react-native'
 import React, { useState, useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTheme } from '@react-navigation/native'
 
 import { ToDoContext } from '../../context/ToDoProvider'
 import { UserContext } from '../../context/UserProvider'
+import { OrientationContext } from '../../context/OrientationProvider' 
 
 import CustomInput from '../../components/CustomInput'
 import CustomButton from '../../components/CustomButton'
@@ -12,8 +20,12 @@ import CustomButton from '../../components/CustomButton'
 const ToDoDescription = (props) => {
 
     const { colors } = useTheme()
-
-    const { height } = useWindowDimensions()
+  
+    const{
+        orientation,
+        windowWidth,
+        windowHeight
+    } = useContext(OrientationContext)
 
     const [edit, setEdit] = useState(false)
 
@@ -72,7 +84,7 @@ const ToDoDescription = (props) => {
                 <View style={styles.container}>
                         {
                             !edit ?
-                            <View style={height >=500 ? styles.notes : styles.notesLANDSCAPE}>
+                            <View style={ orientation === 'PORTRAIT' ? styles.notes : styles.notesLANDSCAPE}>
                                 <Text style={styles.header}>{title}</Text>
                                 <Text style={styles.secondary}>{notes}</Text>
                                 <CustomButton 
@@ -81,7 +93,7 @@ const ToDoDescription = (props) => {
                                 />
                             </View>
                             :
-                            <View style={height >=500 ? styles.edit : styles.editLANDSCAPE}>
+                            <View style={ orientation === 'PORTRAIT' ? styles.edit : styles.editLANDSCAPE}>
                                 <CustomInput 
                                     name='title'
                                     placeholder={title}
@@ -134,7 +146,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginBottom: '10%'
     },
     test:{
         backgroundColor: 'green'
@@ -143,7 +156,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         paddingHorizontal: '3%',
         minHeight: '30%',
-        // height: '30%',
         width: '80%',
         justifyContent: 'center',
         alignItems: 'center',
@@ -158,7 +170,8 @@ const styles = StyleSheet.create({
         maxHeight:'90%',
         width: '85%',
         justifyConternt: 'center',
-        borderRadius: 10
+        borderRadius: 10,
+        
     },
     header: {
         fontSize: 30,
@@ -187,12 +200,14 @@ const styles = StyleSheet.create({
         // width: '80%',
         // justifyContent: 'center',
         // borderRadius: 10
+        marginTop: '2%',
         backgroundColor: '#FFF',
         paddingHorizontal: '05%',
         paddingVertical: '03%',
         minHeight: '50%',
         maxHeight:'90%',
         width: '85%',
+        
         justifyConternt: 'center',
         borderRadius: 10
     }

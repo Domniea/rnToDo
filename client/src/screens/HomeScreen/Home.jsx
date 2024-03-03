@@ -6,28 +6,33 @@ import { StyleSheet,
     ScrollView, 
     TouchableWithoutFeedback,
     Keyboard, 
-    FlatList 
+    FlatList, 
+    Dimensions,
+    Platform
   } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { UserContext } from '../../context/UserProvider'
 import { useTheme } from '@react-navigation/native'
+
+import { ToDoContext } from '../../context/ToDoProvider'
+import { UserContext } from '../../context/UserProvider'
+import { OrientationContext } from '../../context/OrientationProvider'
 
 
 import CustomButton from '../../components/CustomButton'
-
 import ToDo from '../../components/ToDo'
 import PostToDo from '../PostToDo'
-import { ToDoContext } from '../../context/ToDoProvider'
-
 
 
 const Home = (props) => {
+  const {
+    orientation,
+    windowWidth,
+    windowHeight
+  } = useContext(OrientationContext)
 
   const navigation = useNavigation()
 
   const [addToDoVisible, setAddToDoVisible] = useState(false)
-
-  const { height, width } = useWindowDimensions()
 
   function toggleAddToDo(){
     setAddToDoVisible(prevState => !addToDoVisible)
@@ -38,8 +43,7 @@ const Home = (props) => {
   } = useTheme()
 
   const {
-    user,
-    handleSignOut
+    user
   } = useContext(UserContext)
 
   const {
@@ -48,10 +52,10 @@ const Home = (props) => {
     deleteToDo
   } = useContext(ToDoContext)
 
-  function submitDelete(id) {
-    deleteToDo(id)
-    getUsersToDo(username)
-  }
+  // function submitDelete(id) {
+  //   deleteToDo(id)
+  //   getUsersToDo(username)
+  // }
 
   const{
     username,
@@ -62,11 +66,21 @@ const Home = (props) => {
     getUsersToDo(username)
   }, [allToDos.length]) 
 
+
+  // const toDo = allToDos.map((item, i) => {
+  //   return  <ToDo
+  //     key={i}
+  //     {...item}
+  //     notes={item.description}
+  //     deleteToDo={deleteToDo}
+  //     navigation={navigation}
+  //   />
+  // })
   
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 
-      <View style={ height >= 500 ? styles.container : styles.containerLANDSCAPE }>
+      <View style={ orientation === 'PORTRAIT' ? styles.container : styles.containerLANDSCAPE }>
 
         <CustomButton 
           text='Add ToDo' 
@@ -84,19 +98,10 @@ const Home = (props) => {
           />
         }
        
-        <View 
-          // style={
-          //     [{height: height * .6}, 
-          //     {width: width * .9}]
-          //   }
-        >
+
+        <View style={orientation === 'PORTRAIT' ? {height: '80%', width: '100%'} : {height: '50%', width: '100%'}}> 
           <FlatList
             nestedScrollEnabled={true}
-            // style={
-            //   [{height: height * .6}, 
-            //   {width: width * .9}]
-            // }
-            style={{height: '100%'}}
             data={allToDos}
             keyExtractor={(item, id) => item._id + id}
             renderItem={({item}) => <ToDo
@@ -105,14 +110,12 @@ const Home = (props) => {
               notes={item.description}
               deleteToDo={deleteToDo}
               navigation={navigation}
-            />}
+              />
+            }
           />
         </View>
-
-        <View style={styles.footer}>
-        </View>
       
-      </View>
+      </View >
 
   </TouchableWithoutFeedback>
 
@@ -138,13 +141,15 @@ const styles = StyleSheet.create({
     margin: 15
   },
   test: {
-    color: 'green'
+    backgroundColor: 'green',
+    width: 20
   },
   form: {
     alignItems: 'center',
     width: '100%'
-  },
-  list:{
   }
+
+
+
 
 })

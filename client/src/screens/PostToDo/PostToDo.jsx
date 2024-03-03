@@ -15,11 +15,15 @@ import KeyboardAvoidingContainer from '../../components/KeyboardAvoidingContaine
 
 import { UserContext } from '../../context/UserProvider'
 import { ToDoContext } from '../../context/ToDoProvider'
-
+import { OrientationContext } from '../../context/OrientationProvider'
 
 const PostToDo = (props) => {
 
-    const { height } = useWindowDimensions()
+    const{
+        orientation,
+        windowWidth,
+        windowHeight
+    } = useContext(OrientationContext)
 
     const navigation = useNavigation()
 
@@ -72,7 +76,7 @@ const PostToDo = (props) => {
         
             <View style={styles.container}>
 
-                <View style={height >= 500 ? styles.form : styles.formLANDSCAPE}>
+                <View style={orientation === 'PORTRAIT' ? styles.form : styles.formLANDSCAPE}>
                     <CustomInput 
                     name='title'
                     placeholder='What do you need to do?'
@@ -140,6 +144,7 @@ const styles = StyleSheet.create({
         height: '60%',
         width: '80%',
         justifyContent: 'center',
-        borderRadius: 10
+        borderRadius: 10,
+        marginBottom: '10%'
     },
 })

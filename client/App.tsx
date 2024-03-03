@@ -10,6 +10,7 @@ import Navigation from './src/Navigation/Navigation';
 import { UserProvider } from './src/context/UserProvider';
 import { ToDoProvider } from './src/context/ToDoProvider';
 import { ThemeProvider } from './src/context/ThemeProvider';
+import { OrientationProvider } from './src/context/OrientationProvider'
 
 // App.js
 
@@ -22,13 +23,15 @@ function App(): React.JSX.Element {
   return (
     // <SafeAreaView  >
       <View style={styles.root}>
-        <ThemeProvider>
-          <UserProvider>
-            <ToDoProvider>
-              <Navigation />
-            </ToDoProvider>
-          </UserProvider>
-        </ThemeProvider>
+        <OrientationProvider>
+          <ThemeProvider>
+            <UserProvider>
+              <ToDoProvider>
+                <Navigation />
+              </ToDoProvider>
+            </UserProvider>
+          </ThemeProvider>
+        </OrientationProvider>
       </View>
     // </SafeAreaView>
   );
