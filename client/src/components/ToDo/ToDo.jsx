@@ -109,6 +109,7 @@ const ToDo = (props) => {
                     
                 { 
                     detailsVisible && 
+                    
                         <ToDoDetails 
                             title={title} 
                             _id={_id} notes={notes} 

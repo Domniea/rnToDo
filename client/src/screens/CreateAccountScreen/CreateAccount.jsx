@@ -21,7 +21,7 @@ import SocialSignInButtons from '../../components/SocialSignInButtons'
 import KeyboardAvoidingContainer from '../../components/KeyboardAvoidingContainer'
 import { UserContext } from '../../context/UserProvider'
 
-import { signUp } from 'aws-amplify/auth'
+import { signUp, signInWithRedirect} from 'aws-amplify/auth'
 
 const CreateAccount = () => {
 
@@ -151,7 +151,12 @@ const CreateAccount = () => {
                         </TouchableOpacity>
                     </Text>
 
-                    <SocialSignInButtons />
+                    <SocialSignInButtons 
+                        onPressGoogle={() => signInWithRedirect({provider: 'Google'})} 
+                        onPressFacebook={() => signInWithRedirect({provider: 'Facebook'})} 
+                        onPressApple={() => signInWithRedirect({provider: 'Apple'})}
+                        onPressAmazon={() => signInWithRedirect({provider: 'Amazon'})} 
+                    />
                        
                     <CustomButton 
                     text="Already have an account?"

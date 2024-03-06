@@ -13,6 +13,7 @@ import { useTheme } from '@react-navigation/native'
 import { ToDoContext } from '../../context/ToDoProvider'
 import { UserContext } from '../../context/UserProvider'
 import { OrientationContext } from '../../context/OrientationProvider' 
+import KeyboardAvoidingContainer from '../../components/KeyboardAvoidingContainer'
 
 import CustomInput from '../../components/CustomInput'
 import CustomButton from '../../components/CustomButton'
@@ -22,9 +23,7 @@ const ToDoDescription = (props) => {
     const { colors } = useTheme()
   
     const{
-        orientation,
-        windowWidth,
-        windowHeight
+        orientation
     } = useContext(OrientationContext)
 
     const [edit, setEdit] = useState(false)
@@ -81,6 +80,8 @@ const ToDoDescription = (props) => {
             transparent={true}
         >
             <TouchableWithoutFeedback onPress={disregardDetailsModal}>
+                
+                
                 <View style={styles.container}>
                         {
                             !edit ?

@@ -78,7 +78,7 @@ const Preferences = () => {
                         onPress={handleSignOut}
                     />
                     <CustomButton 
-                            text='Delete ToDOs' 
+                            text='Delete ALL ToDOs' 
                             onPress={()=> handleDeleteToDoSubmit(username)}
                     />
                     <CustomButton 
