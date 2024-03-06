@@ -17,6 +17,9 @@ const todoSchema = new Schema({
     },
     description: {
         type: String
+    },
+    list: {
+        type: String
     }
 })
 
