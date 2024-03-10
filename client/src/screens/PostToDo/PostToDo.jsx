@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
-import { StyleSheet, 
+import { 
+        StyleSheet, 
         useWindowDimensions, 
         View, 
         TouchableWithoutFeedback, 
@@ -42,8 +43,10 @@ const PostToDo = (props) => {
     const {
         fromToggle,
         toggleModal,
-        setAddToDoVisible
+        setAddToDoVisible,
+        listName
     } = props
+    
     
     const {control, handleSubmit} = useForm()
     
@@ -54,11 +57,14 @@ const PostToDo = (props) => {
 
     
     function onSubmitPress(data) {
+        data.list = listName
+        // console.log(data)
         submitToDo(username, data)
         {props.route && navigation.goBack() }
         {fromToggle && toggleModal()}
     }
 
+    
   return (
       <Modal 
       supportedOrientations={[

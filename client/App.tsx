@@ -11,6 +11,7 @@ import { UserProvider } from './src/context/UserProvider';
 import { ToDoProvider } from './src/context/ToDoProvider';
 import { ThemeProvider } from './src/context/ThemeProvider';
 import { OrientationProvider } from './src/context/OrientationProvider'
+import { ListsProvider } from './src/context/ListsProvider';
 
 // App.js
 
@@ -26,9 +27,11 @@ function App(): React.JSX.Element {
         <OrientationProvider>
           <ThemeProvider>
             <UserProvider>
+            <ListsProvider>
               <ToDoProvider>
                 <Navigation />
               </ToDoProvider>
+              </ListsProvider>
             </UserProvider>
           </ThemeProvider>
         </OrientationProvider>

@@ -8,7 +8,11 @@ import {
     } from 'react-native'
 import React, { useState, useContext } from 'react'
 import { useTheme } from '@react-navigation/native'
-import { Gesture, GestureDetector } from 'react-native-gesture-handler' 
+import { 
+    Gesture, 
+    GestureDetector, 
+    } from 'react-native-gesture-handler' 
+import Swipeable from 'react-native-gesture-handler/Swipeable'
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated'
 
 import { OrientationContext } from '../../context/OrientationProvider' 
@@ -38,10 +42,13 @@ const ToDo = (props) => {
         title,
         _id,
         notes,
-        deleteToDo
+        deleteToDo,
+        panRef,
+        scrollRef
     } = props
 
     const translateX = useSharedValue(0)
+    const translateY = useSharedValue(0)
     const itemHeight = useSharedValue(windowWidth < windowHeight ? 60 :  100)
     const marginVertical = useSharedValue(10)
     const opacity = useSharedValue(0)
@@ -50,8 +57,9 @@ const ToDo = (props) => {
 
 
     //Animated Styles
-    const rAnimatedSwipe = useAnimatedStyle(() => {
+    const rAnimatedSwipe = useAnimatedStyle((event) => {
         return {
+            
             transform: [{translateX: translateX.value}]
         }
     })
@@ -71,6 +79,7 @@ const ToDo = (props) => {
     })
 
 
+
 //Gesture Handler
     const gestureHandler = Gesture.Pan()
         .minDistance(-20)
@@ -79,6 +88,7 @@ const ToDo = (props) => {
         })
         .onUpdate((event) => {
             translateX.value = event.translationX
+            translateY.value = event.translationY
         })
         .onEnd(() => {
             const willDismiss = translateX.value < -windowWidth * .3
@@ -93,9 +103,18 @@ const ToDo = (props) => {
             } else {
                 translateX.value = withSpring(0)
             }
+            
         })
+        .withRef(panRef)
+   
 
-        
+        const composed = Gesture.Simultaneous(
+            gestureHandler
+          );
+
+
+
+
 
     return (
         <Animated.View style={[styles.container, rAnimatedContainerStyle]}>
@@ -104,7 +123,14 @@ const ToDo = (props) => {
                 <Icon name='trash-alt' size={30} color='red'/>
             </Animated.View>
 
-            <GestureDetector gesture={gestureHandler}>
+            <GestureDetector
+                  failOffsetY={[-20, 20]}
+                  activeOffsetX={[-40, 40]}
+                  gesture={gestureHandler}
+                  simultaneousHandlers={scrollRef}
+                //   style={{backgroundColor:'green'}}
+                  
+            >
                 <Animated.View style={[rAnimatedSwipe, {backgroundColor: colors.card}, styles.card]}>
                     
                 { 

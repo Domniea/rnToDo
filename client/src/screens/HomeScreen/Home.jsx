@@ -1,36 +1,62 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext, useRef } from 'react'
 import { StyleSheet, 
     Text, 
     View, 
-    useWindowDimensions, 
-    ScrollView, 
     TouchableWithoutFeedback,
-    Keyboard, 
-    FlatList, 
-    Dimensions,
-    Platform
+    Keyboard
   } from 'react-native'
+import {
+  FlatList,
+  ScrollView
+} from 'react-native-gesture-handler'
+
 import { useNavigation } from '@react-navigation/native'
 import { useTheme } from '@react-navigation/native'
 
 import { ToDoContext } from '../../context/ToDoProvider'
 import { UserContext } from '../../context/UserProvider'
 import { OrientationContext } from '../../context/OrientationProvider'
+import { ListsContext } from '../../context/ListsProvider'
 
 
 import CustomButton from '../../components/CustomButton'
 import ToDo from '../../components/ToDo'
 import PostToDo from '../PostToDo'
+import TestScreen1 from '../TestScreen1'
 
 
 const Home = (props) => {
+
+  const panRef = useRef(null)
+  const scrollRef= useRef(null)
+
+  const navigation = useNavigation()
+
   const {
     orientation,
     windowWidth,
     windowHeight
   } = useContext(OrientationContext)
 
-  const navigation = useNavigation()
+  const {
+    user
+  } = useContext(UserContext)
+
+  const{
+    username,
+  } = user
+
+  const {
+    test,
+    lists,
+    setLists
+  } = useContext(ListsContext)
+
+  const {
+    allToDos,
+    getUsersToDo,
+    deleteToDo
+  } = useContext(ToDoContext)
 
   const [addToDoVisible, setAddToDoVisible] = useState(false)
 
@@ -42,40 +68,16 @@ const Home = (props) => {
     colors
   } = useTheme()
 
-  const {
-    user
-  } = useContext(UserContext)
 
-  const {
-    allToDos,
-    getUsersToDo,
-    deleteToDo
-  } = useContext(ToDoContext)
 
-  // function submitDelete(id) {
-  //   deleteToDo(id)
-  //   getUsersToDo(username)
-  // }
 
-  const{
-    username,
-  } = user
 
-  
+
+
   useEffect(() => {
     getUsersToDo(username)
   }, [allToDos.length]) 
 
-
-  // const toDo = allToDos.map((item, i) => {
-  //   return  <ToDo
-  //     key={i}
-  //     {...item}
-  //     notes={item.description}
-  //     deleteToDo={deleteToDo}
-  //     navigation={navigation}
-  //   />
-  // })
   
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -97,11 +99,16 @@ const Home = (props) => {
             setAddToDoVisible={setAddToDoVisible}
           />
         }
-       
+     
 
         <View style={orientation === 'PORTRAIT' ? {height: '80%', width: '100%'} : {height: '50%', width: '100%'}}> 
+
+
+        <ScrollView  ueRef={scrollRef} simultaneousHandlers={panRef}>
           <FlatList
             nestedScrollEnabled={true}
+            scrollEnabled={false}
+            // disableScrollViewPanResponder
             data={allToDos}
             keyExtractor={(item, id) => item._id + id}
             renderItem={({item}) => <ToDo
@@ -110,9 +117,15 @@ const Home = (props) => {
               notes={item.description}
               deleteToDo={deleteToDo}
               navigation={navigation}
+              panRef={panRef}
+              scrollRef={scrollRef}
+              
               />
             }
+
+
           />
+          </ScrollView>
         </View>
       
       </View >

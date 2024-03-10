@@ -4,16 +4,18 @@ Platform
 import React, { useEffect, useContext } from 'react'
 import { Hub } from 'aws-amplify/utils';
 import { Appearance } from 'react-native';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 
 import { UserContext } from '../context/UserProvider';
 import { ToDoProvider } from '../context/ToDoProvider';
 import { ThemeContext } from '../context/ThemeProvider';
+import { ListsContext } from '../context/ListsProvider';
 
 //Navigator
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerToggleButton } from '@react-navigation/drawer';
 
 //Screens for Navigator
 import SignIn from '../screens/SignInScreen/SignIn';
@@ -22,12 +24,15 @@ import ConfirmEmail from '../screens/ConfirmEmailScreen/ConfirmEmail';
 import ResetPassword from '../screens/ResetPasswordScreen/ResetPassword';
 import ForgotPaassword from '../screens/ForgotPaassword';
 import Home from '../screens/HomeScreen/Home';
+import CreateList from '../screens/CreateList';
+
 import PostToDo from '../screens/PostToDo';
 import ToDoDescription from '../screens/ToDoDetails/ToDoDetails';
 import Preferences from '../screens/Preferences';
 import EditPassword from '../screens/EditPassword';
 import SignUpComplete from '../screens/SignUpComplete';
-import TestScreen from '../screens/TestScreen';
+import TestScreen1 from '../screens/TestScreen1';
+import TestScreen2 from '../screens/TestScreen2';
 
 
 const Drawer = createDrawerNavigator();
@@ -46,6 +51,14 @@ const Navigation = () => {
     theme
   } = useContext(ThemeContext)
 
+  const {
+    test,
+    lists,
+    setLists
+  } = useContext(ListsContext)
+
+
+
   //Deep Linking
   const linking = {
     prefixes: ['todoapp://'],
@@ -59,8 +72,105 @@ const Navigation = () => {
     }
   }
 
+  
+  // const testList = lists.map(listArr => {
+  //   return <Tab.Screen name={listArr} component={TestScreen1}/>
+  // })
+
+
+
+
+
+
+
+
+  //Tab Views
+  const Tab = createMaterialTopTabNavigator();
+
+  function TabView() {
+
+    const Tab = createMaterialTopTabNavigator();
+    const testList = lists.map((listArr,i) => {
+      return <Tab.Screen 
+        key={listArr[0].list + i} 
+        name={listArr[0].list} 
+        component={TestScreen1}
+        initialParams={{todoList: listArr}}
+      />
+    })
+  
+    
+    return (
+      <Tab.Navigator
+      tabBarPosition='bottom'
+      screenOptions={{
+        swipeEnabled: false,
+        tabBarScrollEnabled: true
+      }}
+      >
+        <Tab.Screen name="CreateList" component={CreateList} />
+        {/* <Tab.Screen name="Test Screen1" component={TestScreen1} />
+        <Tab.Screen name="Test Screen 2" component={TestScreen2} /> */}
+        {testList}
+      </Tab.Navigator>
+    );
+  }
+
+  function RightDrawer() {
+
+    // const testList = lists.map(listArr => {
+    // return <Drawer.Screen name={listArr[0].list} component={TestScreen1}/>
+    // })
+
+      const testList = lists.map((listArr,i) => {
+      return <Drawer.Screen 
+        key={listArr[0].list + i} 
+        name={listArr[0].list} 
+        component={TestScreen1}
+        initialParams={{todoList: listArr}}
+      />
+    })
+
+
+    return (
+      <Drawer.Navigator
+        screenOptions={
+          Platform.OS === 'android' && theme === 'dark' ? 
+          {headerTintColor: 'white', drawerPosition: 'right', headerLeft: false, headerRight: () => <DrawerToggleButton/>} : 
+          {drawerPosition: 'right', headerLeft: false, headerRight: () => <DrawerToggleButton/>}
+          }
+      >
+        <Drawer.Screen
+          name="ALL" 
+          component={Home}
+          />
+
+        {testList}
+
+        {/* <Drawer.Screen 
+          name="Preferences" 
+          component={Preferences} 
+        /> */}
+      </Drawer.Navigator>
+    );
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   //Main App Drawer
-  function MyDrawer() {
+  function LeftDrawer() {
     return (
       <Drawer.Navigator
         screenOptions={
@@ -75,16 +185,12 @@ const Navigation = () => {
           name="Preferences" 
           component={Preferences} 
         />
-        <Drawer.Screen 
-          name='EditPassword' 
-          component={EditPassword} 
-          options={{
-            drawerItemStyle: {display: 'none'}
-          }}
-        />
       </Drawer.Navigator>
     );
   }
+
+
+
 
  //SignIn Listiner
   useEffect(() => {
@@ -117,7 +223,7 @@ const Navigation = () => {
       theme={theme === 'dark' ? DarkTheme : DefaultTheme} 
       linking={linking}
     >
-      <ToDoProvider>
+      {/* <ToDoProvider> */}
         <Stack.Navigator 
           screenOptions={{
             headerShown: false
@@ -127,11 +233,22 @@ const Navigation = () => {
             user ? (
               <>
               <Stack.Group>
-                 <Stack.Screen 
-                  name='MyDrawer' 
-                  component={MyDrawer} 
+                <Stack.Screen 
+                  name='LeftDrawer' 
+                  component={LeftDrawer} 
                   options={{title: 'The Best ToDo List'}}
-               
+                />
+                 {/* <Stack.Screen 
+                  name='RightDrawer' 
+                  component={RightDrawer} 
+                  options={{title: 'The Best ToDo List'}}
+                /> */}
+                <Stack.Screen 
+                  name='EditPassword' 
+                  component={EditPassword} 
+                  options={{
+                    drawerItemStyle: {display: 'none'}
+                  }}
                 />
                 <Stack.Screen 
                   name='PostToDo' 
@@ -170,7 +287,7 @@ const Navigation = () => {
               )
           }
         </Stack.Navigator>
-        </ToDoProvider>
+        {/* </ToDoProvider> */}
     </NavigationContainer>
   )
 }
