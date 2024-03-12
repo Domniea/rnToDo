@@ -5,6 +5,9 @@ import React, { useEffect, useContext } from 'react'
 import { Hub } from 'aws-amplify/utils';
 import { Appearance } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
+
 
 
 import { UserContext } from '../context/UserProvider';
@@ -104,8 +107,9 @@ const Navigation = () => {
       <Tab.Navigator
       tabBarPosition='bottom'
       screenOptions={{
-        swipeEnabled: false,
-        tabBarScrollEnabled: true
+        swipeEnabled: true,
+        tabBarScrollEnabled: true,
+        tabBarStyle: {paddingBottom: 20, paddingTop: 10}
       }}
       >
         <Tab.Screen name="CreateList" component={CreateList} />
@@ -179,7 +183,7 @@ const Navigation = () => {
       >
         <Drawer.Screen
           name="Home" 
-          component={Home}
+          component={TabView}
           />
         <Drawer.Screen 
           name="Preferences" 

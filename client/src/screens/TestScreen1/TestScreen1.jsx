@@ -27,6 +27,8 @@ import PostToDo from '../PostToDo'
 
 const TestScreen1 = (props) => {
 
+  const [refresh, setRefresh] = useState(false)
+  
   const dynamicList = props.route.params.todoList
   const listName = props.route.name
 
@@ -72,7 +74,20 @@ const TestScreen1 = (props) => {
   } = useTheme()
 
 
-
+  const testTask = dynamicList.map((item , i)=> {
+    return (
+      <ToDo
+              key={item._id}
+              {...item}
+              notes={item.description}
+              deleteToDo={deleteToDo}
+              navigation={navigation}
+              panRef={panRef}
+              scrollRef={scrollRef}
+              
+              />
+    )
+  })
 
 
 
@@ -82,11 +97,16 @@ const TestScreen1 = (props) => {
   }, [allToDos.length]) 
 
   
+
+  const testFunction = () => {
+    console.log('boob')
+  }
+
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 
       <View style={ orientation === 'PORTRAIT' ? styles.container : styles.containerLANDSCAPE }>
-
         <CustomButton 
           text='Add ToDo' 
           onPress={toggleAddToDo}
@@ -108,13 +128,16 @@ const TestScreen1 = (props) => {
         <View style={orientation === 'PORTRAIT' ? {height: '80%', width: '100%'} : {height: '50%', width: '100%'}}> 
 
 
-        <ScrollView  ueRef={scrollRef} simultaneousHandlers={panRef}>
+        {/* <ScrollView  useRef={scrollRef} simultaneousHandlers={panRef}> */}
           <FlatList
             nestedScrollEnabled={true}
-            scrollEnabled={false}
+            scrollEnabled={true}
             // disableScrollViewPanResponder
             data={dynamicList}
             keyExtractor={(item, id) => item._id + id}
+            ref={scrollRef}
+            simultaneousHandlers={panRef}
+            
             renderItem={({item}) => <ToDo
               key={item._id}
               {...item}
@@ -129,7 +152,9 @@ const TestScreen1 = (props) => {
 
 
           />
-          </ScrollView>
+
+          {/* {testTask} */}
+          {/* </ScrollView> */}
         </View>
       
       </View >

@@ -20,6 +20,8 @@ import { OrientationContext } from '../../context/OrientationProvider'
 import CustomButton from '../CustomButton'
 import ToDoDetails from '../../screens/ToDoDetails/ToDoDetails'
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import { trigger } from 'react-native-haptic-feedback'
+
 
 
 const ToDo = (props) => {
@@ -78,10 +80,33 @@ const ToDo = (props) => {
         }
     })
 
+//Double Tap Gessture Handler
+    const DoubleTapGestureHandler = Gesture.Tap()
+        .runOnJS(true)
+        .maxDuration(250)
+        .numberOfTaps(2)
+        .onStart(() => {
+            // console.log('double tap')
+            toggleDetails()
+        })
+        .onFinalize(() => {
+          
+            // const willDismiss = translateX.value < -windowWidth * .3
+            // if(willDismiss) {
+            //     translateX.value = withTiming(-windowWidth)
+            //     itemHeight.value = withTiming(0)
+            //     marginVertical.value = withTiming(0, undefined, (isFinished) => {
+            //         if(isFinished && deleteToDo){
+            //             runOnJS(deleteToDo)(_id)
+            //         }
+            //     })
+            // } else {
+            //     translateX.value = withSpring(0)
+            // }
+        })
 
-
-//Gesture Handler
-    const gestureHandler = Gesture.Pan()
+//Pan Gesture Handler
+    const panGestureHandler = Gesture.Pan()
         .minDistance(-20)
         .onStart(() => {
             context.value = {x: 0}
@@ -107,12 +132,20 @@ const ToDo = (props) => {
         })
         .withRef(panRef)
    
-
         const composed = Gesture.Simultaneous(
-            gestureHandler
+            panGestureHandler, DoubleTapGestureHandler
           );
 
-
+          const options = {
+            enableVibrateFallback: true,
+            ignoreAndroidSystemSettings: false
+        }
+    
+        const fireHaptic = () => {
+          console.log('Haptic Working')
+            trigger("impactMedium", options)
+        }
+    
 
 
 
@@ -126,9 +159,9 @@ const ToDo = (props) => {
             <GestureDetector
                   failOffsetY={[-20, 20]}
                   activeOffsetX={[-40, 40]}
-                  gesture={gestureHandler}
+                  gesture={panGestureHandler}
                   simultaneousHandlers={scrollRef}
-                //   style={{backgroundColor:'green'}}
+                  style={{backgroundColor:'green'}}
                   
             >
                 <Animated.View style={[rAnimatedSwipe, {backgroundColor: colors.card}, styles.card]}>
@@ -143,13 +176,15 @@ const ToDo = (props) => {
                             setDetailsVisible={setDetailsVisible}
                         /> 
                 }   
+                <GestureDetector gesture={DoubleTapGestureHandler}>
                         <Text 
                             style={[{color: colors.text}, styles.text, orientation === 'LANDSCAPE' ? {fontSize: 20}: {fontSize: 25}]} 
-                            onPress={toggleDetails}
+                            onPress={() => fireHaptic()}
                             numberOfLines={1}
                         >
                             {title}
                         </Text>
+                </GestureDetector>
                     
                 </Animated.View>
             </GestureDetector >

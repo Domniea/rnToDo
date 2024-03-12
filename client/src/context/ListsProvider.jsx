@@ -45,13 +45,7 @@ const [lists, setLists] = useState([])
             console.log(error)
         }
     }
-
-    // const temp = getSections(lists)
-    // console.log(temp[1])
-    // console.log(lists)
-
-
-
+    
     useEffect(() => {
         getUsersLists()
     }, [])
