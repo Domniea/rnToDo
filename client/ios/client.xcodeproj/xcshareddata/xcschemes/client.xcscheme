@@ -86,7 +86,7 @@
       buildConfiguration = "Debug">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Debug"
       customArchiveName = "rnToDo"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>

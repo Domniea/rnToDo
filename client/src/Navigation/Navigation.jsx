@@ -124,12 +124,25 @@ const Navigation = () => {
         {
         lists &&
           lists.map((listArr,i) => {
-          return <Tab.Screen 
+          // console.log('listArr',listArr)
+          if(listArr.list !== undefined){
+            return <Tab.Screen 
             key={listArr.list + i} 
             name={listArr.list} 
             component={TestScreen1}
             initialParams={{todoList: listArr.data}}
           />
+          } else {
+            // console.log('NO LIST', listArr)
+            return <Tab.Screen 
+            key={i} 
+            name={'undefined'} 
+            component={TestScreen1}
+            initialParams={{todoList: listArr.data}}
+          />
+          }
+
+         
         })
    }
       </Tab.Navigator>
@@ -170,20 +183,6 @@ const Navigation = () => {
     );
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   //Main App Drawer
   function LeftDrawer() {
     return (
@@ -193,7 +192,7 @@ const Navigation = () => {
           }
       >
         <Drawer.Screen
-          name="Home" 
+          name="Lists" 
           component={TabView}
           />
         <Drawer.Screen 
@@ -203,9 +202,6 @@ const Navigation = () => {
       </Drawer.Navigator>
     );
   }
-
-
-
 
  //SignIn Listiner
   useEffect(() => {
@@ -232,6 +228,13 @@ const Navigation = () => {
     Hub.listen('auth', listener)
     return () => Hub.remove('auth', listener)
   }, [])
+
+
+
+
+
+
+
 
   return (
     <NavigationContainer 

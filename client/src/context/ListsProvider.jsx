@@ -71,6 +71,15 @@ const [homeList, setHomeList] = useState('CreateList')
     useEffect(() => {
         getUsersLists()
     }, [])
+
+
+
+
+    console.log('listProvider')
+    console.log(lists)
+
+
+
     return (
     <ListsContext.Provider
         value={

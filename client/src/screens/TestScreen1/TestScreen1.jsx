@@ -147,7 +147,7 @@ async function testDelete(listname, id) {
           style={styles.test}
           btnMargin={0}
         />
-        <Text style={[{color: colors.text}, styles.header]}>ToDo's</Text>
+        <Text style={[{color: colors.text}, styles.header]}>{listName}</Text>
        {
          addToDoVisible && 
           <PostToDo
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 40,
-    margin: 15
+    margin: '3%'
   },
   test: {
     backgroundColor: 'green',
