@@ -9,7 +9,7 @@ import React, {
     useEffect
 } from 'react'
 import axios from 'axios'
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry'
+
 
 const ListsContext = createContext()
 
@@ -17,16 +17,38 @@ const ListsProvider = (props) => {
 
 const [lists, setLists] = useState([])
 
+console.log['parent', lists]
+
+
+
+const [homeList, setHomeList] = useState('CreateList')
+
     //Get Lists
+    // function getSections(data) {
+    //     return Object.values(
+    //         data.reduce((result, todo) => {
+    //             const listName = todo.list
+    //             if(!result[listName]){
+    //                 result[listName] = [todo]     
+    //             }
+    //             else {
+    //             result[listName].push(todo)
+    //             }
+    //             return result
+    //         }, [])
+    //     )
+    // }
+
+// Seperate Lists
     function getSections(data) {
         return Object.values(
             data.reduce((result, todo) => {
                 const listName = todo.list
                 if(!result[listName]){
-                    result[listName] = [todo]     
+                    result[listName] = {'list': listName, data: [todo]}
                 }
                 else {
-                result[listName].push(todo)
+                result[listName].data.push(todo)
                 }
                 return result
             }, [])
@@ -34,10 +56,10 @@ const [lists, setLists] = useState([])
     }
 
 
+//Get Lists Call
     async function getUsersLists() {
         try {
             const res = await axios.get('https://rntodo-production.up.railway.app/todo/domniea!')
-            // console.log(res)
 
             setLists(getSections(res.data))
         }
@@ -45,18 +67,20 @@ const [lists, setLists] = useState([])
             console.log(error)
         }
     }
-    
+
     useEffect(() => {
         getUsersLists()
     }, [])
-
     return (
     <ListsContext.Provider
         value={
             {
                 test: 'test',
                 lists,
-                setLists
+                homeList,
+                setHomeList,
+                setLists,
+                getUsersLists
             }
         }
     >

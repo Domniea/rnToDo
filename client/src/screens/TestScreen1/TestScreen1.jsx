@@ -10,9 +10,9 @@ import {
   ScrollView
 } from 'react-native-gesture-handler'
 
+import axios from 'axios'
 import { useNavigation } from '@react-navigation/native'
 import { useTheme } from '@react-navigation/native'
-
 import { ToDoContext } from '../../context/ToDoProvider'
 import { UserContext } from '../../context/UserProvider'
 import { OrientationContext } from '../../context/OrientationProvider'
@@ -22,15 +22,13 @@ import { ListsContext } from '../../context/ListsProvider'
 import CustomButton from '../../components/CustomButton'
 import ToDo from '../../components/ToDo'
 import PostToDo from '../PostToDo'
-// import TestScreen1 from '../TestScreen1'
-
 
 const TestScreen1 = (props) => {
-
-  const [refresh, setRefresh] = useState(false)
   
   const dynamicList = props.route.params.todoList
   const listName = props.route.name
+  
+  const [testState, setTestState] = useState(dynamicList)
 
   const panRef = useRef(null)
   const scrollRef= useRef(null)
@@ -54,7 +52,9 @@ const TestScreen1 = (props) => {
   const {
     test,
     lists,
-    setLists
+    setLists,
+    getUsersLists,
+    setHomeList
   } = useContext(ListsContext)
 
   const {
@@ -74,33 +74,67 @@ const TestScreen1 = (props) => {
   } = useTheme()
 
 
-  const testTask = dynamicList.map((item , i)=> {
-    return (
-      <ToDo
-              key={item._id}
-              {...item}
-              notes={item.description}
-              deleteToDo={deleteToDo}
-              navigation={navigation}
-              panRef={panRef}
-              scrollRef={scrollRef}
-              
-              />
-    )
-  })
+  //POST Todo
+  async function testSubmit(path, userData) {
+    try {
+        const res = await axios.post(`https://rntodo-production.up.railway.app/todo/${path}`, userData)
+        // const data = await axios.post(`http://localhost:9000/todo/${path}`, userData)
 
+        setTestState(prevState => {
+          return [
+            ...prevState,
+            res.data.todo
+          ]
+        })
 
+    }
+    catch(error) {
+    console.log(error)
+    }
+}
 
+//EDIT todo
+async function testEdit(id, userData) {
+  try {
+      const data = await axios.put(`https://rntodo-production.up.railway.app/todo/${id}`, userData)
+      // const data = await axios.put(`http://localhost:9000/todo/${path}`, userData)
 
-  useEffect(() => {
-    getUsersToDo(username)
-  }, [allToDos.length]) 
-
-  
-
-  const testFunction = () => {
-    console.log('boob')
+      setTestState(prevState => {
+        return prevState.map(task => {
+          return task._id !== id ?
+                task :
+                data.data
+        }
+          
+        )
+      })
   }
+  catch(error) {
+      console.log(error)
+  }
+}
+
+
+//DELETE todo
+async function testDelete(listname, id) {
+       
+  console.log('deleted')
+  try {
+      const data = await axios.delete(`https://rntodo-production.up.railway.app/todo/${id}`)
+      // const data = await axios.delete(`http://localhost:9000/todo/${id}`)
+
+      setTestState(prevState => {
+       return  prevState.filter( todo => {
+           return todo._id !== id 
+        })
+      })
+      
+  }
+  catch(error) {
+      console.log(error)
+  }
+}
+
 
 
   return (
@@ -121,6 +155,8 @@ const TestScreen1 = (props) => {
             fromToggle='fromToggle' 
             toggleModal={toggleAddToDo} 
             setAddToDoVisible={setAddToDoVisible}
+            testSubmit={testSubmit}
+            setTestState={setTestState}
           />
         }
      
@@ -128,33 +164,31 @@ const TestScreen1 = (props) => {
         <View style={orientation === 'PORTRAIT' ? {height: '80%', width: '100%'} : {height: '50%', width: '100%'}}> 
 
 
-        {/* <ScrollView  useRef={scrollRef} simultaneousHandlers={panRef}> */}
+     
           <FlatList
             nestedScrollEnabled={true}
             scrollEnabled={true}
-            // disableScrollViewPanResponder
-            data={dynamicList}
-            keyExtractor={(item, id) => item._id + id}
+            data={testState}
+            extraData={dynamicList}
+            keyExtractor={(item, id) => id}
             ref={scrollRef}
             simultaneousHandlers={panRef}
-            
+    
             renderItem={({item}) => <ToDo
               key={item._id}
               {...item}
               notes={item.description}
-              deleteToDo={deleteToDo}
+              deleteToDo={testDelete}
               navigation={navigation}
               panRef={panRef}
               scrollRef={scrollRef}
-              
+              listName={listName}
+              testEdit={testEdit}
               />
             }
 
-
           />
-
-          {/* {testTask} */}
-          {/* </ScrollView> */}
+   
         </View>
       
       </View >

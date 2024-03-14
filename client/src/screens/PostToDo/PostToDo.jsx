@@ -7,7 +7,7 @@ import {
         Modal
     } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { useForm } from 'react-hook-form'
+import { set, useForm } from 'react-hook-form'
 
 
 import CustomButton from '../../components/CustomButton'
@@ -17,8 +17,19 @@ import KeyboardAvoidingContainer from '../../components/KeyboardAvoidingContaine
 import { UserContext } from '../../context/UserProvider'
 import { ToDoContext } from '../../context/ToDoProvider'
 import { OrientationContext } from '../../context/OrientationProvider'
+import { ListsContext } from '../../context/ListsProvider'
 
 const PostToDo = (props) => {
+
+    const navigation = useNavigation()
+
+    const {
+        fromToggle,
+        toggleModal,
+        setAddToDoVisible,
+        listName,
+        testSubmit
+    } = props
 
     const{
         orientation,
@@ -26,12 +37,15 @@ const PostToDo = (props) => {
         windowHeight
     } = useContext(OrientationContext)
 
-    const navigation = useNavigation()
-
     const {
         user
     } = useContext(UserContext)
 
+    const {
+        homeList,
+        setHomeList
+    } = useContext(ListsContext)
+  
     const {
         submitToDo
     } = useContext(ToDoContext)
@@ -40,12 +54,7 @@ const PostToDo = (props) => {
         username
     } = user
     
-    const {
-        fromToggle,
-        toggleModal,
-        setAddToDoVisible,
-        listName
-    } = props
+
     
     
     const {control, handleSubmit} = useForm()
@@ -58,8 +67,9 @@ const PostToDo = (props) => {
     
     function onSubmitPress(data) {
         data.list = listName
-        // console.log(data)
-        submitToDo(username, data)
+        testSubmit(username, data)
+        // setHomeList(listName)
+        // submitToDo(username, data)
         {props.route && navigation.goBack() }
         {fromToggle && toggleModal()}
     }

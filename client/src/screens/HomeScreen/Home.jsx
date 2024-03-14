@@ -74,9 +74,9 @@ const Home = (props) => {
 
 
 
-  useEffect(() => {
-    getUsersToDo(username)
-  }, [allToDos.length]) 
+  // useEffect(() => {
+  //   getUsersToDo(username)
+  // }, [allToDos.length]) 
 
   
   return (

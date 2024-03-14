@@ -11,7 +11,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 
 import { UserContext } from '../context/UserProvider';
-import { ToDoProvider } from '../context/ToDoProvider';
+
 import { ThemeContext } from '../context/ThemeProvider';
 import { ListsContext } from '../context/ListsProvider';
 
@@ -57,7 +57,8 @@ const Navigation = () => {
   const {
     test,
     lists,
-    setLists
+    setLists,
+    homeList
   } = useContext(ListsContext)
 
 
@@ -88,24 +89,30 @@ const Navigation = () => {
 
 
   //Tab Views
-  const Tab = createMaterialTopTabNavigator();
+  // const Tab = createMaterialTopTabNavigator();
+
+  // function TabView() {
+
+  //   const Tab = createMaterialTopTabNavigator();
+  //   const testList = lists.map((listArr,i) => {
+  //     return <Tab.Screen 
+  //       key={listArr[0].list + i} 
+  //       name={listArr[0].list} 
+  //       component={TestScreen1}
+  //       initialParams={{todoList: listArr}}
+  //     />
+  //   })
+  
+
 
   function TabView() {
 
     const Tab = createMaterialTopTabNavigator();
-    const testList = lists.map((listArr,i) => {
-      return <Tab.Screen 
-        key={listArr[0].list + i} 
-        name={listArr[0].list} 
-        component={TestScreen1}
-        initialParams={{todoList: listArr}}
-      />
-    })
-  
-    
+
     return (
       <Tab.Navigator
       tabBarPosition='bottom'
+      initialRouteName={homeList}
       screenOptions={{
         swipeEnabled: true,
         tabBarScrollEnabled: true,
@@ -113,19 +120,24 @@ const Navigation = () => {
       }}
       >
         <Tab.Screen name="CreateList" component={CreateList} />
-        {/* <Tab.Screen name="Test Screen1" component={TestScreen1} />
-        <Tab.Screen name="Test Screen 2" component={TestScreen2} /> */}
-        {testList}
+
+        {
+        lists &&
+          lists.map((listArr,i) => {
+          return <Tab.Screen 
+            key={listArr.list + i} 
+            name={listArr.list} 
+            component={TestScreen1}
+            initialParams={{todoList: listArr.data}}
+          />
+        })
+   }
       </Tab.Navigator>
     );
   }
 
+  //Right Swipe in Drawer
   function RightDrawer() {
-
-    // const testList = lists.map(listArr => {
-    // return <Drawer.Screen name={listArr[0].list} component={TestScreen1}/>
-    // })
-
       const testList = lists.map((listArr,i) => {
       return <Drawer.Screen 
         key={listArr[0].list + i} 
@@ -134,7 +146,6 @@ const Navigation = () => {
         initialParams={{todoList: listArr}}
       />
     })
-
 
     return (
       <Drawer.Navigator

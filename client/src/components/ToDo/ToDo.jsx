@@ -12,10 +12,11 @@ import {
     Gesture, 
     GestureDetector, 
     } from 'react-native-gesture-handler' 
-import Swipeable from 'react-native-gesture-handler/Swipeable'
+
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated'
 
 import { OrientationContext } from '../../context/OrientationProvider' 
+import { ListsContext } from '../../context/ListsProvider'
 
 import CustomButton from '../CustomButton'
 import ToDoDetails from '../../screens/ToDoDetails/ToDoDetails'
@@ -34,6 +35,10 @@ const ToDo = (props) => {
         windowHeight
     } = useContext(OrientationContext)
     
+    const {
+        setHomeList
+    } = useContext(ListsContext)
+
     const [detailsVisible, setDetailsVisible] = useState(false)
 
     function toggleDetails() {
@@ -46,7 +51,9 @@ const ToDo = (props) => {
         notes,
         deleteToDo,
         panRef,
-        scrollRef
+        scrollRef,
+        listName,
+        testEdit
     } = props
 
     const translateX = useSharedValue(0)
@@ -122,7 +129,8 @@ const ToDo = (props) => {
                 itemHeight.value = withTiming(0)
                 marginVertical.value = withTiming(0, undefined, (isFinished) => {
                     if(isFinished && deleteToDo){
-                        runOnJS(deleteToDo)(_id)
+                        // runOnJS(setHomeList)(listName)
+                        runOnJS(deleteToDo)(listName,_id)
                     }
                 })
             } else {
@@ -174,6 +182,7 @@ const ToDo = (props) => {
                             _id={_id} notes={notes} 
                             toggleModal={toggleDetails}
                             setDetailsVisible={setDetailsVisible}
+                            testEdit={testEdit}
                         /> 
                 }   
                 <GestureDetector gesture={DoubleTapGestureHandler}>
