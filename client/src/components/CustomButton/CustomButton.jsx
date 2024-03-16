@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { trigger} from 'react-native-haptic-feedback'
 
 const CustomButton = (props) => {
 
@@ -11,10 +12,17 @@ const CustomButton = (props) => {
         fgColor,
         btnWidth,
         btnMargin
-        
     } = props
 
+    const options = {
+        enableVibrateFallback: true,
+        ignoreAndroidSystemSettings: false
+    }
 
+    const fireHaptic = () => {
+      console.log('Haptic Working')
+        trigger("impactMedium", options)
+    }
 
   return (
     <Pressable 
@@ -26,6 +34,7 @@ const CustomButton = (props) => {
             btnMargin ? {margin: btnMargin} : {marginVertical: 5}
         ]}
         onPress={onPress}
+        onPressIn={fireHaptic}
     >
       <Text  
         style={[

@@ -1,15 +1,53 @@
-import React, { useEffect } from "react";
-import { useState, createContext } from "react";
+import {AsyncStorage} from 'react-native'
+import React, { useContext } from "react";
+import { useEffect, useState, createContext } from "react";
 import { signOut } from 'aws-amplify/auth'
 import { getCurrentUser } from 'aws-amplify/auth';
 import { deleteUser } from "aws-amplify/auth"; 
+
+import { storage } from '../Storage';
+
 const UserContext = createContext()
 
 
 function UserProvider(props) {
 
     const [user, setUser] = useState(undefined)
-    
+
+    if(user) {
+        const { username } = user
+        // console.log(username)
+        storage.set('USERNAME', username)
+    }
+
+
+
+
+
+    // if(user !== undefined){
+    //     _storeData = async (user) => {
+    //         try{
+    //             await AsyncStorage.setItem(
+    //                 'test'
+    //             )
+    //         } catch(error) {
+    //             console.log(error)
+    //         }
+    //     } 
+    // }
+
+    // _retrieveData = async () => {
+    //     try{
+    //         const value = await AsyncStorage.getItem('TASKS')
+    //         if (value !== null) {
+    //             console.log(value)
+    //         }
+    //     }
+    //     catch(error) {
+    //         console.log(error)
+    //     }
+    // }
+
     async function checkUser() {
         try {
             const response = await getCurrentUser({bypassCache: true});

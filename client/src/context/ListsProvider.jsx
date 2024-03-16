@@ -6,38 +6,44 @@ import {
 import React, {
     useState,
     createContext,
-    useEffect
+    useContext,
+    useEffect,
 } from 'react'
 import axios from 'axios'
+
+import { UserContext } from './UserProvider'
+import { storage, test2 } from '../Storage'
 
 
 const ListsContext = createContext()
 
 const ListsProvider = (props) => {
 
-const [lists, setLists] = useState([])
+    const [lists, setLists] = useState([])
+   
+    const [homeList, setHomeList] = useState('CreateList')
 
-console.log['parent', lists]
+    const USERNAME = storage.getString('USERNAME')
 
 
 
-const [homeList, setHomeList] = useState('CreateList')
 
-    //Get Lists
-    // function getSections(data) {
-    //     return Object.values(
-    //         data.reduce((result, todo) => {
-    //             const listName = todo.list
-    //             if(!result[listName]){
-    //                 result[listName] = [todo]     
-    //             }
-    //             else {
-    //             result[listName].push(todo)
-    //             }
-    //             return result
-    //         }, [])
-    //     )
-    // }
+
+        //Get Lists
+        // function getSections(data) {
+        //     return Object.values(
+        //         data.reduce((result, todo) => {
+        //             const listName = todo.list
+        //             if(!result[listName]){
+        //                 result[listName] = [todo]     
+        //             }
+        //             else {
+        //             result[listName].push(todo)
+        //             }
+        //             return result
+        //         }, [])
+        //     )
+        // }
 
 // Seperate Lists
     function getSections(data) {
@@ -59,7 +65,8 @@ const [homeList, setHomeList] = useState('CreateList')
 //Get Lists Call
     async function getUsersLists() {
         try {
-            const res = await axios.get('https://rntodo-production.up.railway.app/todo/domniea!')
+            
+            const res = await axios.get(`https://rntodo-production.up.railway.app/todo/${USERNAME}`)
 
             setLists(getSections(res.data))
         }
@@ -72,11 +79,6 @@ const [homeList, setHomeList] = useState('CreateList')
         getUsersLists()
     }, [])
 
-
-
-
-    console.log('listProvider')
-    console.log(lists)
 
 
 

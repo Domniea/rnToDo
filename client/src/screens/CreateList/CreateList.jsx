@@ -4,36 +4,59 @@ import {
   View,
   Button
 } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTheme } from '@react-navigation/native'
 
 import CustomInput from '../../components/CustomInput'
 import CustomButton from '../../components/CustomButton'
 
-import { trigger} from 'react-native-haptic-feedback'
+import { ListsContext } from '../../context/ListsProvider'
+
+// import { trigger} from 'react-native-haptic-feedback'
 import { Gesture, GestureDetector, ScrollView } from 'react-native-gesture-handler'
+import { useMMKVString } from 'react-native-mmkv'
 
-
+// import { test2 } from '../../Storage'
 
 const CreateList = () => {
 
-  const {control, handleSubmit} = useForm()
+  const {
+    test,
+    lists,
+    homeList,
+    setHomeList,
+    setLists,
+    getUsersLists,
+  } = useContext(ListsContext)
+
+  // const [testCase, setTestCase] = useMMKVString('test.case', test2)
+
+  // const testFunction = () => {
+  //   test2.set('test.case', 'boobs')
+  // }
+
+  // const testDelete = () => {
+  //     test2.delete('test.case')
+  // }
+
+
+  const { control, handleSubmit } = useForm()
 
   const { colors } = useTheme()
 
 
 
 
-    const options = {
-        enableVibrateFallback: true,
-        ignoreAndroidSystemSettings: false
-    }
+    // const options = {
+    //     enableVibrateFallback: true,
+    //     ignoreAndroidSystemSettings: false
+    // }
 
-    const fireHaptic = () => {
-      console.log('Haptic Working')
-        trigger("impactMedium", options)
-    }
+    // const fireHaptic = () => {
+    //   console.log('Haptic Working')
+    //     trigger("impactMedium", options)
+    // }
 
 
     //Double Tap Gessture Handler
@@ -82,6 +105,22 @@ const CreateList = () => {
         //   );
 
 
+  //POST Todo
+  async function createList(data) {
+    try {
+        setLists(prevState => {
+          return [
+            ...prevState,
+            { list: data.newListTitle, data: []}
+          ]
+        })
+
+
+    }
+    catch(error) {
+    console.log(error)
+    }
+}
 
 
 
@@ -90,20 +129,16 @@ const CreateList = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.text, {color: colors.text}]}>CreateList</Text>
+      <Text style={[styles.text, {color: colors.text}]}>Create A List!</Text>
       <CustomInput 
         name='newListTitle'
         placeholder='Name your list'
         control={control}
       />
-      <CustomButton 
-        text='Submit'
-      />
-      {/* <ScrollView>
-      <GestureDetector gesture={composed}>
-      <Button title='Test Haptics' onPress={() => fireHaptic()}/>
-      </GestureDetector>
-      </ScrollView> */}
+       <CustomButton 
+          text='Submit'
+          onPress={handleSubmit(createList)}
+        />
     </View>
   )
 }
@@ -114,7 +149,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    padding: '10%'
   },
   text: {
     // color: 'white',

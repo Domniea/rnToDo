@@ -27,10 +27,10 @@ function App(): React.JSX.Element {
         <OrientationProvider>
           <ThemeProvider>
             <UserProvider>
-            <ListsProvider>
-              <ToDoProvider>
-                <Navigation />
-              </ToDoProvider>
+              <ListsProvider>
+                <ToDoProvider>
+                  <Navigation />
+                </ToDoProvider>
               </ListsProvider>
             </UserProvider>
           </ThemeProvider>
