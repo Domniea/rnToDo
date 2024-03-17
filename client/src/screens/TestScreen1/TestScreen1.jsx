@@ -3,7 +3,8 @@ import { StyleSheet,
     Text, 
     View, 
     TouchableWithoutFeedback,
-    Keyboard
+    Keyboard,
+    Button
   } from 'react-native'
 import {
   FlatList,
@@ -77,7 +78,7 @@ const TestScreen1 = (props) => {
   //POST Todo
   async function testSubmit(path, userData) {
     try {
-        const res = await axios.post(`https://rntodo-production.up.railway.app/todo/${path}`, userData)
+        const res = await axios.post(`https://rntodo-production.up.railway.app/todo/post/${path}`, userData)
         // const data = await axios.post(`http://localhost:9000/todo/${path}`, userData)
 
         setTestState(prevState => {
@@ -135,6 +136,23 @@ async function testDelete(listname, id) {
   }
 }
 
+async function testGetToDelete() {
+
+  console.log('works', username, listName)
+  try {
+      const res = await axios.get(`https://rntodo-production.up.railway.app/todo/${username}/${listName}`)
+      // const data = await axios.delete(`http://localhost:9000/todo/${id}`)
+      
+      console.log(res)
+      
+  }
+  catch(error) {
+      console.log(error)
+  }
+}
+
+
+
 
 
   return (
@@ -188,9 +206,16 @@ async function testDelete(listname, id) {
             }
 
           />
-   
         </View>
       
+        {/* <CustomButton 
+          text='Delete List' 
+          onPress={() =>testGetToDelete(username)}
+          style={styles.test}
+          btnMargin={0}
+        /> */}
+        <Button title='test' onPress={testGetToDelete}/>
+
       </View >
 
   </TouchableWithoutFeedback>

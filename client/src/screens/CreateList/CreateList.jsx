@@ -108,6 +108,7 @@ const CreateList = () => {
   //POST Todo
   async function createList(data) {
     try {
+      setHomeList(data.newListTitle)
         setLists(prevState => {
           return [
             ...prevState,
