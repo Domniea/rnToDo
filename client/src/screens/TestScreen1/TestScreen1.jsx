@@ -150,24 +150,35 @@ async function testDelete(id) {
 
 async function deleteList() {
   setHomeList(lists[0].list)
+
   try {
-      const data = await axios.delete(`https://rntodo-production.up.railway.app/todo/${username}/${listName}`)
-      // const data = await axios.delete(`http://localhost:9000/todo/${username}/${listName}`)
-      console.log(data.data)
-      
-      setLists(prevState => {
-       
-        console.log(lists)
-        return prevState.filter(list => {
-          console.log( typeof list.list)
-          if(list.list !== 'undefined'){
-            return list.list !== listName
-          } else {
-            return list.list === 'undefined'
+      // const data = await axios.get(`https://rntodo-production.up.railway.app/todo/${username}/${listName}`)
+      if(listName !== 'undefined'){
+        const data = await axios.get(`http://localhost:9000/todo/${username}/${listName}`)
+        console.log(data.data)
+      } else if(listName === 'undefined') {
+        console.log('ran')
+        console.log(lists.map(x => {
+          if(x.list === undefined) {
+            const data = await axios.get(`http://localhost:9000/todo/${username}/unListed`)
+            console.log(data.data)
           }
+        }))
+      }
+
+      
+      // setLists(prevState => {
+      //   console.log(lists)
+      //   return prevState.filter(list => {
           
-        })
-      })
+      //     if(list.list !== 'undefined'){
+      //       return list.list !== listName
+      //     } else {
+      //       return list.list === 'undefined'
+      //     }
+          
+      //   })
+      // })
   }
   catch(error) {
       console.log(error)

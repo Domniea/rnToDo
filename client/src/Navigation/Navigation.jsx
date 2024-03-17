@@ -136,7 +136,7 @@ const Navigation = () => {
           } else {
             return <Tab.Screen 
             key={i} 
-            name={'poop'} 
+            name={'undefined'} 
             component={TestScreen1}
             initialParams={{todoList: listArr.data}}
           />

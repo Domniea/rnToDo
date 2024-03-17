@@ -124,10 +124,6 @@ const CreateList = () => {
 }
 
 
-
-console.log('rendered')
-
-
   return (
     <View style={styles.container}>
       <Text style={[styles.text, {color: colors.text}]}>Create A List!</Text>

@@ -74,7 +74,7 @@ todoRouter.delete('/:todoId', async (req, res, next) => {
 })
 
 //Delete List---test
-todoRouter.delete('/:username/:listName', async (req, res, next) => {
+todoRouter.get('/:username/:listName', async (req, res, next) => {
     try{
         const response = await ToDo.find(
           { username: req.params.username, list: req.params.listName}
@@ -84,7 +84,6 @@ todoRouter.delete('/:username/:listName', async (req, res, next) => {
     catch(err) {
         next(err)
     }
-
 })
 
 //Delete All Users ToDO
