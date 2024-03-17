@@ -24,17 +24,27 @@ import CustomButton from '../../components/CustomButton'
 import ToDo from '../../components/ToDo'
 import PostToDo from '../PostToDo'
 
-const TestScreen1 = (props) => {
-  
-  const dynamicList = props.route.params.todoList
-  const listName = props.route.name
-  
+const TestScreen1 = ({route, navigation}) => {
+  const {
+    key,
+    name,
+    params
+      } = route
+
+  const {
+    todoList,
+    goBack
+  } = params
+
+  const dynamicList = todoList
+  const listName = name
+
   const [testState, setTestState] = useState(dynamicList)
 
   const panRef = useRef(null)
   const scrollRef= useRef(null)
 
-  const navigation = useNavigation()
+  // const navigation = useNavigation()
 
   const {
     orientation,
@@ -78,8 +88,8 @@ const TestScreen1 = (props) => {
   //POST Todo
   async function testSubmit(path, userData) {
     try {
-        const res = await axios.post(`https://rntodo-production.up.railway.app/todo/post/${path}`, userData)
-        // const data = await axios.post(`http://localhost:9000/todo/${path}`, userData)
+        const res = await axios.post(`https://rntodo-production.up.railway.app/todo/${path}`, userData)
+        // const res = await axios.post(`http://localhost:9000/todo/${path}`, userData)
 
         setTestState(prevState => {
           return [
@@ -87,6 +97,7 @@ const TestScreen1 = (props) => {
             res.data.todo
           ]
         })
+        
 
     }
     catch(error) {
@@ -117,7 +128,7 @@ async function testEdit(id, userData) {
 
 
 //DELETE todo
-async function testDelete(listname, id) {
+async function testDelete(id) {
        
   console.log('deleted')
   try {
@@ -129,6 +140,7 @@ async function testDelete(listname, id) {
            return todo._id !== id 
         })
       })
+
       
   }
   catch(error) {
@@ -136,15 +148,26 @@ async function testDelete(listname, id) {
   }
 }
 
-async function testGetToDelete() {
-
-  console.log('works', username, listName)
+async function deleteList() {
+  setHomeList(lists[0].list)
   try {
-      const res = await axios.get(`https://rntodo-production.up.railway.app/todo/${username}/${listName}`)
-      // const data = await axios.delete(`http://localhost:9000/todo/${id}`)
+      const data = await axios.delete(`https://rntodo-production.up.railway.app/todo/${username}/${listName}`)
+      // const data = await axios.delete(`http://localhost:9000/todo/${username}/${listName}`)
+      console.log(data.data)
       
-      console.log(res)
-      
+      setLists(prevState => {
+       
+        console.log(lists)
+        return prevState.filter(list => {
+          console.log( typeof list.list)
+          if(list.list !== 'undefined'){
+            return list.list !== listName
+          } else {
+            return list.list === 'undefined'
+          }
+          
+        })
+      })
   }
   catch(error) {
       console.log(error)
@@ -214,7 +237,7 @@ async function testGetToDelete() {
           style={styles.test}
           btnMargin={0}
         /> */}
-        <Button title='test' onPress={testGetToDelete}/>
+        <Button title='test' onPress={deleteList}/>
 
       </View >
 

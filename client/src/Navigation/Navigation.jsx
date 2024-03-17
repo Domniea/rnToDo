@@ -103,7 +103,9 @@ const Navigation = () => {
   //     />
   //   })
   
-
+  // function goHome(){
+  //   navigation.goBack()
+  // }
 
   function TabView() {
 
@@ -113,19 +115,18 @@ const Navigation = () => {
       <Tab.Navigator
       tabBarPosition='bottom'
       initialRouteName={homeList}
+      backBehavior='history'
       screenOptions={{
         swipeEnabled: true,
         tabBarScrollEnabled: true,
-        tabBarStyle: {paddingBottom: 20, paddingTop: 10}
+        tabBarStyle: {paddingBottom: 20, paddingTop: 10},
       }}
       >
         <Tab.Screen name="CreateList" component={CreateList} />
-
         {
         lists &&
           lists.map((listArr,i) => {
-          // console.log('listArr',listArr)
-          if(listArr.list !== undefined){
+          if(listArr.list !== undefined && listArr.data > []){
             return <Tab.Screen 
             key={listArr.list + i} 
             name={listArr.list} 
@@ -133,10 +134,9 @@ const Navigation = () => {
             initialParams={{todoList: listArr.data}}
           />
           } else {
-            // console.log('NO LIST', listArr)
             return <Tab.Screen 
             key={i} 
-            name={'undefined'} 
+            name={'poop'} 
             component={TestScreen1}
             initialParams={{todoList: listArr.data}}
           />
@@ -156,7 +156,7 @@ const Navigation = () => {
         key={listArr[0].list + i} 
         name={listArr[0].list} 
         component={TestScreen1}
-        initialParams={{todoList: listArr}}
+        initialParams={{todoList: listArr, goHome}}
       />
     })
 

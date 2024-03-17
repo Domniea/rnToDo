@@ -79,9 +79,6 @@ const ListsProvider = (props) => {
         getUsersLists()
     }, [])
 
-
-
-
     return (
     <ListsContext.Provider
         value={
