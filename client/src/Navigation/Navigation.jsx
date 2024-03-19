@@ -158,6 +158,7 @@ const Navigation = () => {
 
   //Main App Drawer
   function LeftDrawer() {
+    console.log('left drawer')
     return (
       <Drawer.Navigator
         screenOptions={

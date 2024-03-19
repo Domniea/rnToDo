@@ -165,10 +165,10 @@ async function deleteList() {
   try {
       // const data = await axios.delete(`https://rntodo-production.up.railway.app/todo/${username}/${listName}`)
       if(listName !== 'undefined'){
-        const data = await axios.delete(`http://localhost:9000/todo/delete/${username}/${listName}/test`)
+        const data = await axios.find(`http://localhost:9000/todo/find/${username}/${listName}/test`)
         console.log(data.data)
       } else if(listName === 'undefined') {
-        const data = await axios.delete(`http://localhost:9000/todo/delete/${username}/undefined`)
+        const data = await axios.find(`http://localhost:9000/todo/delete/${username}/undefined`)
         console.log(data.data)
       }
       

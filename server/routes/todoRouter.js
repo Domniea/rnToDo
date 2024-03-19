@@ -76,7 +76,7 @@ todoRouter.delete('/:todoId', async (req, res, next) => {
 //Delete List---test
 todoRouter.delete('/delete/:username/:listName/test', async (req, res, next) => {
     try{
-        const response = await ToDo.deleteMany(
+        const response = await ToDo.find(
           { username: req.params.username, list: req.params.listName}
         // { $and : [{username: req.params.username}, {list: {$in:  false}}]}
         )
@@ -90,7 +90,7 @@ todoRouter.delete('/delete/:username/:listName/test', async (req, res, next) => 
 //delete undefined
 todoRouter.delete('/delete/:username/undefined', async (req, res, next) => {
     try{
-        const response = await ToDo.deleteMany(
+        const response = await ToDo.find(
             { username: req.params.username, list: undefined}
           )
           res.status(200).send(response)
