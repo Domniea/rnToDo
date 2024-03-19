@@ -12,7 +12,7 @@ import {
 } from 'react-native-gesture-handler'
 
 import axios from 'axios'
-import { useNavigation } from '@react-navigation/native'
+
 import { useTheme } from '@react-navigation/native'
 import { ToDoContext } from '../../context/ToDoProvider'
 import { UserContext } from '../../context/UserProvider'
@@ -35,6 +35,7 @@ const TestScreen1 = ({route, navigation}) => {
     todoList,
     goBack
   } = params
+
 
   const dynamicList = todoList
   const listName = name
@@ -116,8 +117,7 @@ async function testEdit(id, userData) {
           return task._id !== id ?
                 task :
                 data.data
-        }
-          
+          } 
         )
       })
   }
@@ -148,43 +148,45 @@ async function testDelete(id) {
   }
 }
 
+
+
+
 async function deleteList() {
-  setHomeList(lists[0].list)
+  if(lists[0].list) {
+      console.log('here', typeof lists[0].list)
+      setHomeList(prevState=> {
+
+      return lists[0].list
+    })
+    } else {
+      setLists('CreateList')
+    }
+  
 
   try {
-      // const data = await axios.get(`https://rntodo-production.up.railway.app/todo/${username}/${listName}`)
+      // const data = await axios.delete(`https://rntodo-production.up.railway.app/todo/${username}/${listName}`)
       if(listName !== 'undefined'){
-        const data = await axios.get(`http://localhost:9000/todo/${username}/${listName}`)
+        const data = await axios.delete(`http://localhost:9000/todo/delete/${username}/${listName}/test`)
         console.log(data.data)
       } else if(listName === 'undefined') {
-        console.log('ran')
-        console.log(lists.map(x => {
-          if(x.list === undefined) {
-            const data = await axios.get(`http://localhost:9000/todo/${username}/unListed`)
-            console.log(data.data)
-          }
-        }))
+        const data = await axios.delete(`http://localhost:9000/todo/delete/${username}/undefined`)
+        console.log(data.data)
       }
-
       
       // setLists(prevState => {
-      //   console.log(lists)
       //   return prevState.filter(list => {
-          
-      //     if(list.list !== 'undefined'){
-      //       return list.list !== listName
-      //     } else {
-      //       return list.list === 'undefined'
-      //     }
-          
+      //       return list.list !== listName 
       //   })
-      // })
+      getUsersLists(username)
+
+
   }
   catch(error) {
       console.log(error)
   }
 }
 
+console.log('testScreen')
 
 
 

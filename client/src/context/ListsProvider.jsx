@@ -12,7 +12,7 @@ import React, {
 import axios from 'axios'
 
 import { UserContext } from './UserProvider'
-import { storage, test2 } from '../Storage'
+import { storage } from '../Storage'
 
 
 const ListsContext = createContext()
@@ -25,7 +25,7 @@ const ListsProvider = (props) => {
 
     const USERNAME = storage.getString('USERNAME')
 
-
+console.log('listcon')
 
 
 
@@ -63,10 +63,11 @@ const ListsProvider = (props) => {
 
 
 //Get Lists Call
-    async function getUsersLists() {
+    async function getUsersLists(username) {
+        console.log('fire lists')
         try {
             
-            const res = await axios.get(`https://rntodo-production.up.railway.app/todo/${USERNAME}`)
+            const res = await axios.get(`https://rntodo-production.up.railway.app/todo/${username}`)
 
             setLists(getSections(res.data))
         }
@@ -76,7 +77,7 @@ const ListsProvider = (props) => {
     }
 
     useEffect(() => {
-        getUsersLists()
+        getUsersLists(USERNAME)
     }, [])
 
     return (

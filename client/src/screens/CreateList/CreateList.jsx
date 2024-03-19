@@ -4,7 +4,7 @@ import {
   View,
   Button
 } from 'react-native'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTheme } from '@react-navigation/native'
 
@@ -15,11 +15,11 @@ import { ListsContext } from '../../context/ListsProvider'
 
 // import { trigger} from 'react-native-haptic-feedback'
 import { Gesture, GestureDetector, ScrollView } from 'react-native-gesture-handler'
-import { useMMKVString } from 'react-native-mmkv'
+
 
 // import { test2 } from '../../Storage'
 
-const CreateList = () => {
+const CreateList = (props) => {
 
   const {
     test,
@@ -30,6 +30,10 @@ const CreateList = () => {
     getUsersLists,
   } = useContext(ListsContext)
 
+  const {
+    navigation
+  } = props
+  
   // const [testCase, setTestCase] = useMMKVString('test.case', test2)
 
   // const testFunction = () => {
@@ -60,49 +64,49 @@ const CreateList = () => {
 
 
     //Double Tap Gessture Handler
-    const doubleTapGestureHandler = Gesture.Tap()
-        .runOnJS(true)
-        .maxDuration(250)
-        .numberOfTaps(2)
-        .onStart(() => {
-            console.log('double tap')
-            // toggleDetails()
-        })
+    // const doubleTapGestureHandler = Gesture.Tap()
+    //     .runOnJS(true)
+    //     .maxDuration(250)
+    //     .numberOfTaps(2)
+    //     .onStart(() => {
+    //         console.log('double tap')
+    //         // toggleDetails()
+    //     })
         // .withRef(doubleTap)
    
 
 //Pan Gesture Handler
-    const panGestureHandler = Gesture.Pan()
-        .minDistance(-20)
-        .onStart(() => {
-            // context.value = {x: 0}
-            console.log('scrolling')
-        })
-        .onUpdate((event) => {
-            // translateX.value = event.translationX
-            // translateY.value = event.translationY
-        })
-        .onEnd(() => {
-            // const willDismiss = translateX.value < -windowWidth * .3
-            // if(willDismiss) {
-            //     translateX.value = withTiming(-windowWidth)
-            //     itemHeight.value = withTiming(0)
-            //     marginVertical.value = withTiming(0, undefined, (isFinished) => {
-            //         if(isFinished && deleteToDo){
-            //             runOnJS(deleteToDo)(_id)
-            //         }
-            //     })
-            // } else {
-            //     translateX.value = withSpring(0)
-            // }
+    // const panGestureHandler = Gesture.Pan()
+    //     .minDistance(-20)
+    //     .onStart(() => {
+    //         // context.value = {x: 0}
+    //         console.log('scrolling')
+    //     })
+    //     .onUpdate((event) => {
+    //         // translateX.value = event.translationX
+    //         // translateY.value = event.translationY
+    //     })
+    //     .onEnd(() => {
+    //         // const willDismiss = translateX.value < -windowWidth * .3
+    //         // if(willDismiss) {
+    //         //     translateX.value = withTiming(-windowWidth)
+    //         //     itemHeight.value = withTiming(0)
+    //         //     marginVertical.value = withTiming(0, undefined, (isFinished) => {
+    //         //         if(isFinished && deleteToDo){
+    //         //             runOnJS(deleteToDo)(_id)
+    //         //         }
+    //         //     })
+    //         // } else {
+    //         //     translateX.value = withSpring(0)
+    //         // }
             
-        })
-        // .withRef(panRef)
+    //     })
+    //     // .withRef(panRef)
    
-        // const composed = Gesture.Race(
-        //     panGestureHandler,
-        //     doubleTapGestureHandler
-        //   );
+    //     // const composed = Gesture.Race(
+    //     //     panGestureHandler,
+    //     //     doubleTapGestureHandler
+    //     //   );
 
 
   //POST Todo
@@ -123,6 +127,8 @@ const CreateList = () => {
     }
 }
 
+
+console.log('create')
 
   return (
     <View style={styles.container}>

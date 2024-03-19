@@ -11,7 +11,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 
 import { UserContext } from '../context/UserProvider';
-
+import { OrientationContext } from '../context/OrientationProvider';
 import { ThemeContext } from '../context/ThemeProvider';
 import { ListsContext } from '../context/ListsProvider';
 
@@ -61,6 +61,11 @@ const Navigation = () => {
     homeList
   } = useContext(ListsContext)
 
+  const {
+    orientation,
+    windowWidth,
+    windowHeight
+  } = useContext(OrientationContext)
 
 
   //Deep Linking
@@ -75,58 +80,28 @@ const Navigation = () => {
       }
     }
   }
-
   
-  // const testList = lists.map(listArr => {
-  //   return <Tab.Screen name={listArr} component={TestScreen1}/>
-  // })
-
-
-
-
-
-
-
-
-  //Tab Views
-  // const Tab = createMaterialTopTabNavigator();
-
-  // function TabView() {
-
-  //   const Tab = createMaterialTopTabNavigator();
-  //   const testList = lists.map((listArr,i) => {
-  //     return <Tab.Screen 
-  //       key={listArr[0].list + i} 
-  //       name={listArr[0].list} 
-  //       component={TestScreen1}
-  //       initialParams={{todoList: listArr}}
-  //     />
-  //   })
-  
-  // function goHome(){
-  //   navigation.goBack()
-  // }
-
   function TabView() {
-
     const Tab = createMaterialTopTabNavigator();
-
+    console.log('tabin')
     return (
       <Tab.Navigator
       tabBarPosition='bottom'
-      initialRouteName={homeList}
-      backBehavior='history'
+      // initialRouteName={'CreateList'}
+      // backBehavior={'history'}
       screenOptions={{
         swipeEnabled: true,
         tabBarScrollEnabled: true,
         tabBarStyle: {paddingBottom: 20, paddingTop: 10},
+        lazy: false
       }}
+      initialLayout={{ width: windowWidth}}
       >
         <Tab.Screen name="CreateList" component={CreateList} />
         {
-        lists &&
+        lists && ! !lists.length &&
           lists.map((listArr,i) => {
-          if(listArr.list !== undefined && listArr.data > []){
+          if(listArr.list !== undefined){
             return <Tab.Screen 
             key={listArr.list + i} 
             name={listArr.list} 
@@ -141,8 +116,6 @@ const Navigation = () => {
             initialParams={{todoList: listArr.data}}
           />
           }
-
-         
         })
    }
       </Tab.Navigator>
