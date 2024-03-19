@@ -155,7 +155,6 @@ async function deleteList() {
   if(lists[0].list) {
       console.log('here', typeof lists[0].list)
       setHomeList(prevState=> {
-
       return lists[0].list
     })
     } else {
