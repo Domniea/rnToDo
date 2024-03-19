@@ -87,7 +87,7 @@ todoRouter.get('/delete/:username/:listName/test', async (req, res, next) => {
 })
 
 //delete undefined
-todoRouter.get('/delete/:username/undefined', async (req, res, next) => {
+todoRouter.delete('/delete/:username/undefined', async (req, res, next) => {
     try{
         const response = await ToDo.deleteMany(
             { username: req.params.username, list: undefined}
