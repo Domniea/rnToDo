@@ -25,7 +25,7 @@ const ListsProvider = (props) => {
 
     const USERNAME = storage.getString('USERNAME')
 
-console.log('listcon')
+
 
 
 
@@ -64,7 +64,6 @@ console.log('listcon')
 
 //Get Lists Call
     async function getUsersLists(username) {
-        console.log('fire lists')
         try {
             
             const res = await axios.get(`https://rntodo-production.up.railway.app/todo/${username}`)

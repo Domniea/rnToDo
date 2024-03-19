@@ -83,7 +83,7 @@ const Navigation = () => {
   
   function TabView() {
     const Tab = createMaterialTopTabNavigator();
-    console.log('tabin')
+
     return (
       <Tab.Navigator
       tabBarPosition='bottom'
@@ -158,7 +158,7 @@ const Navigation = () => {
 
   //Main App Drawer
   function LeftDrawer() {
-    console.log('left drawer')
+
     return (
       <Drawer.Navigator
         screenOptions={
