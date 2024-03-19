@@ -151,6 +151,7 @@ async function testDelete(id) {
 
 
 
+
 async function deleteList() {
   if(lists[0].list) {
       setHomeList(prevState=> {
@@ -159,47 +160,49 @@ async function deleteList() {
     } else {
       setLists('CreateList')
     }
-  
+ 
 
   try {
       // const data = await axios.delete(`https://rntodo-production.up.railway.app/todo/${username}/${listName}`)
-      if(listName !== 'undefined'){
+      if(listName !== 'Un-Listed'){
         const data = await axios.delete(`https://rntodo-production.up.railway.app/todo/delete/${username}/${listName}/test`)
         // const data = await axios.find(`http://localhost:9000/todo/delete/${username}/${listName}/test`)
-        console.log('delete call data---', data.data)
-      } else if(listName === 'undefined') {
+        console.log('first', data.data)
+      } else if(listName === 'Un-Listed' || undefined) {
         const data = await axios.delete(`https://rntodo-production.up.railway.app/todo/delete/${username}/undefined`)
         // const data = await axios.find(`http://localhost:9000/todo/delete/${username}/undefined`)
-        console.log(data.data)
+        console.log('second', data.data)
       }
-      
-    //   setLists(prevState => {
-    //     return prevState.filter(list => {
-    //         return list.list !== listName 
-    //     })
-    // })
-      
-      
-      getUsersLists(username)
+
+    setLists(prevState => {
+      return prevState.filter(list => {
+        if(list.list !== undefined){
+          return list.list !== listName
+        } else if (list.list === 'Un-Listed') {
+          return list.list !== 'Un-Listed' || undefined
+        }
+
+      })
+    })
   }
   catch(error) {
       console.log(error)
   }
 }
 
-
-
-
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 
       <View style={ orientation === 'PORTRAIT' ? styles.container : styles.containerLANDSCAPE }>
-        <CustomButton 
+    {
+      (listName !== 'Un-Listed' ) &&
+          <CustomButton 
           text='Add ToDo' 
           onPress={toggleAddToDo}
           style={styles.test}
           btnMargin={0}
         />
+    }
         <Text style={[{color: colors.text}, styles.header]}>{listName}</Text>
        {
          addToDoVisible && 

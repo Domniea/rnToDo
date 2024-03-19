@@ -130,7 +130,7 @@ const ToDo = (props) => {
                 marginVertical.value = withTiming(0, undefined, (isFinished) => {
                     if(isFinished && deleteToDo){
                         // runOnJS(setHomeList)(listName)
-                        runOnJS(deleteToDo)(listName,_id)
+                        runOnJS(deleteToDo)(_id)
                     }
                 })
             } else {

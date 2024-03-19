@@ -19,7 +19,7 @@ import { Gesture, GestureDetector, ScrollView } from 'react-native-gesture-handl
 
 // import { test2 } from '../../Storage'
 
-const CreateList = (props) => {
+const CreateList = ({route, navigation}) => {
 
   const {
     test,
@@ -29,20 +29,6 @@ const CreateList = (props) => {
     setLists,
     getUsersLists,
   } = useContext(ListsContext)
-
-  const {
-    navigation
-  } = props
-  
-  // const [testCase, setTestCase] = useMMKVString('test.case', test2)
-
-  // const testFunction = () => {
-  //   test2.set('test.case', 'boobs')
-  // }
-
-  // const testDelete = () => {
-  //     test2.delete('test.case')
-  // }
 
 
   const { control, handleSubmit } = useForm()
@@ -120,6 +106,7 @@ const CreateList = (props) => {
           ]
         })
 
+        navigation.navigate('Lists')
 
     }
     catch(error) {
@@ -127,8 +114,6 @@ const CreateList = (props) => {
     }
 }
 
-
-console.log('create')
 
   return (
     <View style={styles.container}>
@@ -142,6 +127,7 @@ console.log('create')
           text='Submit'
           onPress={handleSubmit(createList)}
         />
+  
     </View>
   )
 }

@@ -13,7 +13,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { UserContext } from '../context/UserProvider';
 import { OrientationContext } from '../context/OrientationProvider';
 import { ThemeContext } from '../context/ThemeProvider';
-import { ListsContext } from '../context/ListsProvider';
+import { ListsContext, ListsProvider } from '../context/ListsProvider';
 
 //Navigator
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native'
@@ -87,8 +87,8 @@ const Navigation = () => {
     return (
       <Tab.Navigator
       tabBarPosition='bottom'
-      // initialRouteName={'CreateList'}
-      // backBehavior={'history'}
+      initialRouteName={homeList}
+      backBehavior={'history'}
       screenOptions={{
         swipeEnabled: true,
         tabBarScrollEnabled: true,
@@ -100,6 +100,7 @@ const Navigation = () => {
         <Tab.Screen 
           name="CreateList" 
           component={CreateList} 
+          initialParams={{todoList: lists}}
         />
         
         {
@@ -115,7 +116,7 @@ const Navigation = () => {
           } else {
             return <Tab.Screen 
             key={idx} 
-            name={'undefined'} 
+            name={'Un-Listed'} 
             component={TestScreen1}
             initialParams={{todoList: listArr.data, listId: idx}}
           />
@@ -162,7 +163,6 @@ const Navigation = () => {
 
   //Main App Drawer
   function LeftDrawer() {
-    console.log('LeftDrawer')
     return (
       <Drawer.Navigator
         screenOptions={
@@ -170,9 +170,12 @@ const Navigation = () => {
           }
       >
         <Drawer.Screen
-          name="Lists" 
-          component={TabView}
-          />
+          name="Lists"
+          >
+            {() => {
+              return <TabView />
+            }}
+          </Drawer.Screen>
         <Drawer.Screen 
           name="Preferences" 
           component={Preferences} 
@@ -181,6 +184,11 @@ const Navigation = () => {
     );
   }
 
+
+
+
+
+  
  //SignIn Listiner
   useEffect(() => {
     function listener(data) {
