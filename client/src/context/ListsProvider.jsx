@@ -51,7 +51,9 @@ const ListsProvider = (props) => {
             data.reduce((result, todo) => {
                 const listName = todo.list
                 if(!result[listName]){
-                    result[listName] = {'list': listName, data: [todo]}
+                    listName !== undefined ? 
+                    result[listName] = {'list': listName, data: [todo]} : 
+                    result[listName] = {'list': 'Un-Listed', data: [todo]}
                 }
                 else {
                 result[listName].data.push(todo)

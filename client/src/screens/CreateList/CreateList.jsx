@@ -13,7 +13,7 @@ import CustomButton from '../../components/CustomButton'
 
 import { ListsContext } from '../../context/ListsProvider'
 
-// import { trigger} from 'react-native-haptic-feedback'
+import { trigger} from 'react-native-haptic-feedback'
 import { Gesture, GestureDetector, ScrollView } from 'react-native-gesture-handler'
 
 
@@ -94,8 +94,19 @@ const CreateList = ({route, navigation}) => {
     //     //     doubleTapGestureHandler
     //     //   );
 
+    const options = {
+      enableVibrateFallback: true,
+      ignoreAndroidSystemSettings: false
+  }
 
-  //POST Todo
+  const fireHaptic = () => {
+    console.log('Error Haptic Working')
+      trigger("notificationWarning", options)
+  }
+
+
+
+  //Create List
   async function createList(data) {
     try {
       setHomeList(data.newListTitle)
@@ -122,10 +133,22 @@ const CreateList = ({route, navigation}) => {
         name='newListTitle'
         placeholder='Name your list'
         control={control}
+        rules={{
+          required: 'List Name is required',
+          validate: (value) => {
+            if (value && value.length >= 16) {
+              // this will give you the correct value for your error message
+              fireHaptic()
+              return `Please, enter a List Name with less than 30 characters (${value.length}/16)`;
+            }
+          }
+        }}
+      keyboardType="default"
       />
        <CustomButton 
           text='Submit'
           onPress={handleSubmit(createList)}
+          
         />
   
     </View>

@@ -83,7 +83,7 @@ const Navigation = () => {
   
   function TabView() {
     const Tab = createMaterialTopTabNavigator();
-
+    console.log('here',lists)
     return (
       <Tab.Navigator
       tabBarPosition='bottom'
@@ -104,7 +104,7 @@ const Navigation = () => {
         />
         
         {
-        lists && ! !lists.length &&
+        lists &&
           lists.map((listArr,idx) => {
           if(listArr.list !== undefined){
             return <Tab.Screen 

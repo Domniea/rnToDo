@@ -155,6 +155,7 @@ const styles = StyleSheet.create({
     toggleContainer: {
         alignItems: 'center',
         fontSize: 35,
+        padding: '10%'
     },
     test: {
         // padding: '5%',

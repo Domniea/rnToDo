@@ -4,7 +4,8 @@ import { StyleSheet,
     View, 
     TouchableWithoutFeedback,
     Keyboard,
-    Button
+    Button,
+    Pressable
   } from 'react-native'
 import {
   FlatList,
@@ -173,7 +174,7 @@ async function deleteList() {
         // const data = await axios.find(`http://localhost:9000/todo/delete/${username}/undefined`)
         console.log('second', data.data)
       }
-
+  lists.length < 1 ?
     setLists(prevState => {
       return prevState.filter(list => {
         if(list.list !== undefined){
@@ -184,6 +185,8 @@ async function deleteList() {
 
       })
     })
+    :
+    setLists([])
   }
   catch(error) {
       console.log(error)
@@ -245,8 +248,13 @@ async function deleteList() {
 
           />
         </View>
+        <Pressable
+        onPress={deleteList}
+        style={{color: 'green'}}
+      >
+          <Text style={[listName === 'Un-Listed' ? {paddingTop: '15%'} : {paddingTop:'5%'}, { color: '#007AFF'}]}>Delete List</Text>
+      </Pressable>
       
-        <Button title='test' onPress={deleteList}/>
 
       </View >
 
@@ -280,9 +288,8 @@ const styles = StyleSheet.create({
   form: {
     alignItems: 'center',
     width: '100%'
+  },
+  deleteButton: {
+  
   }
-
-
-
-
 })
