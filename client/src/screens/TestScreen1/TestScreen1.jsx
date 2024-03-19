@@ -164,23 +164,23 @@ async function deleteList() {
   try {
       // const data = await axios.delete(`https://rntodo-production.up.railway.app/todo/${username}/${listName}`)
       if(listName !== 'undefined'){
-        const data = await axios.get(`https://rntodo-production.up.railway.app/todo/delete/${username}/${listName}/test`)
+        const data = await axios.delete(`https://rntodo-production.up.railway.app/todo/delete/${username}/${listName}/test`)
         // const data = await axios.find(`http://localhost:9000/todo/delete/${username}/${listName}/test`)
         console.log('delete call data---', data.data)
       } else if(listName === 'undefined') {
-        const data = await axios.get(`https://rntodo-production.up.railway.app/todo/delete/${username}/undefined`)
+        const data = await axios.delete(`https://rntodo-production.up.railway.app/todo/delete/${username}/undefined`)
         // const data = await axios.find(`http://localhost:9000/todo/delete/${username}/undefined`)
         console.log(data.data)
       }
       
-      setLists(prevState => {
-        return prevState.filter(list => {
-            return list.list !== listName 
-        })
-    })
+    //   setLists(prevState => {
+    //     return prevState.filter(list => {
+    //         return list.list !== listName 
+    //     })
+    // })
       
       
-      // getUsersLists(username)
+      getUsersLists(username)
   }
   catch(error) {
       console.log(error)

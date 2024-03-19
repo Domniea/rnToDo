@@ -20,7 +20,7 @@ const ListsContext = createContext()
 const ListsProvider = (props) => {
 
     const [lists, setLists] = useState([])
-   
+    console.log('current lists---', lists)
     const [homeList, setHomeList] = useState('CreateList')
 
     const USERNAME = storage.getString('USERNAME')

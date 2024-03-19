@@ -97,23 +97,27 @@ const Navigation = () => {
       }}
       initialLayout={{ width: windowWidth}}
       >
-        <Tab.Screen name="CreateList" component={CreateList} />
+        <Tab.Screen 
+          name="CreateList" 
+          component={CreateList} 
+        />
+        
         {
         lists && ! !lists.length &&
-          lists.map((listArr,i) => {
+          lists.map((listArr,idx) => {
           if(listArr.list !== undefined){
             return <Tab.Screen 
-            key={listArr.list + i} 
+            key={listArr.list + idx} 
             name={listArr.list} 
             component={TestScreen1}
-            initialParams={{todoList: listArr.data}}
+            initialParams={{todoList: listArr.data, listId: idx}}
           />
           } else {
             return <Tab.Screen 
-            key={i} 
+            key={idx} 
             name={'undefined'} 
             component={TestScreen1}
-            initialParams={{todoList: listArr.data}}
+            initialParams={{todoList: listArr.data, listId: idx}}
           />
           }
         })
@@ -123,42 +127,42 @@ const Navigation = () => {
   }
 
   //Right Swipe in Drawer
-  function RightDrawer() {
-      const testList = lists.map((listArr,i) => {
-      return <Drawer.Screen 
-        key={listArr[0].list + i} 
-        name={listArr[0].list} 
-        component={TestScreen1}
-        initialParams={{todoList: listArr, goHome}}
-      />
-    })
+  // function RightDrawer() {
+  //     const testList = lists.map((listArr,i) => {
+  //     return <Drawer.Screen 
+  //       key={listArr[0].list + i} 
+  //       name={listArr[0].list} 
+  //       component={TestScreen1}
+  //       initialParams={{todoList: listArr, goHome}}
+  //     />
+  //   })
 
-    return (
-      <Drawer.Navigator
-        screenOptions={
-          Platform.OS === 'android' && theme === 'dark' ? 
-          {headerTintColor: 'white', drawerPosition: 'right', headerLeft: false, headerRight: () => <DrawerToggleButton/>} : 
-          {drawerPosition: 'right', headerLeft: false, headerRight: () => <DrawerToggleButton/>}
-          }
-      >
-        <Drawer.Screen
-          name="ALL" 
-          component={Home}
-          />
+  //   return (
+  //     <Drawer.Navigator
+  //       screenOptions={
+  //         Platform.OS === 'android' && theme === 'dark' ? 
+  //         {headerTintColor: 'white', drawerPosition: 'right', headerLeft: false, headerRight: () => <DrawerToggleButton/>} : 
+  //         {drawerPosition: 'right', headerLeft: false, headerRight: () => <DrawerToggleButton/>}
+  //         }
+  //     >
+  //       <Drawer.Screen
+  //         name="ALL" 
+  //         component={Home}
+  //         />
 
-        {testList}
+  //       {testList}
 
-        {/* <Drawer.Screen 
-          name="Preferences" 
-          component={Preferences} 
-        /> */}
-      </Drawer.Navigator>
-    );
-  }
+  //       {/* <Drawer.Screen 
+  //         name="Preferences" 
+  //         component={Preferences} 
+  //       /> */}
+  //     </Drawer.Navigator>
+  //   );
+  // }
 
   //Main App Drawer
   function LeftDrawer() {
-
+    console.log('LeftDrawer')
     return (
       <Drawer.Navigator
         screenOptions={
