@@ -18,11 +18,6 @@ function ToDoProvider(props) {
     } = useContext(ListsContext)
 
 
-    //   const test = lists.filter(obj => obj.list === listName)
-    //   console.log('here',test)
-    
-
-
     const [ allToDos, setAllToDos] = useState([])
 
 

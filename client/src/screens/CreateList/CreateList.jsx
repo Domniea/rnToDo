@@ -13,11 +13,6 @@ import CustomButton from '../../components/CustomButton'
 
 import { ListsContext } from '../../context/ListsProvider'
 
-import { trigger} from 'react-native-haptic-feedback'
-import { Gesture, GestureDetector, ScrollView } from 'react-native-gesture-handler'
-
-
-// import { test2 } from '../../Storage'
 
 const CreateList = ({route, navigation}) => {
 
@@ -35,77 +30,6 @@ const CreateList = ({route, navigation}) => {
 
   const { colors } = useTheme()
 
-
-
-
-    // const options = {
-    //     enableVibrateFallback: true,
-    //     ignoreAndroidSystemSettings: false
-    // }
-
-    // const fireHaptic = () => {
-    //   console.log('Haptic Working')
-    //     trigger("impactMedium", options)
-    // }
-
-
-    //Double Tap Gessture Handler
-    // const doubleTapGestureHandler = Gesture.Tap()
-    //     .runOnJS(true)
-    //     .maxDuration(250)
-    //     .numberOfTaps(2)
-    //     .onStart(() => {
-    //         console.log('double tap')
-    //         // toggleDetails()
-    //     })
-        // .withRef(doubleTap)
-   
-
-//Pan Gesture Handler
-    // const panGestureHandler = Gesture.Pan()
-    //     .minDistance(-20)
-    //     .onStart(() => {
-    //         // context.value = {x: 0}
-    //         console.log('scrolling')
-    //     })
-    //     .onUpdate((event) => {
-    //         // translateX.value = event.translationX
-    //         // translateY.value = event.translationY
-    //     })
-    //     .onEnd(() => {
-    //         // const willDismiss = translateX.value < -windowWidth * .3
-    //         // if(willDismiss) {
-    //         //     translateX.value = withTiming(-windowWidth)
-    //         //     itemHeight.value = withTiming(0)
-    //         //     marginVertical.value = withTiming(0, undefined, (isFinished) => {
-    //         //         if(isFinished && deleteToDo){
-    //         //             runOnJS(deleteToDo)(_id)
-    //         //         }
-    //         //     })
-    //         // } else {
-    //         //     translateX.value = withSpring(0)
-    //         // }
-            
-    //     })
-    //     // .withRef(panRef)
-   
-    //     // const composed = Gesture.Race(
-    //     //     panGestureHandler,
-    //     //     doubleTapGestureHandler
-    //     //   );
-
-    const options = {
-      enableVibrateFallback: true,
-      ignoreAndroidSystemSettings: false
-  }
-
-  const fireHaptic = () => {
-    console.log('Error Haptic Working')
-      trigger("notificationWarning", options)
-  }
-
-
-
   //Create List
   async function createList(data) {
     try {
@@ -116,9 +40,7 @@ const CreateList = ({route, navigation}) => {
             { list: data.newListTitle, data: []}
           ]
         })
-
         navigation.navigate('Lists')
-
     }
     catch(error) {
     console.log(error)
@@ -138,7 +60,6 @@ const CreateList = ({route, navigation}) => {
           validate: (value) => {
             if (value && value.length >= 16) {
               // this will give you the correct value for your error message
-              fireHaptic()
               return `Please, enter a List Name with less than 30 characters (${value.length}/16)`;
             }
           }
@@ -165,7 +86,6 @@ const styles = StyleSheet.create({
     padding: '10%'
   },
   text: {
-    // color: 'white',
     fontSize: 40
   }
 })

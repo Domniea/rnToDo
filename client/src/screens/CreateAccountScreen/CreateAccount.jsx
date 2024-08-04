@@ -108,8 +108,8 @@ const CreateAccount = () => {
                     <CustomInput 
                         name='password'
                         placeholder='Password'
-                        secureTextEntry
                         control={control}
+                        password={true}
                         rules={{
                             required: 'Password is REQUIRED',
                             minLength: {
@@ -125,7 +125,7 @@ const CreateAccount = () => {
                     <CustomInput 
                         name='passwordRetyped'
                         placeholder='Please re-type password'
-                        secureTextEntry
+                        password={true}
                         control={control}
                         rules={{
                             required: 'Passwords do not match',

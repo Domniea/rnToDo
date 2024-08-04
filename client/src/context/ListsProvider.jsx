@@ -25,26 +25,6 @@ const ListsProvider = (props) => {
 
     const USERNAME = storage.getString('USERNAME')
 
-
-
-
-
-        //Get Lists
-        // function getSections(data) {
-        //     return Object.values(
-        //         data.reduce((result, todo) => {
-        //             const listName = todo.list
-        //             if(!result[listName]){
-        //                 result[listName] = [todo]     
-        //             }
-        //             else {
-        //             result[listName].push(todo)
-        //             }
-        //             return result
-        //         }, [])
-        //     )
-        // }
-
 // Seperate Lists
     function getSections(data) {
         return Object.values(

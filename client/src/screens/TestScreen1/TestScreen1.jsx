@@ -8,14 +8,12 @@ import { StyleSheet,
     Pressable
   } from 'react-native'
 import {
-  FlatList,
-  ScrollView
+  FlatList
 } from 'react-native-gesture-handler'
 
 import axios from 'axios'
 
 import { useTheme } from '@react-navigation/native'
-import { ToDoContext } from '../../context/ToDoProvider'
 import { UserContext } from '../../context/UserProvider'
 import { OrientationContext } from '../../context/OrientationProvider'
 import { ListsContext } from '../../context/ListsProvider'
@@ -34,7 +32,6 @@ const TestScreen1 = ({route, navigation}) => {
 
   const {
     todoList,
-    goBack
   } = params
 
 
@@ -45,8 +42,6 @@ const TestScreen1 = ({route, navigation}) => {
 
   const panRef = useRef(null)
   const scrollRef= useRef(null)
-
-  // const navigation = useNavigation()
 
   const {
     orientation,
@@ -63,18 +58,12 @@ const TestScreen1 = ({route, navigation}) => {
   } = user
 
   const {
-    test,
     lists,
     setLists,
-    getUsersLists,
     setHomeList
   } = useContext(ListsContext)
 
-  const {
-    allToDos,
-    getUsersToDo,
-    deleteToDo
-  } = useContext(ToDoContext)
+
 
   const [addToDoVisible, setAddToDoVisible] = useState(false)
 
@@ -91,16 +80,15 @@ const TestScreen1 = ({route, navigation}) => {
   async function testSubmit(path, userData) {
     try {
         const res = await axios.post(`https://rntodo-production.up.railway.app/todo/${path}`, userData)
+        console.log('path', path)
         // const res = await axios.post(`http://localhost:9000/todo/${path}`, userData)
-
+      console.log(path)
         setTestState(prevState => {
           return [
             ...prevState,
             res.data.todo
           ]
         })
-        
-
     }
     catch(error) {
     console.log(error)
@@ -141,8 +129,6 @@ async function testDelete(id) {
            return todo._id !== id 
         })
       })
-
-      
   }
   catch(error) {
       console.log(error)
@@ -168,13 +154,14 @@ async function deleteList() {
       if(listName !== 'Un-Listed'){
         const data = await axios.delete(`https://rntodo-production.up.railway.app/todo/delete/${username}/${listName}/test`)
         // const data = await axios.find(`http://localhost:9000/todo/delete/${username}/${listName}/test`)
-        console.log('first', data.data)
+        // console.log('first', data.data)
       } else if(listName === 'Un-Listed' || undefined) {
         const data = await axios.delete(`https://rntodo-production.up.railway.app/todo/delete/${username}/undefined`)
         // const data = await axios.find(`http://localhost:9000/todo/delete/${username}/undefined`)
-        console.log('second', data.data)
+        // console.log('second', data.data)
       }
-  lists.length < 1 ?
+      console.log(lists.length)
+  lists.length > 1 ?
     setLists(prevState => {
       return prevState.filter(list => {
         if(list.list !== undefined){

@@ -83,7 +83,7 @@ const Navigation = () => {
   
   function TabView() {
     const Tab = createMaterialTopTabNavigator();
-    console.log('here',lists)
+
     return (
       <Tab.Navigator
       tabBarPosition='bottom'
@@ -93,7 +93,7 @@ const Navigation = () => {
         swipeEnabled: true,
         tabBarScrollEnabled: true,
         tabBarStyle: {paddingBottom: 20, paddingTop: 10},
-        lazy: false
+   
       }}
       initialLayout={{ width: windowWidth}}
       >
@@ -236,45 +236,45 @@ const Navigation = () => {
           {
             user ? (
               <>
-              <Stack.Group>
-                <Stack.Screen 
-                  name='LeftDrawer' 
-                  component={LeftDrawer} 
-                  options={{title: 'The Best ToDo List'}}
-                />
-                 {/* <Stack.Screen 
-                  name='RightDrawer' 
-                  component={RightDrawer} 
-                  options={{title: 'The Best ToDo List'}}
-                /> */}
-                <Stack.Screen 
-                  name='EditPassword' 
-                  component={EditPassword} 
-                  options={{
-                    drawerItemStyle: {display: 'none'}
-                  }}
-                />
-                <Stack.Screen 
-                  name='PostToDo' 
-                  component={PostToDo} 
-                  options={{
-                    presentation: 'modal', 
-                    title: 'Add a todo'
-                  }}
-                />
-                <Stack.Screen 
-                  name='ToDoDescription' 
-                  component={ToDoDescription} 
-                  options={({route}) => 
-                  ({ presentation: 'modal', 
-                  title: `${route.params.title} Details`,
-                  })
-                }
+                <Stack.Group>
+                  <Stack.Screen 
+                    name='LeftDrawer' 
+                    component={LeftDrawer} 
+                    options={{title: 'The Best ToDo List'}}
+                  />
+                  {/* <Stack.Screen 
+                    name='RightDrawer' 
+                    component={RightDrawer} 
+                    options={{title: 'The Best ToDo List'}}
+                  /> */}
+                  <Stack.Screen 
+                    name='EditPassword' 
+                    component={EditPassword} 
+                    options={{
+                      drawerItemStyle: {display: 'none'}
+                    }}
+                  />
+                  <Stack.Screen 
+                    name='PostToDo' 
+                    component={PostToDo} 
+                    options={{
+                      presentation: 'modal', 
+                      title: 'Add a todo'
+                    }}
+                  />
+                  <Stack.Screen 
+                    name='ToDoDescription' 
+                    component={ToDoDescription} 
+                    options={({route}) => 
+                    ({ presentation: 'modal', 
+                    title: `${route.params.title} Details`,
+                    })
+                  }
+            
+                  />
+                </Stack.Group>
            
-                />
-              </Stack.Group>
-           
-             </>
+              </>
 
             )
               :

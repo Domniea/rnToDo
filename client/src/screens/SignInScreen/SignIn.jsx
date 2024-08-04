@@ -90,7 +90,7 @@ const SignIn = () => {
                             placeholder='Password'
                             name='password'
                             control={control}
-                            secureTextEntry
+                            password={true}
                             rules={{
                                 required: 'Password is REQUIRED'
                             }}

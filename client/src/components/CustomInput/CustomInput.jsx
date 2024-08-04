@@ -1,11 +1,11 @@
-import React, { useContext } from 'react'
-import { StyleSheet, Text, TextInput, View } from 'react-native'
+import React, { useContext, useState } from 'react'
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import { useTheme } from '@react-navigation/native'
 
 import { ThemeContext } from '../../context/ThemeProvider' 
+import Icon1 from 'react-native-vector-icons/FontAwesome5'
 
-import KeyboardAvoidContainer from '../KeyboardAvoidingContainer'
 
 
 
@@ -17,7 +17,8 @@ const CustomInput = (props) => {
         rules = {},
         secureTextEntry,
         keyboardType,
-        errMessage
+        errMessage,
+        password
     } = props
 
     const {
@@ -25,6 +26,11 @@ const CustomInput = (props) => {
     } = useContext(ThemeContext)
 
     const { colors } = useTheme()
+    const [passwordHidden, setPasswordHidden] = useState(password)
+
+    const togglePasswordVisibility = () => {
+      setPasswordHidden(prevState => !prevState)
+    }
 
   return (
     
@@ -34,17 +40,28 @@ const CustomInput = (props) => {
           rules={rules}
           render={({field: {value, onChange, onBlur},  fieldState: {error}}) => (
             <>
-              <View style={[styles.container, {borderColor: error ? 'red': '#e8e8e8'}]}>
+              <View style={[styles.container, {borderColor: error ? 'red': '#e8e8e8', flexDirection: 'row', alignItems: 'center' ,justifyContent: 'space-between'}]}>
                 <TextInput  
                 value={value}
                 onChangeText={onChange}
                 onBlur={onBlur}
                 placeholder={placeholder}
                 style={[theme === 'dark' ? {color : 'black'} : {color: colors.text}, styles.input]}
-                secureTextEntry={secureTextEntry}
+                // secureTextEntry={secureTextEntry}
                 keyboardType={keyboardType}
                 placeholderTextColor='#333'
+                secureTextEntry={passwordHidden}
                 />
+                { 
+                  password &&
+                  <Pressable onPress={() => togglePasswordVisibility()}>
+                    {
+                    passwordHidden ?
+                  <Icon1 style={{textAlign: 'right'}} name='eye' size={30} color='grey'/> :
+                  <Icon1 style={{textAlign: 'right'}} name='eye-slash' size={30} color='grey'/>
+                    }
+                  </Pressable>
+                }
               </View>
               {
                  error && (
@@ -70,7 +87,8 @@ const styles = StyleSheet.create({
         marginVertical: 5,
     },
   input: {
-    padding: 15
+    padding: 15,
+    width:'80%'
   },
   error: {
     color: 'red',

@@ -10,7 +10,7 @@ import CustomButton from '../../components/CustomButton'
 import { UserContext } from '../../context/UserProvider';
 import { ThemeContext } from '../../context/ThemeProvider';
 import { ToDoContext } from '../../context/ToDoProvider';
-
+import { ListsContext } from '../../context/ListsProvider';
 
 const Preferences = () => {
 
@@ -20,6 +20,11 @@ const Preferences = () => {
         changeTheme,
         switchState
     }  = useContext(ThemeContext)
+
+    const {
+        lists,
+        setLists
+    } = useContext(ListsContext)
     
     const { width, height } = useWindowDimensions()
 
@@ -45,13 +50,15 @@ const Preferences = () => {
 
     function handleDeleteToDoSubmit(username) {
         deleteAllToDos(username)
-        navigation.navigate('Home')
+        setLists([])
+        navigation.navigate('Preferences')
     }
 
     function handleDeleteUserSubmit(username) {
         deleteAllToDos(username)
         handleDeleteAccount(username)
-        navigation.navigate('Home')
+        setLists([])
+        navigation.navigate('Preferences')
      }
 
     //Delete User
