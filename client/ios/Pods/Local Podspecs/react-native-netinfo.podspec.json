@@ -1,6 +1,6 @@
 {
   "name": "react-native-netinfo",
-  "version": "11.2.1",
+  "version": "11.4.1",
   "summary": "React Native Network Info API for iOS & Android",
   "license": "MIT",
   "authors": "Matt Oakes <hello@mattoakes.net>",
@@ -8,11 +8,12 @@
   "platforms": {
     "ios": "9.0",
     "tvos": "9.2",
-    "osx": "10.14"
+    "osx": "10.14",
+    "visionos": "1.0"
   },
   "source": {
     "git": "https://github.com/react-native-community/react-native-netinfo.git",
-    "tag": "v11.2.1"
+    "tag": "v11.4.1"
   },
   "source_files": "ios/**/*.{h,m}",
   "dependencies": {

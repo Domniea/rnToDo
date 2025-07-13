@@ -27,6 +27,25 @@
 
 namespace mmkv {
 
+FileLock::~FileLock() {
+    if (isFileLockValid()) {
+        if (m_exclusiveLockCount > 0) {
+#ifdef MMKV_WIN32
+            // only win32 file lock requires double unlock
+            if (m_sharedLockCount > 0) {
+                platformUnLock(true);
+            }
+#endif
+            m_sharedLockCount = 0;
+            m_exclusiveLockCount = 0;
+            platformUnLock(false);
+        } else if (m_sharedLockCount > 0) {
+            m_sharedLockCount = 0;
+            platformUnLock(false);
+        }
+    }
+}
+
 bool FileLock::lock(LockType lockType) {
     return doLock(lockType, true);
 }
@@ -132,13 +151,11 @@ bool FileLock::platformUnLock(bool unlockToSharedLock) {
     }
 #    endif
     int cmd = unlockToSharedLock ? LOCK_SH : LOCK_UN;
-    auto ret = flock(m_fd, cmd);
-    if (ret != 0) {
-        MMKVError("fail to unlock fd=%d, ret=%d, error:%s", m_fd, ret, strerror(errno));
+    if (flock(m_fd, cmd) != 0) {
+        MMKVError("fail to unlock fd=%d, error:%d(%s)", m_fd, errno, strerror(errno));
         return false;
-    } else {
-        return true;
     }
+    return true;
 }
 
 #endif // MMKV_WIN32
@@ -181,6 +198,14 @@ bool FileLock::unlock(LockType lockType) {
         }
     }
     return ret;
+}
+
+void FileLock::destroyAndUnLock() {
+    platformUnLock(false);
+
+    m_sharedLockCount = 0;
+    m_exclusiveLockCount = 0;
+    m_fd = MMKVFileHandleInvalidValue;
 }
 
 } // namespace mmkv

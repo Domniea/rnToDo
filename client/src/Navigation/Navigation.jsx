@@ -83,49 +83,79 @@ const Navigation = () => {
   
   function TabView() {
     const Tab = createMaterialTopTabNavigator();
+    
+    
+    
+    function renderTabScreens() {
+      return lists.map((listArr, idx) => {
+        const hasListName = typeof listArr.list === 'string' && listArr.list.trim() !== '';
+        const tabName = hasListName ? listArr.list : `Un-Listed-${idx}`;
+
+        return (
+          <Tab.Screen
+            key={`tab-${tabName}-${idx}`}
+            name={tabName}
+            component={TestScreen1}
+            initialParams={{ todoList: listArr.data, listId: idx }}
+          />
+        );
+      });
+    }
 
     return (
       <Tab.Navigator
-      tabBarPosition='bottom'
-      initialRouteName={homeList}
-      backBehavior={'history'}
-      screenOptions={{
-        swipeEnabled: true,
-        tabBarScrollEnabled: true,
-        tabBarStyle: {paddingBottom: 20, paddingTop: 10},
-   
-      }}
-      initialLayout={{ width: windowWidth}}
+        tabBarPosition="bottom"
+        initialRouteName={homeList}
+        backBehavior="history"
+        screenOptions={{
+          swipeEnabled: true,
+          tabBarScrollEnabled: true,
+          tabBarStyle: { paddingBottom: 20, paddingTop: 10 },
+        }}
+        initialLayout={{ width: windowWidth }}
       >
-        <Tab.Screen 
-          name="CreateList" 
-          component={CreateList} 
-          initialParams={{todoList: lists}}
+        <Tab.Screen
+          name="CreateList"
+          component={CreateList}
+          initialParams={{ todoList: lists }}
         />
-        
-        {
-        lists &&
-          lists.map((listArr,idx) => {
-          if(listArr.list !== undefined){
-            return <Tab.Screen 
-            key={listArr.list + idx} 
-            name={listArr.list} 
-            component={TestScreen1}
-            initialParams={{todoList: listArr.data, listId: idx}}
-          />
-          } else {
-            return <Tab.Screen 
-            key={idx} 
-            name={'Un-Listed'} 
-            component={TestScreen1}
-            initialParams={{todoList: listArr.data, listId: idx}}
-          />
-          }
-        })
-   }
+        {renderTabScreens()}
       </Tab.Navigator>
     );
   }
+
+  // <Tab.Screen 
+  //         name="CreateList" 
+  //         component={CreateList} 
+  //         initialParams={{todoList: lists}}
+  //       />
+        
+  //       {
+  //       lists &&
+  //         lists.map((listArr,idx) => {
+  //         if(listArr.list !== undefined){
+  //           return <Tab.Screen 
+  //           key={listArr.list + idx} 
+  //           name={listArr.list} 
+  //           component={TestScreen1}
+  //           initialParams={{todoList: listArr.data, listId: idx}}
+  //         />
+  //         } else {
+  //           return <Tab.Screen 
+  //           key={idx} 
+  //           name={'Un-Listed'} 
+  //           component={TestScreen1}
+  //           initialParams={{todoList: listArr.data, listId: idx}}
+  //         />
+  //         }
+  //       })
+  //  }
+   
+
+
+
+
+
 
   //Right Swipe in Drawer
   // function RightDrawer() {

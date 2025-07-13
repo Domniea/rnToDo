@@ -1,6 +1,6 @@
 {
   "name": "AmplifyRTNWebBrowser",
-  "version": "1.0.17",
+  "version": "1.1.4",
   "summary": "React Native module for aws-amplify web browser",
   "homepage": "https://docs.amplify.aws/",
   "license": "Apache-2.0",
@@ -10,7 +10,7 @@
   },
   "source": {
     "git": "https://github.com/aws-amplify/amplify-js.git",
-    "tag": "1.0.17"
+    "tag": "1.1.4"
   },
   "source_files": "ios/**/*.{h,m,mm,swift}",
   "dependencies": {

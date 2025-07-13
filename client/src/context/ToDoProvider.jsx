@@ -50,19 +50,19 @@ function ToDoProvider(props) {
       }
 
     // Post ToDo
-    // async function submitToDo(path, userData) {
-    //     try {
-    //         const data = await axios.post(`https://rntodo-production.up.railway.app/todo/${path}`, userData)
-    //         // const data = await axios.post(`http://localhost:9000/todo/${path}`, userData)
-    //         setAllToDos(prevState => {
-    //             return [...prevState,
-    //             data.data]
-    //         })
-    //     }
-    //     catch(error) {
-    //     console.log(error)
-    //     }
-    // }
+    async function submitToDo(path, userData) {
+        try {
+            const data = await axios.post(`https://rntodo-production.up.railway.app/todo/${path}`, userData)
+            // const data = await axios.post(`http://localhost:9000/todo/${path}`, userData)
+            setAllToDos(prevState => {
+                return [...prevState,
+                data.data]
+            })
+        }
+        catch(error) {
+        console.log(error)
+        }
+    }
 
     async function submitToDo(path, userData) {
         try {
