@@ -110,17 +110,19 @@ const Home = (props) => {
             scrollEnabled={false}
             // disableScrollViewPanResponder
             data={allToDos}
-            keyExtractor={(item, id) => item._id + id}
-            renderItem={({item}) => <ToDo
+            keyExtractor={(item) => item._id.toString()}
+            renderItem={({item}) => {
+               const { _id, description, ...rest } = item;
+              <ToDo
               key={item._id}
-              {...item}
-              notes={item.description}
+              notes={description}
               deleteToDo={deleteToDo}
               navigation={navigation}
               panRef={panRef}
               scrollRef={scrollRef}
-              
+              {...rest}
               />
+            }
             }
 
 

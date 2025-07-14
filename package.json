@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@react-native-community/cli": "^19.1.0",
+    "@react-navigation/material-top-tabs": "^7.3.2",
+    "react-native-pager-view": "^6.8.1",
+    "react-native-paper": "^5.14.5",
+    "react-native-tab-view": "^4.1.2"
+  }
+}

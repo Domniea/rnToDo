@@ -216,12 +216,13 @@ async function deleteList() {
             scrollEnabled={true}
             data={testState}
             extraData={dynamicList}
-            keyExtractor={(item, id) => id}
+            // keyExtractor={(item, id) => id}
+            keyExtractor={(item) => item._id.toString()}
             ref={scrollRef}
             simultaneousHandlers={panRef}
     
             renderItem={({item}) => <ToDo
-              key={item._id}
+              // key={item._id}
               {...item}
               notes={item.description}
               deleteToDo={testDelete}

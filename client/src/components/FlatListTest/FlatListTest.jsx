@@ -27,10 +27,10 @@ const FlatListTest = (props) => {
 
 
 
-// useEffect(() => {
-//   console.log('ran')
-//   testRefresh()
-// }, [])
+useEffect(() => {
+  console.log('ran')
+  testRefresh()
+}, [])
 
 
 
@@ -44,21 +44,36 @@ const FlatListTest = (props) => {
             nestedScrollEnabled={true}
             scrollEnabled={true}
             data={allToDos}
-            keyExtractor={(item, id) => id}
+            keyExtractor={(item) => item._id.toString()}
             ref={scrollRef}
             simultaneousHandlers={panRef}
             // extraData={testState}
-            renderItem={({item}) => <ToDo
-              key={item._id}
-              {...item}
-              notes={item.description}
-              deleteToDo={deleteToDo}
-              navigation={navigation}
-              panRef={panRef}
-              scrollRef={scrollRef}
+            // renderItem={({item}) => <ToDo
+            //   key={item._id}
+            //   {...item}
+            //   notes={item.description}
+            //   deleteToDo={deleteToDo}
+            //   navigation={navigation}
+            //   panRef={panRef}
+            //   scrollRef={scrollRef}
               
-              />
-            }
+            //   />
+            // }
+
+            renderItem={({ item }) => {
+              const { _id, description, ...rest } = item;
+              return (
+                <ToDo
+                  key={_id}
+                  notes={description}
+                  deleteToDo={deleteToDo}
+                  navigation={navigation}
+                  panRef={panRef}
+                  scrollRef={scrollRef}
+                  {...rest}
+                />
+              );
+            }}
 
 
           />
