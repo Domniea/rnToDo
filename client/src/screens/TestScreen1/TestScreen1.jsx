@@ -25,7 +25,7 @@ import PostToDo from '../PostToDo'
 
 const TestScreen1 = ({route, navigation}) => {
   const {
-    key,
+    // key,
     name,
     params
       } = route
@@ -180,6 +180,7 @@ async function deleteList() {
   }
 }
 
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 
@@ -221,17 +222,20 @@ async function deleteList() {
             ref={scrollRef}
             simultaneousHandlers={panRef}
     
-            renderItem={({item}) => <ToDo
-              // key={item._id}
-              {...item}
-              notes={item.description}
-              deleteToDo={testDelete}
-              navigation={navigation}
-              panRef={panRef}
-              scrollRef={scrollRef}
-              listName={listName}
-              testEdit={testEdit}
-              />
+            renderItem={({item}) => {
+                const { _id, description, ...rest } = item;
+                <ToDo
+                  key={_id}
+                  notes={item.description}
+                  deleteToDo={testDelete}
+                  navigation={navigation}
+                  panRef={panRef}
+                  scrollRef={scrollRef}
+                  listName={listName}
+                  testEdit={testEdit}
+                  {...rest}
+                />
+              }
             }
 
           />

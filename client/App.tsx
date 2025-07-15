@@ -22,6 +22,12 @@ Amplify.configure(amplifyconfig);
 
 function App(): React.JSX.Element {
 
+console.warn = (...args) => {
+  if (typeof args[0] === 'string' && args[0].includes('key')) {
+    console.trace('⚠️ KEY WARNING TRACE', ...args);
+  }
+};
+
   return (
     // <SafeAreaView  >
       <View style={styles.root}>

@@ -86,21 +86,40 @@ const Navigation = () => {
     
     
     
-    function renderTabScreens() {
-      return lists.map((listArr, idx) => {
-        const hasListName = typeof listArr.list === 'string' && listArr.list.trim() !== '';
-        const tabName = hasListName ? listArr.list : `Un-Listed-${idx}`;
+    // function renderTabScreens() {
+    //   return lists.map((listArr, idx) => {
+    //     const hasListName = typeof listArr.list === 'string' && listArr.list.trim() !== '';
+    //     const tabName = hasListName ? listArr.list : `Un-Listed-${idx}`;
 
-        return (
-          <Tab.Screen
-            key={`tab-${tabName}-${idx}`}
-            name={tabName}
-            component={TestScreen1}
-            initialParams={{ todoList: listArr.data, listId: idx }}
-          />
-        );
-      });
-    }
+    //     return (
+    //       <Tab.Screen
+    //         key={`tab-${tabName}-${idx}`}
+    //         name={tabName}
+    //         component={TestScreen1}
+    //         initialParams={{ todoList: listArr.data, listId: idx }}
+    //       />
+    //     );
+    //   });
+    // }
+
+    function renderTabScreens() {
+  return lists.map((listArr, idx) => {
+    const hasListName = typeof listArr.list === 'string' && listArr.list.trim() !== '';
+    const tabName = hasListName ? listArr.list : `Un-Listed-${idx}`;
+
+    // ✅ Pass key directly to JSX (React uses this)
+    return (
+      <React.Fragment key={`tab-${tabName}-${idx}`}>
+        <Tab.Screen
+          name={tabName}
+          component={TestScreen1}
+          initialParams={{ todoList: listArr.data, listId: idx }}
+        />
+      </React.Fragment>
+    );
+  });
+}
+
 
     return (
       <Tab.Navigator

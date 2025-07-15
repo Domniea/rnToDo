@@ -114,7 +114,7 @@ const Home = (props) => {
             renderItem={({item}) => {
                const { _id, description, ...rest } = item;
               <ToDo
-              key={item._id}
+              key={_id}
               notes={description}
               deleteToDo={deleteToDo}
               navigation={navigation}

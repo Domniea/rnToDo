@@ -61,10 +61,11 @@ useEffect(() => {
             // }
 
             renderItem={({ item }) => {
+
               const { _id, description, ...rest } = item;
               return (
                 <ToDo
-                  key={_id}
+                  // key={_id}
                   notes={description}
                   deleteToDo={deleteToDo}
                   navigation={navigation}
