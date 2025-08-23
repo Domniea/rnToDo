@@ -28,7 +28,7 @@ const PostToDo = (props) => {
         toggleModal,
         setAddToDoVisible,
         listName,
-        testSubmit
+        submitTask
     } = props
 
     const{
@@ -67,7 +67,7 @@ const PostToDo = (props) => {
     
     function onSubmitPress(data) {
         data.list = listName
-        testSubmit(username, data)
+        submitTask(username, data)
         // setHomeList(listName)
         // submitToDo(username, data)
         {props.route && navigation.goBack() }

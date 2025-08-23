@@ -4,7 +4,6 @@ import { StyleSheet,
     View, 
     TouchableWithoutFeedback,
     Keyboard,
-    Button,
     Pressable
   } from 'react-native'
 import {
@@ -23,22 +22,10 @@ import CustomButton from '../../components/CustomButton'
 import ToDo from '../../components/ToDo'
 import PostToDo from '../PostToDo'
 
-const TestScreen1 = ({route, navigation}) => {
-  const {
-    // key,
-    name,
-    params
-      } = route
 
-  const {
-    todoList,
-  } = params
+function TestScreen1({ todoList, navigation, listName }) {
 
-
-  const dynamicList = todoList
-  const listName = name
-
-  const [testState, setTestState] = useState(dynamicList)
+  const [dynamicList, setDynamicList] = useState(todoList)
 
   const panRef = useRef(null)
   const scrollRef= useRef(null)
@@ -63,8 +50,6 @@ const TestScreen1 = ({route, navigation}) => {
     setHomeList
   } = useContext(ListsContext)
 
-
-
   const [addToDoVisible, setAddToDoVisible] = useState(false)
 
   function toggleAddToDo(){
@@ -75,15 +60,14 @@ const TestScreen1 = ({route, navigation}) => {
     colors
   } = useTheme()
 
-
   //POST Todo
-  async function testSubmit(path, userData) {
+  async function submitTask(path, userData) {
     try {
+        console.log('list', lists.data)
         const res = await axios.post(`https://rntodo-production.up.railway.app/todo/${path}`, userData)
         console.log('path', path)
         // const res = await axios.post(`http://localhost:9000/todo/${path}`, userData)
-      console.log(path)
-        setTestState(prevState => {
+        setDynamicList(prevState => {
           return [
             ...prevState,
             res.data.todo
@@ -96,12 +80,12 @@ const TestScreen1 = ({route, navigation}) => {
 }
 
 //EDIT todo
-async function testEdit(id, userData) {
+async function editTask(id, userData) {
   try {
       const data = await axios.put(`https://rntodo-production.up.railway.app/todo/${id}`, userData)
       // const data = await axios.put(`http://localhost:9000/todo/${path}`, userData)
 
-      setTestState(prevState => {
+      setDynamicList(prevState => {
         return prevState.map(task => {
           return task._id !== id ?
                 task :
@@ -119,13 +103,13 @@ async function testEdit(id, userData) {
 //DELETE todo
 async function testDelete(id) {
        
-  console.log('deleted')
   try {
+      console.log(id)
       const data = await axios.delete(`https://rntodo-production.up.railway.app/todo/${id}`)
       // const data = await axios.delete(`http://localhost:9000/todo/${id}`)
 
-      setTestState(prevState => {
-       return  prevState.filter( todo => {
+      setDynamicList(prevState => {
+       return  prevState.filter(todo => {
            return todo._id !== id 
         })
       })
@@ -145,7 +129,8 @@ async function deleteList() {
       return lists[0].list
     })
     } else {
-      setLists('CreateList')
+      //EDIT HERE
+      setLists([])
     }
  
 
@@ -154,11 +139,10 @@ async function deleteList() {
       if(listName !== 'Un-Listed'){
         const data = await axios.delete(`https://rntodo-production.up.railway.app/todo/delete/${username}/${listName}/test`)
         // const data = await axios.find(`http://localhost:9000/todo/delete/${username}/${listName}/test`)
-        // console.log('first', data.data)
+        
       } else if(listName === 'Un-Listed' || undefined) {
         const data = await axios.delete(`https://rntodo-production.up.railway.app/todo/delete/${username}/undefined`)
         // const data = await axios.find(`http://localhost:9000/todo/delete/${username}/undefined`)
-        // console.log('second', data.data)
       }
       console.log(lists.length)
   lists.length > 1 ?
@@ -169,7 +153,6 @@ async function deleteList() {
         } else if (list.list === 'Un-Listed') {
           return list.list !== 'Un-Listed' || undefined
         }
-
       })
     })
     :
@@ -202,8 +185,7 @@ async function deleteList() {
             fromToggle='fromToggle' 
             toggleModal={toggleAddToDo} 
             setAddToDoVisible={setAddToDoVisible}
-            testSubmit={testSubmit}
-            setTestState={setTestState}
+            submitTask={submitTask}
           />
         }
      
@@ -211,34 +193,32 @@ async function deleteList() {
         <View style={orientation === 'PORTRAIT' ? {height: '80%', width: '100%'} : {height: '50%', width: '100%'}}> 
 
 
-     
           <FlatList
             nestedScrollEnabled={true}
             scrollEnabled={true}
-            data={testState}
-            extraData={dynamicList}
-            // keyExtractor={(item, id) => id}
+            data={dynamicList}
             keyExtractor={(item) => item._id.toString()}
             ref={scrollRef}
             simultaneousHandlers={panRef}
-    
-            renderItem={({item}) => {
-                const { _id, description, ...rest } = item;
+            renderItem={({ item }) => {
+              const { _id, description, ...rest } = item;
+              return (
                 <ToDo
-                  key={_id}
-                  notes={item.description}
+                  title={item.title}
+                  notes={description}
                   deleteToDo={testDelete}
                   navigation={navigation}
                   panRef={panRef}
                   scrollRef={scrollRef}
                   listName={listName}
-                  testEdit={testEdit}
+                  editTask={editTask}
+                  _id={_id}
                   {...rest}
                 />
-              }
-            }
-
+              );
+            }}
           />
+
         </View>
         <Pressable
         onPress={deleteList}

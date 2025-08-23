@@ -45,6 +45,8 @@ const ToDo = (props) => {
         setDetailsVisible(prevState => !prevState)
       }
 
+
+
     const {
         title,
         _id,
@@ -53,7 +55,7 @@ const ToDo = (props) => {
         panRef,
         scrollRef,
         listName,
-        testEdit
+        editTask
     } = props
 
     const translateX = useSharedValue(0)
@@ -182,7 +184,7 @@ const ToDo = (props) => {
                             _id={_id} notes={notes} 
                             toggleModal={toggleDetails}
                             setDetailsVisible={setDetailsVisible}
-                            testEdit={testEdit}
+                            editTask={editTask}
                         /> 
                 }   
                 <GestureDetector gesture={DoubleTapGestureHandler}>

@@ -49,7 +49,7 @@ const ToDoDescription = (props) => {
         notes,
         _id,
         setDetailsVisible,
-        testEdit
+        editTask
     } = props
 
     //Modal dismiss
@@ -64,7 +64,7 @@ const ToDoDescription = (props) => {
 
     //Submit Edits
     function onSubmit(data) {
-        testEdit( _id, data)
+        editTask( _id, data)
         toggleModal()
         // editToDo( _id, data)
         // setAllToDos([])
