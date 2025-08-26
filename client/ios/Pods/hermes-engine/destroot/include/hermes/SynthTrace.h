@@ -171,6 +171,9 @@ class SynthTrace {
     } val_;
   };
 
+  /// Represents the encoding type of a String or PropNameId
+  enum class StringEncodingType { ASCII, UTF8, UTF16 };
+
   /// A TimePoint is a time when some event occurred.
   using TimePoint = std::chrono::steady_clock::time_point;
   using TimeSinceStart = std::chrono::milliseconds;
@@ -180,8 +183,10 @@ class SynthTrace {
   RECORD(EndExecJS)                      \
   RECORD(Marker)                         \
   RECORD(CreateObject)                   \
+  RECORD(CreateObjectWithPrototype)      \
   RECORD(CreateString)                   \
   RECORD(CreatePropNameID)               \
+  RECORD(CreatePropNameIDWithValue)      \
   RECORD(CreateHostObject)               \
   RECORD(CreateHostFunction)             \
   RECORD(QueueMicrotask)                 \
@@ -208,6 +213,10 @@ class SynthTrace {
   RECORD(BigIntToString)                 \
   RECORD(SetExternalMemoryPressure)      \
   RECORD(Utf8)                           \
+  RECORD(Utf16)                          \
+  RECORD(GetStringData)                  \
+  RECORD(GetPrototype)                   \
+  RECORD(SetPrototype)                   \
   RECORD(Global)
 
   /// RecordType is a tag used to differentiate which type of record it is.
@@ -317,7 +326,7 @@ class SynthTrace {
 
   /// The version of the Synth Benchmark
   constexpr static uint32_t synthVersion() {
-    return 4;
+    return 5;
   }
 
   static const char *nameFromReleaseUnused(::hermes::vm::ReleaseUnused ru);
@@ -557,8 +566,10 @@ class SynthTrace {
     /// The string that was passed to Runtime::createStringFromAscii() or
     /// Runtime::createStringFromUtf8() when the string was created.
     std::string chars_;
-    /// Whether the string was created from ASCII (true) or UTF8 (false).
-    bool ascii_;
+    /// The string that was passed to Runtime::createStringFromUtf16()
+    std::u16string chars16_;
+    /// Whether the String was created from ASCII, UTF-8 or UTF-16
+    StringEncodingType encodingType_;
 
     // General UTF-8.
     CreateStringRecord(
@@ -569,14 +580,27 @@ class SynthTrace {
         : Record(time),
           objID_(objID),
           chars_(reinterpret_cast<const char *>(chars), length),
-          ascii_(false) {}
+          encodingType_(StringEncodingType::UTF8) {}
     // Ascii.
     CreateStringRecord(
         TimeSinceStart time,
         ObjectID objID,
         const char *chars,
         size_t length)
-        : Record(time), objID_(objID), chars_(chars, length), ascii_(true) {}
+        : Record(time),
+          objID_(objID),
+          chars_(chars, length),
+          encodingType_(StringEncodingType::ASCII) {}
+    // UTF-16.
+    CreateStringRecord(
+        TimeSinceStart time,
+        ObjectID objID,
+        const char16_t *chars,
+        size_t length)
+        : Record(time),
+          objID_(objID),
+          chars16_(chars, length),
+          encodingType_(StringEncodingType::UTF16) {}
 
     void toJSONInternal(::hermes::JSONEmitter &json) const override;
     RecordType getType() const override {
@@ -596,19 +620,15 @@ class SynthTrace {
   /// created by the native code.
   struct CreatePropNameIDRecord : public Record {
     static constexpr RecordType type{RecordType::CreatePropNameID};
-    /// The ObjectID of the PropNameID that was created by
-    /// Runtime::createPropNameIDFromXxx() functions.
+    /// The ObjectID of the PropNameID that was created.
     const ObjectID propNameID_;
     /// The string that was passed to Runtime::createPropNameIDFromAscii() or
     /// Runtime::createPropNameIDFromUtf8().
     std::string chars_;
-    /// The String for Symbol that was passed to
-    /// Runtime::createPropNameIDFromString() or
-    /// Runtime::createPropNameIDFromSymbol().
-    const TraceValue traceValue_{TraceValue::encodeUndefinedValue()};
-    /// Whether the PropNameID was created from ASCII, UTF8, jsi::String
-    /// (TRACEVALUE) or jsi::Symbol (TRACEVALUE).
-    enum ValueType { ASCII, UTF8, TRACEVALUE } valueType_;
+    /// The string that was passed to Runtime::createPropNameIDFromUtf16()
+    std::u16string chars16_;
+    /// Whether the PropNameID was created from ASCII, UTF-8, or UTF-16
+    StringEncodingType encodingType_;
 
     // General UTF-8.
     CreatePropNameIDRecord(
@@ -619,7 +639,7 @@ class SynthTrace {
         : Record(time),
           propNameID_(propNameID),
           chars_(reinterpret_cast<const char *>(chars), length),
-          valueType_(UTF8) {}
+          encodingType_(StringEncodingType::UTF8) {}
     // Ascii.
     CreatePropNameIDRecord(
         TimeSinceStart time,
@@ -629,16 +649,49 @@ class SynthTrace {
         : Record(time),
           propNameID_(propNameID),
           chars_(chars, length),
-          valueType_(ASCII) {}
-    // jsi::String or jsi::Symbol.
+          encodingType_(StringEncodingType::ASCII) {}
+    // UTF16
     CreatePropNameIDRecord(
         TimeSinceStart time,
         ObjectID propNameID,
-        TraceValue traceValue)
+        const char16_t *chars,
+        size_t length)
         : Record(time),
           propNameID_(propNameID),
-          traceValue_(traceValue),
-          valueType_(TRACEVALUE) {}
+          chars16_(chars, length),
+          encodingType_(StringEncodingType::UTF16) {}
+
+    void toJSONInternal(::hermes::JSONEmitter &json) const override;
+    RecordType getType() const override {
+      return type;
+    }
+
+    std::vector<ObjectID> defs() const override {
+      return {propNameID_};
+    }
+
+    std::vector<ObjectID> uses() const override {
+      return {};
+    }
+  };
+
+  /// A CreatePropNameIDWithValueRecord is an event where a jsi::PropNameID is
+  /// created by the native code from JSI Value
+  struct CreatePropNameIDWithValueRecord : public Record {
+    static constexpr RecordType type{RecordType::CreatePropNameIDWithValue};
+    /// The ObjectID of the PropNameID that was created.
+    const ObjectID propNameID_;
+    /// The String or Symbol that was passed to
+    /// Runtime::createPropNameIDFromString() or
+    /// Runtime::createPropNameIDFromSymbol().
+    const TraceValue traceValue_;
+
+    // jsi::String or jsi::Symbol.
+    CreatePropNameIDWithValueRecord(
+        TimeSinceStart time,
+        ObjectID propNameID,
+        TraceValue traceValue)
+        : Record(time), propNameID_(propNameID), traceValue_(traceValue) {}
 
     void toJSONInternal(::hermes::JSONEmitter &json) const override;
     RecordType getType() const override {
@@ -653,6 +706,31 @@ class SynthTrace {
       std::vector<ObjectID> vec;
       pushIfTrackedValue(traceValue_, vec);
       return vec;
+    }
+  };
+
+  struct CreateObjectWithPrototypeRecord : public Record {
+    static constexpr RecordType type{RecordType::CreateObjectWithPrototype};
+    const ObjectID objID_;
+    /// The prototype being assigned
+    const TraceValue prototype_;
+
+    CreateObjectWithPrototypeRecord(
+        TimeSinceStart time,
+        ObjectID objID,
+        TraceValue prototype)
+        : Record(time), objID_(objID), prototype_(prototype) {}
+
+    void toJSONInternal(::hermes::JSONEmitter &json) const override;
+
+    RecordType getType() const override {
+      return type;
+    }
+
+    std::vector<ObjectID> uses() const override {
+      std::vector<ObjectID> uses{objID_};
+      pushIfTrackedValue(prototype_, uses);
+      return uses;
     }
   };
 
@@ -702,45 +780,6 @@ class SynthTrace {
     }
   };
 
-  /// The base struct for GetPropertyRecord and SetPropertyRecord.
-  struct GetOrSetPropertyRecord : public Record {
-    /// The ObjectID of the object that was accessed for its property.
-    const ObjectID objID_;
-    /// String or PropNameID passed to getProperty/setProperty.
-    const TraceValue propID_;
-#ifdef HERMESVM_API_TRACE_DEBUG
-    std::string propNameDbg_;
-#endif
-    /// Returned value from getProperty, or the set value passed for
-    /// setProperty.
-    const TraceValue value_;
-
-    GetOrSetPropertyRecord(
-        TimeSinceStart time,
-        ObjectID objID,
-        TraceValue propID,
-#ifdef HERMESVM_API_TRACE_DEBUG
-        const std::string &propNameDbg,
-#endif
-        TraceValue value)
-        : Record(time),
-          objID_(objID),
-          propID_(propID),
-#ifdef HERMESVM_API_TRACE_DEBUG
-          propNameDbg_(propNameDbg),
-#endif
-          value_(value) {
-    }
-
-    std::vector<ObjectID> uses() const override {
-      std::vector<ObjectID> vec{objID_};
-      pushIfTrackedValue(propID_, vec);
-      return vec;
-    }
-
-    void toJSONInternal(::hermes::JSONEmitter &json) const override;
-  };
-
   struct QueueMicrotaskRecord : public Record {
     static constexpr RecordType type{RecordType::QueueMicrotask};
     /// The ObjectID of the callback function that was queued.
@@ -777,32 +816,91 @@ class SynthTrace {
 
   /// A GetPropertyRecord is an event where native code accesses the property
   /// of a JS object.
-  struct GetPropertyRecord : public GetOrSetPropertyRecord {
+  struct GetPropertyRecord : public Record {
+    /// The ObjectID of the object that was accessed for its property.
+    const ObjectID objID_;
+    /// String or PropNameID passed to getProperty.
+    const TraceValue propID_;
+#ifdef HERMESVM_API_TRACE_DEBUG
+    std::string propNameDbg_;
+#endif
+
+    GetPropertyRecord(
+        TimeSinceStart time,
+        ObjectID objID,
+        TraceValue propID
+#ifdef HERMESVM_API_TRACE_DEBUG
+        ,
+        const std::string &propNameDbg
+#endif
+        )
+        : Record(time),
+          objID_(objID),
+          propID_(propID)
+#ifdef HERMESVM_API_TRACE_DEBUG
+          ,
+          propNameDbg_(propNameDbg)
+#endif
+    {
+    }
+
     static constexpr RecordType type{RecordType::GetProperty};
-    using GetOrSetPropertyRecord::GetOrSetPropertyRecord;
     RecordType getType() const override {
       return type;
     }
-    std::vector<ObjectID> defs() const override {
-      auto defs = GetOrSetPropertyRecord::defs();
-      pushIfTrackedValue(value_, defs);
-      return defs;
+
+    std::vector<ObjectID> uses() const override {
+      std::vector<ObjectID> uses{objID_};
+      pushIfTrackedValue(propID_, uses);
+      return uses;
     }
+
+    void toJSONInternal(::hermes::JSONEmitter &json) const override;
   };
 
   /// A SetPropertyRecord is an event where native code writes to the property
   /// of a JS object.
-  struct SetPropertyRecord : public GetOrSetPropertyRecord {
+  struct SetPropertyRecord : public Record {
+    /// The ObjectID of the object that was accessed for its property.
+    const ObjectID objID_;
+    /// String or PropNameID passed to setProperty.
+    const TraceValue propID_;
+#ifdef HERMESVM_API_TRACE_DEBUG
+    std::string propNameDbg_;
+#endif
+    /// The value being assigned.
+    const TraceValue value_;
+
+    SetPropertyRecord(
+        TimeSinceStart time,
+        ObjectID objID,
+        TraceValue propID,
+#ifdef HERMESVM_API_TRACE_DEBUG
+        const std::string &propNameDbg,
+#endif
+        TraceValue value)
+        : Record(time),
+          objID_(objID),
+          propID_(propID),
+#ifdef HERMESVM_API_TRACE_DEBUG
+          propNameDbg_(propNameDbg),
+#endif
+          value_(value) {
+    }
+
     static constexpr RecordType type{RecordType::SetProperty};
-    using GetOrSetPropertyRecord::GetOrSetPropertyRecord;
     RecordType getType() const override {
       return type;
     }
+
     std::vector<ObjectID> uses() const override {
-      auto uses = GetOrSetPropertyRecord::uses();
+      std::vector<ObjectID> uses{objID_};
+      pushIfTrackedValue(propID_, uses);
       pushIfTrackedValue(value_, uses);
       return uses;
     }
+
+    void toJSONInternal(::hermes::JSONEmitter &json) const override;
   };
 
   /// A HasPropertyRecord is an event where native code queries whether a
@@ -850,23 +948,55 @@ class SynthTrace {
     static constexpr RecordType type{RecordType::GetPropertyNames};
     /// The ObjectID of the object that was accessed for its property.
     const ObjectID objID_;
-    // Since getPropertyNames always returns an array, this can be an object id
-    // rather than a TraceValue.
-    /// The ObjectID of the array that was returned by getPropertyNames().
-    const ObjectID propNamesID_;
 
-    explicit GetPropertyNamesRecord(
-        TimeSinceStart time,
-        ObjectID objID,
-        ObjectID propNamesID)
-        : Record(time), objID_(objID), propNamesID_(propNamesID) {}
+    explicit GetPropertyNamesRecord(TimeSinceStart time, ObjectID objID)
+        : Record(time), objID_(objID) {}
 
     void toJSONInternal(::hermes::JSONEmitter &json) const override;
     RecordType getType() const override {
       return type;
     }
-    std::vector<ObjectID> defs() const override {
-      return {propNamesID_};
+    std::vector<ObjectID> uses() const override {
+      return {objID_};
+    }
+  };
+
+  /// A SetPrototypeRecord is an event where native code sets the prototype of a
+  /// JS Object
+  struct SetPrototypeRecord : public Record {
+    static constexpr RecordType type{RecordType::SetPrototype};
+    /// The ObjectID of the object that was accessed for its prototype.
+    const ObjectID objID_;
+    /// The custom prototype being assigned
+    const TraceValue value_;
+    SetPrototypeRecord(TimeSinceStart time, ObjectID objID, TraceValue value)
+        : Record(time), objID_(objID), value_(value) {}
+
+    void toJSONInternal(::hermes::JSONEmitter &json) const override;
+
+    RecordType getType() const override {
+      return type;
+    }
+    std::vector<ObjectID> uses() const override {
+      std::vector<ObjectID> uses{objID_};
+      pushIfTrackedValue(value_, uses);
+      return uses;
+    }
+  };
+
+  /// A GetPrototypeRecord is an event where native code gets the prototype of a
+  /// JS Object
+  struct GetPrototypeRecord : public Record {
+    static constexpr RecordType type{RecordType::GetPrototype};
+    /// The ObjectID of the object that was accessed for its prototype.
+    const ObjectID objID_;
+    GetPrototypeRecord(TimeSinceStart time, ObjectID objID)
+        : Record(time), objID_(objID) {}
+
+    void toJSONInternal(::hermes::JSONEmitter &json) const override;
+
+    RecordType getType() const override {
+      return type;
     }
     std::vector<ObjectID> uses() const override {
       return {objID_};
@@ -897,57 +1027,56 @@ class SynthTrace {
     }
   };
 
-  struct ArrayReadOrWriteRecord : public Record {
+  /// An ArrayReadRecord is an event where a value was read from an index
+  /// of an array.
+  /// It is modeled separately from GetProperty because it is more efficient to
+  /// read from a numeric index on an array than a string.
+  struct ArrayReadRecord final : public Record {
     /// The ObjectID of the array that was accessed.
     const ObjectID objID_;
     /// The index of the element that was accessed in the array.
     const size_t index_;
-    /// The value that was read from or written to the array.
+
+    explicit ArrayReadRecord(TimeSinceStart time, ObjectID objID, size_t index)
+        : Record(time), objID_(objID), index_(index) {}
+
+    static constexpr RecordType type{RecordType::ArrayRead};
+    RecordType getType() const override {
+      return type;
+    }
+    std::vector<ObjectID> uses() const override {
+      return {objID_};
+    }
+    void toJSONInternal(::hermes::JSONEmitter &json) const override;
+  };
+
+  /// An ArrayWriteRecord is an event where a value was written into an index
+  /// of an array.
+  struct ArrayWriteRecord final : public Record {
+    /// The ObjectID of the array that was accessed.
+    const ObjectID objID_;
+    /// The index of the element that was accessed in the array.
+    const size_t index_;
+    /// The value that was written to the array.
     const TraceValue value_;
 
-    explicit ArrayReadOrWriteRecord(
+    explicit ArrayWriteRecord(
         TimeSinceStart time,
         ObjectID objID,
         size_t index,
         TraceValue value)
         : Record(time), objID_(objID), index_(index), value_(value) {}
 
-    void toJSONInternal(::hermes::JSONEmitter &json) const override;
-    std::vector<ObjectID> uses() const override {
-      return {objID_};
-    }
-  };
-
-  /// An ArrayReadRecord is an event where a value was read from an index
-  /// of an array.
-  /// It is modeled separately from GetProperty because it is more efficient to
-  /// read from a numeric index on an array than a string.
-  struct ArrayReadRecord final : public ArrayReadOrWriteRecord {
-    static constexpr RecordType type{RecordType::ArrayRead};
-    using ArrayReadOrWriteRecord::ArrayReadOrWriteRecord;
-    RecordType getType() const override {
-      return type;
-    }
-    std::vector<ObjectID> defs() const override {
-      auto defs = ArrayReadOrWriteRecord::defs();
-      pushIfTrackedValue(value_, defs);
-      return defs;
-    }
-  };
-
-  /// An ArrayWriteRecord is an event where a value was written into an index
-  /// of an array.
-  struct ArrayWriteRecord final : public ArrayReadOrWriteRecord {
     static constexpr RecordType type{RecordType::ArrayWrite};
-    using ArrayReadOrWriteRecord::ArrayReadOrWriteRecord;
     RecordType getType() const override {
       return type;
     }
     std::vector<ObjectID> uses() const override {
-      auto uses = ArrayReadOrWriteRecord::uses();
+      std::vector<ObjectID> uses{objID_};
       pushIfTrackedValue(value_, uses);
       return uses;
     }
+    void toJSONInternal(::hermes::JSONEmitter &json) const override;
   };
 
   struct CallRecord : public Record {
@@ -1262,6 +1391,63 @@ class SynthTrace {
         const TraceValue objID,
         std::string retval)
         : Record(time), objID_(objID), retVal_(std::move(retval)) {}
+
+    RecordType getType() const override {
+      return type;
+    }
+
+    std::vector<ObjectID> uses() const override {
+      std::vector<ObjectID> vec;
+      pushIfTrackedValue(objID_, vec);
+      return vec;
+    }
+
+    void toJSONInternal(::hermes::JSONEmitter &json) const override;
+  };
+
+  /// A Utf16Record is an event where a PropNameID or String was converted to
+  /// UTF-16.
+  struct Utf16Record final : public Record {
+    static constexpr RecordType type{RecordType::Utf16};
+    /// PropNameID, String passed to utf16() as an argument
+    const TraceValue objID_;
+    /// Returned string from utf16().
+    const std::u16string retVal_;
+
+    explicit Utf16Record(
+        TimeSinceStart time,
+        const TraceValue objID,
+        std::u16string retval)
+        : Record(time), objID_(objID), retVal_(std::move(retval)) {}
+
+    RecordType getType() const override {
+      return type;
+    }
+
+    std::vector<ObjectID> uses() const override {
+      std::vector<ObjectID> vec;
+      pushIfTrackedValue(objID_, vec);
+      return vec;
+    }
+
+    void toJSONInternal(::hermes::JSONEmitter &json) const override;
+  };
+
+  /// A GetStringData is an event where getStringData or getPropNameIdData was
+  /// invoked.
+  struct GetStringDataRecord final : public Record {
+    static constexpr RecordType type{RecordType::GetStringData};
+    /// The String or PropNameID passed into getStringData or getPropNameIdData
+    const TraceValue objID_;
+    /// The string content in the String or PropNameID that was passed into the
+    /// callback
+    const std::u16string strData_;
+
+    explicit GetStringDataRecord(
+        TimeSinceStart time,
+        const TraceValue objID,
+        std::u16string strData)
+        : Record(time), objID_(objID), strData_(std::move(strData)) {}
 
     RecordType getType() const override {
       return type;

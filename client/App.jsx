@@ -12,14 +12,14 @@ import {OrientationProvider} from './src/context/OrientationProvider';
 import {ListsProvider} from './src/context/ListsProvider';
 
 import {LogBox} from 'react-native';
-
+import { fetchAuthSession } from 'aws-amplify/auth';
 // App.js
 
 import {Amplify} from 'aws-amplify';
 import amplifyconfig from './src/amplifyconfiguration.json';
 Amplify.configure(amplifyconfig);
 
-function App(): React.JSX.Element {
+function App(){
   // console.warn = (...args) => {
   //   if (typeof args[0] === 'string' && args[0].includes('key')) {
   //     console.trace('⚠️ KEY WARNING TRACE', ...args);
@@ -30,6 +30,8 @@ function App(): React.JSX.Element {
   //   'A props object containing a "key" prop is being spread into JSX',
   // ]);
 
+
+  
   return (
     // <SafeAreaView  >
     <View style={styles.root}>

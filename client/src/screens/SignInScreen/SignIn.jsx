@@ -26,6 +26,9 @@ import { signIn, signInWithRedirect } from 'aws-amplify/auth'
 
 const SignIn = () => {
 
+
+
+
     const [errMessage, setErrMessage] = useState('')
     const navigation = useNavigation()
 
@@ -101,6 +104,10 @@ const SignIn = () => {
                         text='Sign In'
                         onPress={handleSubmit(onPressSignIn)}
                     />
+                    {/* <CustomButton 
+                        text='TEST'
+                        onPress={() => signInWithRedirect({provider: 'Google'})}
+                    /> */}
                     <CustomButton 
                         text='Forgot Password'
                         onPress={() => navigation.navigate('ForgotPassword')}
