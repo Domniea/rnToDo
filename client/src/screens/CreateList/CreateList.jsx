@@ -30,20 +30,40 @@ const CreateList = ({route, navigation}) => {
 
   const { colors } = useTheme()
 
+
+
+
+  function toRouteName(title, fallback) {
+    const base = (title ?? '').toString().trim();
+    if (!base) return fallback;
+    return base.replace(/[^\p{L}\p{N}\s]/gu, '').replace(/\s+/g, '') || fallback;
+  }
+
+
+
+
+
   //Create List
   async function createList(data) {
     try {
-      setHomeList(data.newListTitle)
-        setLists(prevState => {
-          return [
-            ...prevState,
-            { list: data.newListTitle, data: []}
-          ]
-        })
-        navigation.navigate('Lists')
+
+      const route = toRouteName(data.newListTitle, `UnListed${(lists ?? []).length}`);
+
+      setLists(prev => [...prev, { list: data.newListTitle, data: [] }]);
+      setHomeList(route);
+
+
+      // setHomeList(data.newListTitle)
+      //   setLists(prevState => {
+      //     return [
+      //       ...prevState,
+      //       { list: data.newListTitle, data: []}
+      //     ]
+      //   })
+      //   navigation.navigate('Lists')
     }
     catch(error) {
-    console.log(error)
+      console.log(error)
     }
 }
 

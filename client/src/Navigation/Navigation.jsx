@@ -1,5 +1,5 @@
 import {StyleSheet, Platform} from 'react-native';
-import React, {useEffect, useContext} from 'react';
+import React, {useEffect, useContext, useMemo} from 'react';
 import {Hub} from 'aws-amplify/utils';
 import {Appearance} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
@@ -21,6 +21,7 @@ import {
   createDrawerNavigator,
   DrawerToggleButton,
 } from '@react-navigation/drawer';
+import { useNavigation } from '@react-navigation/native';
 
 //Screens for Navigator
 import SignIn from '../screens/SignInScreen/SignIn';
@@ -35,7 +36,7 @@ import ToDoDescription from '../screens/ToDoDetails/ToDoDetails';
 import Preferences from '../screens/Preferences';
 import EditPassword from '../screens/EditPassword';
 import SignUpComplete from '../screens/SignUpComplete';
-import TestScreen1 from '../screens/ListScreen';
+import ListScreen from '../screens/ListScreen';
 
 
 const Drawer = createDrawerNavigator();
@@ -47,7 +48,10 @@ const Navigation = () => {
 
   const {theme} = useContext(ThemeContext);
 
-  const {test, lists, setLists, homeList} = useContext(ListsContext);
+  const {lists, setLists, homeList} = useContext(ListsContext);
+
+  console.log(homeList)
+
 
   const {orientation, windowWidth, windowHeight} =
     useContext(OrientationContext);
@@ -58,7 +62,6 @@ const Navigation = () => {
     config: {
       initialRouteName: 'home',
       screens: {
-        TestScreen: 'test/boob',
         Home: 'home',
         PostToDo: 'post',
       },
@@ -84,7 +87,7 @@ const Navigation = () => {
   //         options={{ title: label }}
   //       >
   //         {() => (
-  //           <TestScreen1
+  //           <ListScreen
   //             todoList={listArr.data}
   //             listId={idx}
   //             listName={listArr.list}
@@ -116,57 +119,98 @@ const Navigation = () => {
   //   );
   // }
 
+// turn "New List!" → "NewList"
+function toRouteName(title, fallback) {
+  const base = (title ?? '').toString().trim();
+  if (!base) return fallback;                   // e.g., "UnListed0"
+  const cleaned = base
+    .replace(/[^\p{L}\p{N}\s]/gu, '')           // keep letters/numbers/spaces
+    .replace(/\s+/g, '');                       // remove spaces
+  return cleaned || fallback;
+}
+
+// ensure route names are unique (silent insurance)
+function uniquify(items) {
+  const seen = new Map();
+  return items.map(({ routeName, ...rest }) => {
+    let name = routeName;
+    let i = 2;
+    while (seen.has(name)) name = `${routeName}-${i++}`;
+    seen.set(name, true);
+    return { routeName: name, ...rest };
+  });
+}
+
+
   function TabView() {
-  // Build a normalized tab list (routeName + title) once
-  const tabs = React.useMemo(() => {
-    // First, your fixed CreateList tab (if you want it first)
+  // Build the tab list: first the static Create tab, then dynamic list tabs
+  // const navigation = useNavigation();
+
+  const tabs = useMemo(() => {
     const base = [
-      { routeName: 'CreateList', title: 'Create List', render: () => (
-          <CreateList initialParams={{ todoList: lists }} />
-        )},
+      {
+        routeName: 'CreateList',
+        title: 'Create List',
+        // since we're using a render function, pass real props (not initialParams)
+        render: () => <CreateList todoList={lists} />,
+      },
     ];
 
-    // Then your dynamic list tabs
     const dynamic = (lists ?? []).map((listArr, idx) => {
-      const hasListName =
-        typeof listArr?.list === 'string' && listArr.list.trim() !== '';
-      const title = hasListName ? listArr.list : `Un-Listed-${idx}`;
-      const routeName = `list-${idx}`;
+      const title =
+        typeof listArr?.list === 'string' && listArr.list.trim()
+          ? listArr.list
+          : `Un-Listed-${idx}`;
+
+      const routeName = toRouteName(listArr?.list, `UnListed${idx}`);
+
       return {
         routeName,
-        title,
+        title, // shown on the tab
         render: () => (
-          <TestScreen1
-            todoList={listArr.data}
-            listId={idx}
-            listName={listArr.list}
+          <ListScreen
+            todoList={listArr?.data ?? []}
+            listId={idx}                 // if you have stable IDs, prefer those
+            listName={listArr?.list}
           />
         ),
       };
     });
 
-    return [...base, ...dynamic];
+    return uniquify([...base, ...dynamic]);
   }, [lists]);
 
-  // Convert your external "homeList" (likely a label like "New") into a real route name
-  const initialRouteName = React.useMemo(() => {
+  // Turn your context/state `homeList` into an initialRouteName safely
+  const initialRouteName = useMemo(() => {
     if (!tabs.length) return undefined;
 
-    // If homeList already equals a route name, use it
-    if (tabs.some(t => t.routeName === homeList)) return homeList;
+    // if homeList already equals one of our route names, use it
+    if (homeList && tabs.some(t => t.routeName === homeList)) return homeList;
 
-    // If homeList equals a visible label/title, map it to the route name
-    const byTitle = tabs.find(t => t.title === homeList)?.routeName;
-    if (byTitle) return byTitle;
-
-    // Fallback: first tab
+    // otherwise default to the first tab
     return tabs[0].routeName;
   }, [tabs, homeList]);
 
-  if (!tabs.length) return null; // or a loading view
+  if (!tabs.length) return null; // or a loading placeholder
+
+  // // Re-render tab navigator upon "homeList" change...delete list ect
+  //   useEffect(() => {
+  //   if (!homeList) return;
+
+  //   const exists = tabs.some(t => t.routeName === homeList);
+  //   if (exists) {
+  //     navigation.navigate(homeList);
+  //   }
+  // }, [homeList, tabs, navigation]); 
+
+   const tabKey = useMemo(() => {
+    const names = tabs.map(t => t.routeName).join('|');
+    return `tabs-${homeList ?? 'none'}-${names}`;
+  }, [tabs, homeList]);
 
   return (
-    <Tab.Navigator
+  <Tab.Navigator
+      key={tabKey}                      // 👈 remount when routes/target change
       tabBarPosition="bottom"
       initialRouteName={initialRouteName}
       backBehavior="history"
@@ -174,17 +218,11 @@ const Navigation = () => {
         swipeEnabled: true,
         tabBarScrollEnabled: true,
         tabBarStyle: { paddingBottom: 20, paddingTop: 10 },
-        // You can also set tabBarLabel from options.title automatically,
-        // but keeping your options.title below is fine.
       }}
       initialLayout={{ width: windowWidth }}
     >
       {tabs.map(({ routeName, title, render }) => (
-        <Tab.Screen
-          key={routeName}
-          name={routeName}                 // <-- actual route name
-          options={{ title }}             // <-- visible label
-        >
+        <Tab.Screen key={routeName} name={routeName} options={{ title }}>
           {render}
         </Tab.Screen>
       ))}
@@ -208,38 +246,6 @@ function LeftDrawer() {
   );
 }
 
-  //Main App Drawer
-  function LeftDrawer() {
-    return (
-      <Drawer.Navigator
-        screenOptions={
-          Platform.OS === 'android' && theme === 'dark'
-            ? {headerTintColor: 'white'}
-            : {}
-        }>
-        <Drawer.Screen name="Lists">
-          {() => {
-            return <TabView />;
-          }}
-        </Drawer.Screen>
-        <Drawer.Screen name="Preferences" component={Preferences} />
-      </Drawer.Navigator>
-    );
-  }
-
-  // // SignIn Listiner
-  // useEffect(() => {
-  //   function listener(data) {
-  //     if (data.payload.event === 'signedIn') {
-  //       checkUser();
-  //     }
-  //     console.log(data.payload.event);
-  //   }
-
-  //   Hub.listen('auth', listener);
-  //   return () => Hub.remove('auth', listener);
-  // }, []);
-
   // SignIn Listener
   useEffect(() => {
     const unsubscribe = Hub.listen('auth', (data) => {
@@ -254,20 +260,6 @@ function LeftDrawer() {
       if (typeof unsubscribe === 'function') unsubscribe();
     };
   }, []);
-
-  // //SignOut Listener
-  // useEffect(() => {
-  //   function listener(data) {
-  //     if (data.payload.event === 'signedOut') {
-  //       setUser(undefined);
-  //     }
-  //     console.log(data.payload.event);
-  //   }
-
-  //   Hub.listen('auth', listener);
-  //   return () => Hub.remove('auth', listener);
-  // }, []);
-
 
   // SignOut Listener
   useEffect(() => {

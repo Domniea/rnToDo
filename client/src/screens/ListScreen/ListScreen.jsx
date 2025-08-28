@@ -6,10 +6,7 @@ import { StyleSheet,
     Keyboard,
     Pressable
   } from 'react-native'
-import {
-  FlatList
-} from 'react-native-gesture-handler'
-
+import { FlatList } from 'react-native-gesture-handler'
 import axios from 'axios'
 
 import { useTheme } from '@react-navigation/native'
@@ -26,6 +23,7 @@ import PostToDo from '../PostToDo'
 function TestScreen1({ todoList, navigation, listName }) {
 
   const [dynamicList, setDynamicList] = useState(todoList)
+  const [addToDoVisible, setAddToDoVisible] = useState(false)
 
   const panRef = useRef(null)
   const scrollRef= useRef(null)
@@ -50,8 +48,8 @@ function TestScreen1({ todoList, navigation, listName }) {
     setHomeList
   } = useContext(ListsContext)
 
-  const [addToDoVisible, setAddToDoVisible] = useState(false)
-
+  const listIndex = lists.findIndex(l => l.list === listName) 
+  console.log('LISTINDEX', listIndex, listName)
   function toggleAddToDo(){
     setAddToDoVisible(prevState => !addToDoVisible)
   }
@@ -101,7 +99,7 @@ async function editTask(id, userData) {
 
 
 //DELETE todo
-async function testDelete(id) {
+async function taskDelete(id) {
        
   try {
       console.log(id)
@@ -123,16 +121,20 @@ async function testDelete(id) {
 
 
 
-async function deleteList() {
-  if(lists[0].list) {
-      setHomeList(prevState=> {
-      return lists[0].list
-    })
-    } else {
-      //EDIT HERE
-      setLists([])
-    }
- 
+async function deleteList(id) {
+  const neighborId = id - 1
+  const prevListName = lists[neighborId].list
+            .trim()
+            .replace(/[^\p{L}\p{N}\s]/gu, '')           // keep letters/numbers/spaces
+            .replace(/\s+/g, '') 
+          
+  
+  if(lists.lengthv > 0) {
+          setHomeList(prevListName)
+        } else {
+          //EDIT HERE
+          setLists([])
+        }
 
   try {
       // const data = await axios.delete(`https://rntodo-production.up.railway.app/todo/${username}/${listName}`)
@@ -144,7 +146,7 @@ async function deleteList() {
         const data = await axios.delete(`https://rntodo-production.up.railway.app/todo/delete/${username}/undefined`)
         // const data = await axios.find(`http://localhost:9000/todo/delete/${username}/undefined`)
       }
-      console.log(lists.length)
+
   lists.length > 1 ?
     setLists(prevState => {
       return prevState.filter(list => {
@@ -206,7 +208,7 @@ async function deleteList() {
                 <ToDo
                   title={item.title}
                   notes={description}
-                  deleteToDo={testDelete}
+                  deleteToDo={taskDelete}
                   navigation={navigation}
                   panRef={panRef}
                   scrollRef={scrollRef}
@@ -221,7 +223,7 @@ async function deleteList() {
 
         </View>
         <Pressable
-        onPress={deleteList}
+        onPress={() => deleteList(listIndex)}
         style={{color: 'green'}}
       >
           <Text style={[listName === 'Un-Listed' ? {paddingTop: '15%'} : {paddingTop:'5%'}, { color: '#007AFF'}]}>Delete List</Text>
