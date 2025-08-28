@@ -41,12 +41,12 @@ npm run start
 ### Terminal 2: Run on iOS
 ```bash
 cd client
-npx run ios-default
+npm run ios-default
 ```
 ### Terminal 2: Run on android
 ```bash
 cd client
-npx run android
+npm run android
 ```
 
 👉 To specify a simulator:
