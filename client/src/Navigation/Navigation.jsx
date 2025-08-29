@@ -151,7 +151,7 @@ function uniquify(items) {
       {
         routeName: 'CreateList',
         title: 'Create List',
-        // since we're using a render function, pass real props (not initialParams)
+
         render: () => <CreateList todoList={lists} />,
       },
     ];
@@ -166,11 +166,11 @@ function uniquify(items) {
 
       return {
         routeName,
-        title, // shown on the tab
+        title, 
         render: () => (
           <ListScreen
             todoList={listArr?.data ?? []}
-            listId={idx}                 // if you have stable IDs, prefer those
+            listId={idx}                
             listName={listArr?.list}
           />
         ),
@@ -180,28 +180,6 @@ function uniquify(items) {
     return uniquify([...base, ...dynamic]);
   }, [lists]);
 
-  // Turn your context/state `homeList` into an initialRouteName safely
-  const initialRouteName = useMemo(() => {
-    if (!tabs.length) return undefined;
-
-    // if homeList already equals one of our route names, use it
-    if (homeList && tabs.some(t => t.routeName === homeList)) return homeList;
-
-    // otherwise default to the first tab
-    return tabs[0].routeName;
-  }, [tabs, homeList]);
-
-  if (!tabs.length) return null; // or a loading placeholder
-
-  // // Re-render tab navigator upon "homeList" change...delete list ect
-  //   useEffect(() => {
-  //   if (!homeList) return;
-
-  //   const exists = tabs.some(t => t.routeName === homeList);
-  //   if (exists) {
-  //     navigation.navigate(homeList);
-  //   }
-  // }, [homeList, tabs, navigation]); 
 
    const tabKey = useMemo(() => {
     const names = tabs.map(t => t.routeName).join('|');
@@ -210,9 +188,8 @@ function uniquify(items) {
 
   return (
   <Tab.Navigator
-      key={tabKey}                      // 👈 remount when routes/target change
+      key={tabKey}                      
       tabBarPosition="bottom"
-      initialRouteName={initialRouteName}
       backBehavior="history"
       screenOptions={{
         swipeEnabled: true,
