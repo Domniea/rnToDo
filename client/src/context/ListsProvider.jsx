@@ -43,8 +43,7 @@ const ListsProvider = (props) => {
         )
     }
 
-
-//Get Lists Call
+    // Get Lists Call
     async function getUsersLists(username) {
         try {
             
@@ -56,6 +55,18 @@ const ListsProvider = (props) => {
             console.log(error)
         }
     }
+
+  function toRouteName(title) {
+    const base = String(title ?? '').trim().toLowerCase();
+    if (!base) return 'unlisted';
+    // Collapse any non letter/number into underscores, then trim redundant underscores
+    const cleaned = base
+        .normalize('NFKD')
+        .replace(/[^\p{L}\p{N}]+/gu, '_')
+        .replace(/^_+|_+$/g, '');
+    return `list-${cleaned || 'unlisted'}`;
+    }
+
 
     useEffect(() => {
         getUsersLists(USERNAME)
@@ -70,7 +81,8 @@ const ListsProvider = (props) => {
                 homeList,
                 setHomeList,
                 setLists,
-                getUsersLists
+                getUsersLists,
+                toRouteName
             }
         }
     >

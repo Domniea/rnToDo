@@ -48,13 +48,11 @@ const Navigation = () => {
 
   const {theme} = useContext(ThemeContext);
 
-  const {lists, setLists, homeList} = useContext(ListsContext);
+  const {lists, setLists, homeList, toRouteName} = useContext(ListsContext);
 
-  console.log(homeList)
+  const Tab = createMaterialTopTabNavigator();
 
-
-  const {orientation, windowWidth, windowHeight} =
-    useContext(OrientationContext);
+  const {orientation, windowWidth, windowHeight} = useContext(OrientationContext);
 
   //Deep Linking
   const linking = {
@@ -68,127 +66,28 @@ const Navigation = () => {
     },
   };
 
-  const Tab = createMaterialTopTabNavigator();
-  
-  // function TabView() {
-
-  //   function renderTabScreens() {
-  //   return lists.map((listArr, idx) => {
-  //     const hasListName = typeof listArr.list === 'string' && listArr.list.trim() !== '';
-  //     const label = hasListName ? listArr.list : `Un-Listed-${idx}`;
-
-  //     // Use a stable, unique internal route name. Show the label via options.title.
-  //     const routeName = `list-${idx}`;
-
-  //     return (
-  //       <Tab.Screen
-  //         key={routeName} 
-  //         name={routeName}
-  //         options={{ title: label }}
-  //       >
-  //         {() => (
-  //           <ListScreen
-  //             todoList={listArr.data}
-  //             listId={idx}
-  //             listName={listArr.list}
-  //           />
-  //         )}
-  //       </Tab.Screen>
-  //     );
-  //   });
-  // }
-
-  //   return (
-  //     <Tab.Navigator
-  //       tabBarPosition="bottom"
-  //       initialRouteName={homeList}
-  //       backBehavior="history"
-  //       screenOptions={{
-  //         swipeEnabled: true,
-  //         tabBarScrollEnabled: true,
-  //         tabBarStyle: {paddingBottom: 20, paddingTop: 10},
-  //       }}
-  //       initialLayout={{width: windowWidth}}>
-  //       <Tab.Screen
-  //         name="CreateList"
-  //         component={CreateList}
-  //         initialParams={{todoList: lists}}
-  //       />
-  //       {renderTabScreens()}
-  //     </Tab.Navigator>
-  //   );
-  // }
-
-// turn "New List!" → "NewList"
-function toRouteName(title, fallback) {
-  const base = (title ?? '').toString().trim();
-  if (!base) return fallback;                   // e.g., "UnListed0"
-  const cleaned = base
-    .replace(/[^\p{L}\p{N}\s]/gu, '')           // keep letters/numbers/spaces
-    .replace(/\s+/g, '');                       // remove spaces
-  return cleaned || fallback;
-}
-
-// ensure route names are unique (silent insurance)
-function uniquify(items) {
-  const seen = new Map();
-  return items.map(({ routeName, ...rest }) => {
-    let name = routeName;
-    let i = 2;
-    while (seen.has(name)) name = `${routeName}-${i++}`;
-    seen.set(name, true);
-    return { routeName: name, ...rest };
-  });
-}
-
-
   function TabView() {
-  // Build the tab list: first the static Create tab, then dynamic list tabs
-  // const navigation = useNavigation();
+  const navigation = useNavigation();
 
-  const tabs = useMemo(() => {
-    const base = [
-      {
-        routeName: 'CreateList',
-        title: 'Create List',
+    const screenNames = useMemo(
+    () => lists.map(l => toRouteName(l.list)),
+    [lists]
+  );
 
-        render: () => <CreateList todoList={lists} />,
-      },
-    ];
-
-    const dynamic = (lists ?? []).map((listArr, idx) => {
-      const title =
-        typeof listArr?.list === 'string' && listArr.list.trim()
-          ? listArr.list
-          : `Un-Listed-${idx}`;
-
-      const routeName = toRouteName(listArr?.list, `UnListed${idx}`);
-
-      return {
-        routeName,
-        title, 
-        render: () => (
-          <ListScreen
-            todoList={listArr?.data ?? []}
-            listId={idx}                
-            listName={listArr?.list}
-          />
-        ),
-      };
-    });
-
-    return uniquify([...base, ...dynamic]);
-  }, [lists]);
+  useEffect(() => {
+    if (!homeList) return;
+    if (screenNames.includes(homeList)) {
+      requestAnimationFrame(() => {  // wait one frame so Tab.Screen mounts
+    navigation.navigate('Lists', { screen: homeList });
+      });
+    }
+  }, [homeList, screenNames, navigation]);
 
 
-   const tabKey = useMemo(() => {
-    const names = tabs.map(t => t.routeName).join('|');
-    return `tabs-${homeList ?? 'none'}-${names}`;
-  }, [tabs, homeList]);
+  console.log('LISTS',lists)
 
   return (
-  <Tab.Navigator
-      key={tabKey}                      
+  <Tab.Navigator                    
       tabBarPosition="bottom"
       backBehavior="history"
       screenOptions={{
@@ -198,11 +97,20 @@ function uniquify(items) {
       }}
       initialLayout={{ width: windowWidth }}
     >
-      {tabs.map(({ routeName, title, render }) => (
-        <Tab.Screen key={routeName} name={routeName} options={{ title }}>
-          {render}
-        </Tab.Screen>
-      ))}
+
+      <Tab.Screen name='CreateList' list={'Create List'} component={CreateList}/>
+        {
+          lists.map(({ list, data, index }) => (
+          <Tab.Screen
+            key={list}
+            name={toRouteName(list)}  
+            options={{ title: list }}
+          >
+            {({ navigation, route }) => (
+              <ListScreen navigation={navigation} route={route} listName={list} todoList={data} index={index}/>
+            )}
+          </Tab.Screen>
+        ))}
     </Tab.Navigator>
   );
 }

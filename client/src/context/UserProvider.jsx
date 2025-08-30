@@ -51,7 +51,7 @@ function UserProvider(props) {
     async function checkUser() {
         try {
             const response = await getCurrentUser({bypassCache: true});
-            setUser(response)
+            setUser(response || 'test')
         } catch (err) {
             console.log(err);
         }

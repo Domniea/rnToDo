@@ -14,15 +14,14 @@ import CustomButton from '../../components/CustomButton'
 import { ListsContext } from '../../context/ListsProvider'
 
 
-const CreateList = ({route, navigation}) => {
+const CreateList = () => {
 
   const {
-    test,
     lists,
     homeList,
     setHomeList,
     setLists,
-    getUsersLists,
+    toRouteName
   } = useContext(ListsContext)
 
 
@@ -30,37 +29,13 @@ const CreateList = ({route, navigation}) => {
 
   const { colors } = useTheme()
 
-
-
-
-  function toRouteName(title, fallback) {
-    const base = (title ?? '').toString().trim();
-    if (!base) return fallback;
-    return base.replace(/[^\p{L}\p{N}\s]/gu, '').replace(/\s+/g, '') || fallback;
-  }
-
-
-
-
-
   //Create List
   async function createList(data) {
     try {
-
-      const route = toRouteName(data.newListTitle, `UnListed${(lists ?? []).length}`);
+      const name = data.newListTitle
 
       setLists(prev => [...prev, { list: data.newListTitle, data: [] }]);
-      setHomeList(route);
-
-
-      // setHomeList(data.newListTitle)
-      //   setLists(prevState => {
-      //     return [
-      //       ...prevState,
-      //       { list: data.newListTitle, data: []}
-      //     ]
-      //   })
-      //   navigation.navigate('Lists')
+      setHomeList(toRouteName(name))
     }
     catch(error) {
       console.log(error)
