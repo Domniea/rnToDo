@@ -10,7 +10,7 @@ import {
         ScrollView,
         Linking,
     } from 'react-native'
-import React from 'react'
+import { useTheme } from '@react-navigation/native'
 import { useContext } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useForm } from 'react-hook-form'
@@ -26,6 +26,7 @@ import { signUp, signInWithRedirect} from 'aws-amplify/auth'
 const CreateAccount = () => {
 
     const navigation = useNavigation()
+    const { colors } = useTheme()
     
     const {
         control,
@@ -71,7 +72,7 @@ const CreateAccount = () => {
 
                 <View style={styles.root}>
 
-                    <Text style={styles.header}>Create Account</Text>
+                    <Text style={[styles.header, {color: colors.text}]}>Create Account</Text>
                     <CustomInput 
                         name= 'username'
                         placeholder='username'

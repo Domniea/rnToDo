@@ -67,7 +67,7 @@ const ToDo = (props) => {
     const context = useSharedValue({x: 0})
 
 
-    //Animated Styles
+    // Animated Styles
     const rAnimatedSwipe = useAnimatedStyle((event) => {
         return {
             
@@ -89,7 +89,7 @@ const ToDo = (props) => {
         }
     })
 
-//Double Tap Gessture Handler
+// Double Tap Gessture Handler
     const DoubleTapGestureHandler = Gesture.Tap()
         .runOnJS(true)
         .maxDuration(250)
@@ -114,7 +114,7 @@ const ToDo = (props) => {
             // }
         })
 
-//Pan Gesture Handler
+// Pan Gesture Handler
     const panGestureHandler = Gesture.Pan()
         .minDistance(-20)
         .onStart(() => {

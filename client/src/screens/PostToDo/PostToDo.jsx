@@ -59,7 +59,7 @@ const PostToDo = (props) => {
     
     const {control, handleSubmit} = useForm()
     
-    //Dismiss modal
+    // Dismiss modal
     function disregardModal() {
         setAddToDoVisible(false)
     }

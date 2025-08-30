@@ -9,8 +9,6 @@ import {
     Keyboard,
     SafeAreaView
 } from 'react-native'
-
-import React from 'react'
 import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useForm } from 'react-hook-form'

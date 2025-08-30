@@ -15,7 +15,7 @@ import { useHeaderHeight } from '@react-navigation/elements';
 
 const KeyboardAvoidingContainer = ({children, headerAvailable=true}) => {
 
-//Landscape or Portrait
+// Landscape or Portrait
     const isPortrait = () => {
         const dim = Dimensions.get('screen');
         return dim.height >= dim.width;

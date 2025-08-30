@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, useWindowDimensions } from 'react-native'
-import React, { useContext } from 'react'
+import { useTheme } from '@react-navigation/native'
 import { useNavigation } from '@react-navigation/native'
 import { useForm } from 'react-hook-form'
 
@@ -13,7 +13,8 @@ import { resetPassword } from 'aws-amplify/auth'
 
 const ForgotPassword = () => {
 
-    const navigation = useNavigation()  
+    const navigation = useNavigation()
+    const { colors } =useTheme() 
     
     const {
         control,
@@ -70,7 +71,7 @@ const ForgotPassword = () => {
   return (
     <View style={styles.root}>
 
-        <Text style={styles.header}>Forgot Your Password?</Text>
+        <Text style={[styles.header, { color: colors.text}]}>Forgot Your Password?</Text>
         <CustomInput 
             name='username'
             placeholder='Username'
@@ -97,8 +98,10 @@ export default ForgotPassword
 
 const styles = StyleSheet.create({
     root: {
+        flex: 1,
         padding: 20,
-        alignItems:'center'
+        alignItems:'center',
+        justifyContent: 'center'
     },
     header: {
         fontSize: 40,

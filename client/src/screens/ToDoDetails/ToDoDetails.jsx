@@ -57,12 +57,12 @@ const ToDoDescription = (props) => {
         setDetailsVisible(false)
     }
 
-    //Toggle edit inputs
+    // Toggle edit inputs
     function toggleEdit() {
         setEdit(prevState => !prevState)
     }
 
-    //Submit Edits
+    // Submit Edits
     function onSubmit(data) {
         editTask( _id, data)
         toggleModal()

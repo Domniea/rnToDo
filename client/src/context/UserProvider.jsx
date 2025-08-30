@@ -57,7 +57,7 @@ function UserProvider(props) {
         }
     }
 
-    //Signout User
+    // Signout User
     async function handleSignOut() {
         try {
           await signOut();

@@ -1,29 +1,25 @@
 import {StyleSheet, Platform} from 'react-native';
-import React, {useEffect, useContext, useMemo} from 'react';
+import {useEffect, useContext, useMemo} from 'react';
 import {Hub} from 'aws-amplify/utils';
-import {Appearance} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
+// Context
 import {UserContext} from '../context/UserProvider';
 import {OrientationContext} from '../context/OrientationProvider';
 import {ThemeContext} from '../context/ThemeProvider';
-import {ListsContext, ListsProvider} from '../context/ListsProvider';
+import {ListsContext} from '../context/ListsProvider';
 
-//Navigator
+// Navigator
 import {
   NavigationContainer,
   DefaultTheme,
   DarkTheme,
 } from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {
-  createDrawerNavigator,
-  DrawerToggleButton,
-} from '@react-navigation/drawer';
-import { useNavigation } from '@react-navigation/native';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {useNavigation} from '@react-navigation/native';
 
-//Screens for Navigator
+// Screens for Navigator
 import SignIn from '../screens/SignInScreen/SignIn';
 import CreateAccount from '../screens/CreateAccountScreen/CreateAccount';
 import ConfirmEmail from '../screens/ConfirmEmailScreen/ConfirmEmail';
@@ -38,7 +34,6 @@ import EditPassword from '../screens/EditPassword';
 import SignUpComplete from '../screens/SignUpComplete';
 import ListScreen from '../screens/ListScreen';
 
-
 const Drawer = createDrawerNavigator();
 
 const Stack = createNativeStackNavigator();
@@ -52,9 +47,10 @@ const Navigation = () => {
 
   const Tab = createMaterialTopTabNavigator();
 
-  const {orientation, windowWidth, windowHeight} = useContext(OrientationContext);
+  const { windowWidth, windowHeight } =
+    useContext(OrientationContext);
 
-  //Deep Linking
+  // Deep Linking
   const linking = {
     prefixes: ['todoapp://'],
     config: {
@@ -67,73 +63,78 @@ const Navigation = () => {
   };
 
   function TabView() {
-  const navigation = useNavigation();
+    const navigation = useNavigation();
 
     const screenNames = useMemo(
-    () => lists.map(l => toRouteName(l.list)),
-    [lists]
-  );
+      () => lists.map(l => toRouteName(l.list)),
+      [lists],
+    );
 
-  useEffect(() => {
-    if (!homeList) return;
-    if (screenNames.includes(homeList)) {
-      requestAnimationFrame(() => {  // wait one frame so Tab.Screen mounts
-    navigation.navigate('Lists', { screen: homeList });
-      });
-    }
-  }, [homeList, screenNames, navigation]);
+    useEffect(() => {
+      if (!homeList) return;
+      if (screenNames.includes(homeList)) {
+        requestAnimationFrame(() => {
+          // wait one frame so Tab.Screen mounts
+          navigation.navigate('Lists', {screen: homeList});
+        });
+      }
+    }, [homeList, screenNames, navigation]);
 
+    console.log('LISTS', lists);
 
-  console.log('LISTS',lists)
-
-  return (
-  <Tab.Navigator                    
-      tabBarPosition="bottom"
-      backBehavior="history"
-      screenOptions={{
-        swipeEnabled: true,
-        tabBarScrollEnabled: true,
-        tabBarStyle: { paddingBottom: 20, paddingTop: 10 },
-      }}
-      initialLayout={{ width: windowWidth }}
-    >
-
-      <Tab.Screen name='CreateList' list={'Create List'} component={CreateList}/>
-        {
-          lists.map(({ list, data, index }) => (
+    return (
+      <Tab.Navigator
+        tabBarPosition="bottom"
+        backBehavior="history"
+        screenOptions={{
+          swipeEnabled: true,
+          tabBarScrollEnabled: true,
+          tabBarStyle: {paddingBottom: 20, paddingTop: 10},
+        }}
+        initialLayout={{width: windowWidth}}>
+        <Tab.Screen
+          name="CreateList"
+          list={'Create List'}
+          component={CreateList}
+        />
+        {lists.map(({list, data, index}) => (
           <Tab.Screen
             key={list}
-            name={toRouteName(list)}  
-            options={{ title: list }}
-          >
-            {({ navigation, route }) => (
-              <ListScreen navigation={navigation} route={route} listName={list} todoList={data} index={index}/>
+            name={toRouteName(list)}
+            options={{title: list}}>
+            {({navigation, route}) => (
+              <ListScreen
+                navigation={navigation}
+                route={route}
+                listName={list}
+                todoList={data}
+                index={index}
+              />
             )}
           </Tab.Screen>
         ))}
-    </Tab.Navigator>
-  );
-}
+      </Tab.Navigator>
+    );
+  }
 
-// Main App Drawer
-function LeftDrawer() {
-  return (
-    <Drawer.Navigator
-      screenOptions={
-        Platform.OS === 'android' && theme === 'dark'
-          ? { headerTintColor: 'white' }
-          : {}
-      }
-    >
-      <Drawer.Screen name="Lists" component={TabView} />
-      <Drawer.Screen name="Preferences" component={Preferences} />
-    </Drawer.Navigator>
-  );
-}
+  // Main App Drawer
+  function LeftDrawer() {
+    return (
+      <Drawer.Navigator
+        screenOptions={
+          Platform.OS === 'android' && theme === 'dark'
+            ? {headerTintColor: 'white'}
+            : {}
+        }>
+        <Drawer.Screen name="Lists" component={TabView} />
+        <Drawer.Screen name="Preferences" component={Preferences} />
+      </Drawer.Navigator>
+    );
+  }
 
   // SignIn Listener
   useEffect(() => {
-    const unsubscribe = Hub.listen('auth', (data) => {
+    const unsubscribe = Hub.listen('auth', data => {
       const event = data?.payload?.event;
       if (event === 'signedIn') {
         checkUser();
@@ -148,7 +149,7 @@ function LeftDrawer() {
 
   // SignOut Listener
   useEffect(() => {
-    const unsubscribe = Hub.listen('auth', (data) => {
+    const unsubscribe = Hub.listen('auth', data => {
       const event = data?.payload?.event;
       if (event === 'signedOut') {
         setUser(undefined);

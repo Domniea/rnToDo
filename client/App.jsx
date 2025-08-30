@@ -1,9 +1,7 @@
-import React from 'react';
-
 import {View, StyleSheet} from 'react-native';
 
 import 'react-native-gesture-handler';
-
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Navigation from './src/Navigation/Navigation';
 import {UserProvider} from './src/context/UserProvider';
 import {ToDoProvider} from './src/context/ToDoProvider';
@@ -12,9 +10,7 @@ import {OrientationProvider} from './src/context/OrientationProvider';
 import {ListsProvider} from './src/context/ListsProvider';
 
 import {LogBox} from 'react-native';
-import { fetchAuthSession } from 'aws-amplify/auth';
-// App.js
-
+ // Amplify
 import {Amplify} from 'aws-amplify';
 import amplifyconfig from './src/amplifyconfiguration.json';
 Amplify.configure(amplifyconfig);
@@ -33,21 +29,21 @@ function App(){
 
   
   return (
-    // <SafeAreaView  >
-    <View style={styles.root}>
-      <OrientationProvider>
-        <ThemeProvider>
-          <UserProvider>
-            <ListsProvider>
-              <ToDoProvider>
-                <Navigation />
-              </ToDoProvider>
-            </ListsProvider>
-          </UserProvider>
-        </ThemeProvider>
-      </OrientationProvider>
-    </View>
-    // </SafeAreaView>
+    <SafeAreaView style={styles.root}>
+      <View style={styles.root}>
+        <OrientationProvider>
+          <ThemeProvider>
+            <UserProvider>
+              <ListsProvider>
+                <ToDoProvider>
+                  <Navigation />
+                </ToDoProvider>
+              </ListsProvider>
+            </UserProvider>
+          </ThemeProvider>
+        </OrientationProvider>
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -56,6 +52,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F9FBFC',
   },
+  test: {
+    flex: 1
+  }
 });
 
 // export default withAuthenticator(App);

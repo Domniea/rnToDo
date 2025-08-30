@@ -61,7 +61,7 @@ const Preferences = () => {
         navigation.navigate('Preferences')
      }
 
-    //Delete User
+    // Delete User
     const [toggleDeleteWarn, setToggleDeleteWarn] = useState(false)
 
     function toggleDeleteWarning() {

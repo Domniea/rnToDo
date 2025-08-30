@@ -29,7 +29,7 @@ const CreateList = () => {
 
   const { colors } = useTheme()
 
-  //Create List
+  // Create List
   async function createList(data) {
     try {
       const name = data.newListTitle

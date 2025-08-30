@@ -14,7 +14,7 @@ function ToDoProvider(props) {
 
   const {user} = useContext(UserContext);
 
-  //Get All
+  // Get All
   async function getAllToDos() {
     try {
       const data = await axios.get(
@@ -27,7 +27,7 @@ function ToDoProvider(props) {
     }
   }
 
-  //Get Users ToDo
+  // Get Users ToDo
   async function getUsersToDo(username) {
     try {
       const data = await axios.get(
@@ -76,7 +76,7 @@ function ToDoProvider(props) {
     }
   }
 
-  //Edit ToDo
+  // Edit ToDo
   async function editToDo(path, userData) {
     try {
       const data = await axios.put(
@@ -89,7 +89,7 @@ function ToDoProvider(props) {
     }
   }
 
-  //Delete ToDo
+  // Delete ToDo
   // async function deleteToDo(id) {
   //     console.log('deleted')
   //     try {
@@ -140,7 +140,7 @@ function ToDoProvider(props) {
   //      })
   //  })
 
-  //DELETE ALL
+  // DELETE ALL
   async function deleteAllToDos(username) {
     try {
       const responseData = await axios.delete(

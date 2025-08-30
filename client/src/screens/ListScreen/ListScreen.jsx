@@ -19,19 +19,16 @@ import CustomButton from '../../components/CustomButton';
 import ToDo from '../../components/ToDo';
 import PostToDo from '../PostToDo';
 
-
-
-
-
 function ListScreen({navigation, index, listName, todoList}) {
-  console.log('DATA', todoList)
+  console.log('DATA', todoList);
   const [dynamicList, setDynamicList] = useState(todoList);
   const [addToDoVisible, setAddToDoVisible] = useState(false);
 
   const panRef = useRef(null);
   const scrollRef = useRef(null);
 
-  const {orientation, windowWidth, windowHeight} = useContext(OrientationContext);
+  const {orientation, windowWidth, windowHeight} =
+    useContext(OrientationContext);
 
   const {user} = useContext(UserContext);
 
@@ -47,7 +44,7 @@ function ListScreen({navigation, index, listName, todoList}) {
 
   const {colors} = useTheme();
 
-  //POST Todo
+  // POST Todo
   async function submitTask(path, userData) {
     try {
       console.log('list', lists.data);
@@ -65,7 +62,7 @@ function ListScreen({navigation, index, listName, todoList}) {
     }
   }
 
-  //EDIT todo
+  // EDIT todo
   async function editTask(id, userData) {
     try {
       const data = await axios.put(
@@ -84,7 +81,7 @@ function ListScreen({navigation, index, listName, todoList}) {
     }
   }
 
-  //DELETE todo
+  // DELETE todo
   async function taskDelete(id) {
     try {
       console.log(id);
@@ -103,92 +100,43 @@ function ListScreen({navigation, index, listName, todoList}) {
     }
   }
 
-  // async function deleteList(id) {
-  //   const neighborId = id - 1;
-  //   const prevListName = lists[neighborId].list
-  //     .trim()
-  //     .replace(/[^\p{L}\p{N}\s]/gu, '') // keep letters/numbers/spaces
-  //     .replace(/\s+/g, '');
+  function deleteList(id) {
+    const prev = lists;
+    if (!Array.isArray(prev) || id < 0 || id >= prev.length) return;
 
-  //   if (lists.lengthv > 0) {
-  //     setHomeList(prevListName);
-  //   } else {
-  //     //EDIT HERE
-  //     setHomeList('CreateList');
-  //   }
-
-  //   // try {
-  //   //     // const data = await axios.delete(`https://rntodo-production.up.railway.app/todo/${username}/${listName}`)
-  //   //     if(listName !== 'Un-Listed'){
-  //   //       const data = await axios.delete(`https://rntodo-production.up.railway.app/todo/delete/${username}/${listName}/test`)
-  //   //       // const data = await axios.find(`http://localhost:9000/todo/delete/${username}/${listName}/test`)
-
-  //   //     } else if(listName === 'Un-Listed' || undefined) {
-  //   //       const data = await axios.delete(`https://rntodo-production.up.railway.app/todo/delete/${username}/undefined`)
-  //   //       // const data = await axios.find(`http://localhost:9000/todo/delete/${username}/undefined`)
-  //   //     }
-  //   // lists.length > 1 ?
-  //   //   setLists(prevState => {
-  //   //     return prevState.filter(list => {
-  //   //       if(list.list !== undefined){
-  //   //         return list.list !== listName
-  //   //       } else if (list.list === 'Un-Listed') {
-  //   //         return list.list !== 'Un-Listed' || undefined
-  //   //       }
-  //   //     })
-  //   //   })
-  //   //   :
-  //   //   setLists([])
-  //   // }
-  //   // catch(error) {
-  //   //     console.log(error)
-  //   // }
-  // }
-  // Delete by ARRAY INDEX (id is the index in `lists`)
-async function deleteList(id) {
-  // 1) Compute next state + where to navigate, atomically from current lists
-  setLists(prev => {
-    if (!Array.isArray(prev) || id < 0 || id >= prev.length) return prev;
-
-    const deleting = prev[id];                // { list, data }
+    const deleting = prev[id];
     const next = prev.filter((_, i) => i !== id);
 
-    // pick neighbor after deletion:
-    // - try to land on the item that shifted into the deleted slot
-    // - if we deleted the last one, land on the new last
-    let targetRoute;
-    if (next.length > 0) {
-      const neighborIndex = Math.min(id, next.length - 1);
-      targetRoute = toRouteName(next[neighborIndex].list);  // e.g. "list-test4"
-    } else {
-      targetRoute = 'CreateList';                           // your empty-state tab
-    }
+    const targetRoute = next.length
+      ? toRouteName(next[Math.min(id, next.length - 1)].list)
+      : 'CreateList';
 
-    setHomeList(targetRoute); // your Tabs useEffect will navigate to this
+    navigation.navigate(targetRoute);
 
-    // 2) Fire-and-forget API call (don’t block UI); protect special names & URL-encode
+    // 2) Remove the deleted tab on the next frame
+    requestAnimationFrame(() => {
+      setLists(next);
+      setHomeList(targetRoute);
+    });
+
     (async () => {
       try {
-        const listName = deleting?.list ?? 'undefined';
-        const encoded = encodeURIComponent(listName);
-
-        if (listName === 'Un-Listed') {
-          await axios.delete(
-            `https://rntodo-production.up.railway.app/todo/delete/${username}/undefined`
-          );
-        } else {
-          await axios.delete(
-            `https://rntodo-production.up.railway.app/todo/delete/${username}/${encoded}/test`
-          );
-        }
+        const name = deleting?.list ?? 'undefined';
+        const seg = s => encodeURIComponent(String(s ?? ''));
+        const url =
+          name === 'unlisted'
+            ? `https://rntodo-production.up.railway.app/todo/delete/${seg(
+                username,
+              )}/undefined`
+            : `https://rntodo-production.up.railway.app/todo/delete/${seg(
+                username,
+              )}/${seg(name)}/test`;
+        await axios.delete(url);
       } catch (err) {
-        console.log(err);
+        console.log('Delete failed:', err?.message || err);
       }
     })();
-
-    return next;
-  });
-}
+  }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -198,7 +146,7 @@ async function deleteList(id) {
             ? styles.container
             : styles.containerLANDSCAPE
         }>
-        {listName !== 'Un-Listed' && (
+        {listName !== 'unlisted' && (
           <CustomButton
             text="Add ToDo"
             onPress={toggleAddToDo}
@@ -254,7 +202,7 @@ async function deleteList(id) {
           style={{color: 'green'}}>
           <Text
             style={[
-              listName === 'Un-Listed'
+              listName === 'unlisted'
                 ? {paddingTop: '15%'}
                 : {paddingTop: '5%'},
               {color: '#007AFF'},
