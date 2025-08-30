@@ -80,8 +80,6 @@ const Navigation = () => {
       }
     }, [homeList, screenNames, navigation]);
 
-    console.log('LISTS', lists);
-
     return (
       <Tab.Navigator
         tabBarPosition="bottom"

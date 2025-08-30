@@ -1,7 +1,7 @@
 import {View, StyleSheet} from 'react-native';
 
 import 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import Navigation from './src/Navigation/Navigation';
 import {UserProvider} from './src/context/UserProvider';
 import {ToDoProvider} from './src/context/ToDoProvider';
@@ -10,12 +10,12 @@ import {OrientationProvider} from './src/context/OrientationProvider';
 import {ListsProvider} from './src/context/ListsProvider';
 
 import {LogBox} from 'react-native';
- // Amplify
+// Amplify
 import {Amplify} from 'aws-amplify';
 import amplifyconfig from './src/amplifyconfiguration.json';
 Amplify.configure(amplifyconfig);
 
-function App(){
+function App() {
   // console.warn = (...args) => {
   //   if (typeof args[0] === 'string' && args[0].includes('key')) {
   //     console.trace('⚠️ KEY WARNING TRACE', ...args);
@@ -26,8 +26,6 @@ function App(){
   //   'A props object containing a "key" prop is being spread into JSX',
   // ]);
 
-
-  
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.root}>
@@ -53,8 +51,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#F9FBFC',
   },
   test: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });
 
 // export default withAuthenticator(App);

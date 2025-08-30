@@ -20,7 +20,6 @@ import ToDo from '../../components/ToDo';
 import PostToDo from '../PostToDo';
 
 function ListScreen({navigation, index, listName, todoList}) {
-  console.log('DATA', todoList);
   const [dynamicList, setDynamicList] = useState(todoList);
   const [addToDoVisible, setAddToDoVisible] = useState(false);
 
