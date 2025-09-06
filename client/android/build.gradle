@@ -1,36 +1,122 @@
-// buildscript {
-//     ext {
-//         buildToolsVersion = "34.0.0"
-//         minSdkVersion = 23
-//         compileSdkVersion = 34
-//         targetSdkVersion = 34
+// // android/build.gradle (root)
 
-//         ndkVersion = "26.1.10909125"
-//         kotlinVersion = "1.9.24"
-//     }
-//     repositories {
-//         google()
-//         mavenCentral()
-//     }
-//     dependencies {
-//         classpath("com.android.tools.build:gradle")
-//         classpath("com.facebook.react:react-native-gradle-plugin")
-//         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
-//     }
+// buildscript {
+//   repositories { google(); mavenCentral() }
 // }
 
-// apply plugin: "com.facebook.react.rootproject"
+// ext {
+//   compileSdkVersion = 35
+//   targetSdkVersion  = 35
+//   minSdkVersion     = 24
+//   buildToolsVersion = "35.0.0"
+//   ndkVersion        = "27.0.12077973"   // matches your installed NDK
+//   kotlinVersion     = "2.0.20"
+// }
+
+// /* Enforce consistent SDK/JDK/NDK across subprojects (fixes libs that miss ndkVersion, etc.) */
+// subprojects { p ->
+//   p.plugins.withId("com.android.library") {
+//     p.android {
+//       compileSdkVersion rootProject.ext.compileSdkVersion
+//       defaultConfig {
+//         minSdkVersion    rootProject.ext.minSdkVersion
+//         targetSdkVersion rootProject.ext.targetSdkVersion
+//       }
+//       ndkVersion rootProject.ext.ndkVersion
+//       compileOptions {
+//         sourceCompatibility JavaVersion.VERSION_17
+//         targetCompatibility JavaVersion.VERSION_17
+//       }
+//     }
+//     if (p.hasProperty("kotlinOptions")) { p.kotlinOptions.jvmTarget = "17" }
+//   }
+
+//   p.plugins.withId("com.android.application") {
+//     p.android {
+//       compileSdkVersion rootProject.ext.compileSdkVersion
+//       defaultConfig {
+//         minSdkVersion    rootProject.ext.minSdkVersion
+//         targetSdkVersion rootProject.ext.targetSdkVersion
+//       }
+//       ndkVersion rootProject.ext.ndkVersion
+//       compileOptions {
+//         sourceCompatibility JavaVersion.VERSION_17
+//         targetCompatibility JavaVersion.VERSION_17
+//       }
+//     }
+//     if (p.hasProperty("kotlinOptions")) { p.kotlinOptions.jvmTarget = "17" }
+//   }
+// }
+
+// tasks.register("clean", Delete) { delete(rootProject.buildDir) }
+
+// /* --- Fallback: generate autolinking.json if the RN settings plugin didn't --- */
+// tasks.register("generateAutolinkingJsonIfMissing") {
+//   doLast {
+//     def autolinkDir  = new File(rootProject.buildDir, "generated/autolinking")
+//     def autolinkJson = new File(autolinkDir, "autolinking.json")
+
+//     if (autolinkJson.exists()) {
+//       println("autolinking.json already exists -> ${autolinkJson}")
+//       return
+//     }
+
+//     autolinkDir.mkdirs()
+
+//     // android/.. = your project root (where package.json lives)
+//     def rnRoot = rootProject.projectDir.parentFile
+//     def cli    = new File(rnRoot, "node_modules/react-native/cli.js")
+//     if (!cli.exists()) {
+//       throw new GradleException("react-native CLI not found at ${cli}. Run your package manager install.")
+//     }
+
+//     // Prefer explicit NODE_BINARY, otherwise rely on PATH
+//     def nodeBin = System.getenv("NODE_BINARY") ?: "node"
+
+//     def stdout = new java.io.ByteArrayOutputStream()
+//     def stderr = new java.io.ByteArrayOutputStream()
+//     def result = exec {
+//       workingDir rnRoot
+//       executable nodeBin
+//       args cli.absolutePath, "config"
+//       standardOutput = stdout
+//       errorOutput    = stderr
+//       ignoreExitValue = true
+//     }
+
+//     if (result.exitValue != 0) {
+//       throw new GradleException("RN CLI 'config' failed (exit ${result.exitValue}). STDERR:\n${stderr.toString('UTF-8')}")
+//     }
+
+//     def content = stdout.toString("UTF-8")
+//     if (!content?.trim()) {
+//       throw new GradleException("RN CLI 'config' produced empty output.")
+//     }
+
+//     autolinkJson.text = content
+//     println("Wrote autolinking.json -> ${autolinkJson}")
+//   }
+// }
 
 
-// android/build.gradle
-plugins {
-  id("com.android.application") version "8.8.0" apply false
-  id("com.android.library")     version "8.8.0" apply false
-  id("org.jetbrains.kotlin.android") version "1.9.24" apply false
-  id("com.facebook.react") apply false
+buildscript {
+    ext {
+        buildToolsVersion = "35.0.0"
+        minSdkVersion = 24
+        compileSdkVersion = 35
+        targetSdkVersion = 35
+        ndkVersion = "27.1.12297006"
+        kotlinVersion = "2.1.20"
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.android.tools.build:gradle")
+        classpath("com.facebook.react:react-native-gradle-plugin")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
+    }
 }
 
-tasks.register("clean", Delete) {
-  delete(rootProject.buildDir)
-}
-
+apply plugin: "com.facebook.react.rootproject"

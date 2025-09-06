@@ -1,192 +1,294 @@
-// apply plugin: "com.android.application"
-// apply plugin: "org.jetbrains.kotlin.android"
-// apply plugin: "com.facebook.react"
+// // // android/app/build.gradle
 
-// /**
-//  * This is the configuration block to customize your React Native Android app.
-//  * By default you don't need to apply any configuration, just uncomment the lines you need.
-//  */
-// react {
-//     /* Folders */
-//     //   The root of your project, i.e. where "package.json" lives. Default is '..'
-//     // root = file("../")
-//     //   The folder where the react-native NPM package is. Default is ../node_modules/react-native
-//     // reactNativeDir = file("../node_modules/react-native")
-//     //   The folder where the react-native Codegen package is. Default is ../node_modules/@react-native/codegen
-//     // codegenDir = file("../node_modules/@react-native/codegen")
-//     //   The cli.js file which is the React Native CLI entrypoint. Default is ../node_modules/react-native/cli.js
-//     // cliFile = file("../node_modules/react-native/cli.js")
+// // plugins {
+// //   id "com.android.application"
+// //   id "org.jetbrains.kotlin.android"
+// //   id "com.facebook.react"
+// // }
 
-//     /* Variants */
-//     //   The list of variants to that are debuggable. For those we're going to
-//     //   skip the bundling of the JS bundle and the assets. By default is just 'debug'.
-//     //   If you add flavors like lite, prod, etc. you'll have to list your debuggableVariants.
-//     // debuggableVariants = ["liteDebug", "prodDebug"]
+// // android {
+// //   namespace "com.client"
 
-//     /* Bundling */
-//     //   A list containing the node command and its flags. Default is just 'node'.
-//     // nodeExecutableAndArgs = ["node"]
-//     //
-//     //   The command to run when bundling. By default is 'bundle'
-//     // bundleCommand = "ram-bundle"
-//     //
-//     //   The path to the CLI configuration file. Default is empty.
-//     // bundleConfig = file(../rn-cli.config.js)
-//     //
-//     //   The name of the generated asset file containing your JS bundle
-//     // bundleAssetName = "MyApplication.android.bundle"
-//     //
-//     //   The entry file for bundle generation. Default is 'index.android.js' or 'index.js'
-//     // entryFile = file("../js/MyApplication.android.js")
-//     //
-//     //   A list of extra flags to pass to the 'bundle' commands.
-//     //   See https://github.com/react-native-community/cli/blob/main/docs/commands.md#bundle
-//     // extraPackagerArgs = []
+// //   compileSdkVersion rootProject.ext.compileSdkVersion
+// //   ndkVersion        rootProject.ext.ndkVersion
 
-//     /* Hermes Commands */
-//     //   The hermes compiler command to run. By default it is 'hermesc'
-//     // hermesCommand = "$rootDir/my-custom-hermesc/bin/hermesc"
-//     //
-//     //   The list of flags to pass to the Hermes compiler. By default is "-O", "-output-source-map"
-//     // hermesFlags = ["-O", "-output-source-map"]
-     
-//     /* Autolinking */
-//     autolinkLibrariesWithApp()
+// //   defaultConfig {
+// //     applicationId "com.thebesttodolist"
+// //     minSdkVersion    rootProject.ext.minSdkVersion
+// //     targetSdkVersion rootProject.ext.targetSdkVersion
+// //     versionCode 8
+// //     versionName "1.0"
+// //   }
+
+// //   // 👇 Must be a direct child of android
+// //   buildFeatures { prefab true }
+
+// //   signingConfigs {
+// //     release {
+// //       if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
+// //         storeFile file(MYAPP_UPLOAD_STORE_FILE)
+// //         storePassword MYAPP_UPLOAD_STORE_PASSWORD
+// //         keyAlias MYAPP_UPLOAD_KEY_ALIAS
+// //         keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+// //       }
+// //     }
+// //     debug {
+// //       storeFile file('debug.keystore')
+// //       storePassword 'android'
+// //       keyAlias 'androiddebugkey'
+// //       keyPassword 'android'
+// //     }
+// //   }
+
+// //   buildTypes {
+// //     debug   { signingConfig signingConfigs.debug }
+// //     release {
+// //       signingConfig signingConfigs.release
+// //       minifyEnabled false
+// //       proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+// //     }
+// //   }
+
+// //   compileOptions {
+// //     sourceCompatibility JavaVersion.VERSION_17
+// //     targetCompatibility JavaVersion.VERSION_17
+// //   }
+// //   kotlinOptions { jvmTarget = "17" }
+// // }
+
+// // dependencies {
+// //   implementation("androidx.appcompat:appcompat:1.7.0")
+// //   implementation("com.google.android.material:material:1.12.0")
+
+// //   // Only if you STILL hit "ReactAndroidConfig.cmake not found", uncomment:
+// // }
+
+// // // If you use react-native-vector-icons
+// // apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
+
+// // react {
+// //   // ✅ Correct place to set Node path
+// //   nodeExecutableAndArgs = ["/Users/adamdomnie/.nvm/versions/node/v20.10.0/bin/node"]
+// // }
+// // android/app/build.gradle
+
+// plugins {
+//   id("com.android.application")
+//   id("org.jetbrains.kotlin.android")
+//   id("com.facebook.react") // comes from the includeBuild in settings.gradle
 // }
 
-// /**
-//  * Set this to true to Run Proguard on Release builds to minify the Java bytecode.
-//  */
-// def enableProguardInReleaseBuilds = false
-
-// /**
-//  * The preferred build flavor of JavaScriptCore (JSC)
-//  *
-//  * For example, to use the international variant, you can use:
-//  * `def jscFlavor = 'org.webkit:android-jsc-intl:+'`
-//  *
-//  * The international variant includes ICU i18n library and necessary data
-//  * allowing to use e.g. `Date.toLocaleString` and `String.localeCompare` that
-//  * give correct results when using with locales other than en-US. Note that
-//  * this variant is about 6MiB larger per architecture than default.
-//  */
-// def jscFlavor = 'org.webkit:android-jsc:+'
-
 // android {
-//     ndkVersion rootProject.ext.ndkVersion
-//     buildToolsVersion rootProject.ext.buildToolsVersion
-//     compileSdk rootProject.ext.compileSdkVersion
+//   namespace "com.client"
 
-//     namespace "com.client"
-//     defaultConfig {
-//         applicationId "com.thebesttodolist"
-//         minSdkVersion rootProject.ext.minSdkVersion
-//         targetSdkVersion rootProject.ext.targetSdkVersion
-//         versionCode 8
-//         versionName "1.0"
+//   // Pin RN 0.80 Android platform matrix
+//   compileSdkVersion 35
+//   buildToolsVersion "35.0.0"
+
+//   defaultConfig {
+//     applicationId "com.thebesttodolist"
+//     minSdkVersion 24
+//     targetSdkVersion 35
+//     versionCode 8
+//     versionName "1.0"
+
+//     // NDK per RN 0.80 docs
+//     ndkVersion "27.1.12297006"
+//   }
+
+//   // Must be a direct child of android
+//   buildFeatures {
+//     prefab true
+//   }
+
+//   signingConfigs {
+//     release {
+//       if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
+//         storeFile file(MYAPP_UPLOAD_STORE_FILE)
+//         storePassword MYAPP_UPLOAD_STORE_PASSWORD
+//         keyAlias MYAPP_UPLOAD_KEY_ALIAS
+//         keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+//       }
 //     }
-//     signingConfigs {
-//         release {
-//             if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
-//                 storeFile file(MYAPP_UPLOAD_STORE_FILE)
-//                 storePassword MYAPP_UPLOAD_STORE_PASSWORD
-//                 keyAlias MYAPP_UPLOAD_KEY_ALIAS
-//                 keyPassword MYAPP_UPLOAD_KEY_PASSWORD
-//             }
-//         }
-//         debug {
-//             storeFile file('debug.keystore')
-//             storePassword 'android'
-//             keyAlias 'androiddebugkey'
-//             keyPassword 'android'
-//         }
+//     debug {
+//       storeFile file('debug.keystore')
+//       storePassword 'android'
+//       keyAlias 'androiddebugkey'
+//       keyPassword 'android'
 //     }
-//     buildTypes {
-//         debug {
-//             signingConfig signingConfigs.debug
-//         }
-//         release {
-//             // Caution! In production, you need to generate your own keystore file.
-//             // see https://reactnative.dev/docs/signed-apk-android.
-//             signingConfig signingConfigs.release
-//             minifyEnabled enableProguardInReleaseBuilds
-//             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-//         }
+//   }
+
+//   buildTypes {
+//     debug {
+//       signingConfig signingConfigs.debug
 //     }
+//     release {
+//       signingConfig signingConfigs.release
+//       minifyEnabled false
+//       proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+//     }
+//   }
+
+//   // Java/Kotlin 17 toolchain (required for AGP 8.x)
+//   compileOptions {
+//     sourceCompatibility JavaVersion.VERSION_17
+//     targetCompatibility JavaVersion.VERSION_17
+//   }
+//   kotlinOptions {
+//     jvmTarget = "17"
+//   }
+
+//   // Optional: reduce duplicate META-INF noise
+//   packagingOptions {
+//     resources {
+//       excludes += [ "META-INF/*", "**/*.kotlin_module" ]
+//     }
+//   }
 // }
 
 // dependencies {
-//     // The version of react-native is set by the React Native Gradle Plugin
-//     implementation("com.facebook.react:react-android")
+//   // If BOM gave you trouble, pin RN AARs explicitly
+//   def rn = "0.80.1"
+//   implementation("com.facebook.react:react-android:$rn")
 
+//   if (project.hasProperty("hermesEnabled") && hermesEnabled.toBoolean()) {
+//     implementation("com.facebook.react:hermes-android:$rn")
+//   } else {
+//     implementation("org.webkit:android-jsc:+")
+//   }
 
-//     if (hermesEnabled.toBoolean()) {
-//         implementation("com.facebook.react:hermes-android")
-//     } else {
-//         implementation jscFlavor
-//     }
+//   // Your other deps here (appcompat/material/etc.) as needed
+// }
+
+// // (Optional) RN Vector Icons font task; safe to keep
+// apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
+
+// react {
+//   // Use your Node binary (absolute path OK)
+//   nodeExecutableAndArgs = ["/Users/adamdomnie/.nvm/versions/node/v20.10.0/bin/node"]
 // }
 
 
-// apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
 
-// android/app/build.gradle (RN 0.80+ style)
+apply plugin: "com.android.application"
+apply plugin: "org.jetbrains.kotlin.android"
+apply plugin: "com.facebook.react"
 
-plugins {
-  id("com.android.application")
-  id("org.jetbrains.kotlin.android")
-  id("com.facebook.react")
+/**
+ * This is the configuration block to customize your React Native Android app.
+ * By default you don't need to apply any configuration, just uncomment the lines you need.
+ */
+react {
+    /* Folders */
+    //   The root of your project, i.e. where "package.json" lives. Default is '../..'
+    // root = file("../../")
+    //   The folder where the react-native NPM package is. Default is ../../node_modules/react-native
+    // reactNativeDir = file("../../node_modules/react-native")
+    //   The folder where the react-native Codegen package is. Default is ../../node_modules/@react-native/codegen
+    // codegenDir = file("../../node_modules/@react-native/codegen")
+    //   The cli.js file which is the React Native CLI entrypoint. Default is ../../node_modules/react-native/cli.js
+    // cliFile = file("../../node_modules/react-native/cli.js")
+
+    /* Variants */
+    //   The list of variants to that are debuggable. For those we're going to
+    //   skip the bundling of the JS bundle and the assets. By default is just 'debug'.
+    //   If you add flavors like lite, prod, etc. you'll have to list your debuggableVariants.
+    // debuggableVariants = ["liteDebug", "prodDebug"]
+
+    /* Bundling */
+    //   A list containing the node command and its flags. Default is just 'node'.
+    // nodeExecutableAndArgs = ["node"]
+    //
+    //   The command to run when bundling. By default is 'bundle'
+    // bundleCommand = "ram-bundle"
+    //
+    //   The path to the CLI configuration file. Default is empty.
+    // bundleConfig = file(../rn-cli.config.js)
+    //
+    //   The name of the generated asset file containing your JS bundle
+    // bundleAssetName = "MyApplication.android.bundle"
+    //
+    //   The entry file for bundle generation. Default is 'index.android.js' or 'index.js'
+    // entryFile = file("../js/MyApplication.android.js")
+    //
+    //   A list of extra flags to pass to the 'bundle' commands.
+    //   See https://github.com/react-native-community/cli/blob/main/docs/commands.md#bundle
+    // extraPackagerArgs = []
+
+    /* Hermes Commands */
+    //   The hermes compiler command to run. By default it is 'hermesc'
+    // hermesCommand = "$rootDir/my-custom-hermesc/bin/hermesc"
+    //
+    //   The list of flags to pass to the Hermes compiler. By default is "-O", "-output-source-map"
+    // hermesFlags = ["-O", "-output-source-map"]
+
+    /* Autolinking */
+    autolinkLibrariesWithApp()
 }
+
+/**
+ * Set this to true to Run Proguard on Release builds to minify the Java bytecode.
+ */
+def enableProguardInReleaseBuilds = false
+
+/**
+ * The preferred build flavor of JavaScriptCore (JSC)
+ *
+ * For example, to use the international variant, you can use:
+ * `def jscFlavor = io.github.react-native-community:jsc-android-intl:2026004.+`
+ *
+ * The international variant includes ICU i18n library and necessary data
+ * allowing to use e.g. `Date.toLocaleString` and `String.localeCompare` that
+ * give correct results when using with locales other than en-US. Note that
+ * this variant is about 6MiB larger per architecture than default.
+ */
+def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
 
 android {
-  namespace "com.client"              // ← keep or change to your actual package
-  compileSdkVersion 35
+    ndkVersion rootProject.ext.ndkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdk rootProject.ext.compileSdkVersion
 
-  defaultConfig {
-    applicationId "com.thebesttodolist" // ← you had this; keep if correct
-    minSdkVersion 23
-    targetSdkVersion 35
-
-    versionCode 8
-    versionName "1.0"
-  }
-
-  signingConfigs {
-    release {
-      if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
-        storeFile file(MYAPP_UPLOAD_STORE_FILE)
-        storePassword MYAPP_UPLOAD_STORE_PASSWORD
-        keyAlias MYAPP_UPLOAD_KEY_ALIAS
-        keyPassword MYAPP_UPLOAD_KEY_PASSWORD
-      }
+    namespace "com.client"
+    defaultConfig {
+        applicationId "com.thebesttodolist"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
     }
-    debug {
-      storeFile file('debug.keystore')
-      storePassword 'android'
-      keyAlias 'androiddebugkey'
-      keyPassword 'android'
+    signingConfigs {
+        debug {
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
     }
-  }
-
-  buildTypes {
-    debug {
-      signingConfig signingConfigs.debug
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            // Caution! In production, you need to generate your own keystore file.
+            // see https://reactnative.dev/docs/signed-apk-android.
+            signingConfig signingConfigs.debug
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
     }
-    release {
-      signingConfig signingConfigs.release
-      minifyEnabled false
-      proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-    }
-  }
 }
-
-// ⚠️ Do NOT add autolinkLibrariesWithApp() or native_modules.gradle here.
-// The React Gradle plugin (com.facebook.react) handles autolinking for RN 0.80+.
 
 dependencies {
-  // Let the React Gradle plugin manage react-android & Hermes.
-  // You generally don't need to declare them manually on RN 0.80+.
+    // The version of react-native is set by the React Native Gradle Plugin
+    implementation("com.facebook.react:react-android")
+
+    if (hermesEnabled.toBoolean()) {
+        implementation("com.facebook.react:hermes-android")
+    } else {
+        implementation jscFlavor
+    }
 }
 
-// Some libraries still use this helper for copying fonts (react-native-vector-icons)
+//vector graphics
 apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")

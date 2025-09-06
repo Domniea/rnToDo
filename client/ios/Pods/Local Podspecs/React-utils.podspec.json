@@ -28,38 +28,16 @@
     "React-jsi": [
       "0.80.1"
     ],
-    "hermes-engine": [
-
-    ],
-    "React-hermes": [
-
-    ],
-    "glog": [
-
-    ],
-    "boost": [
-
-    ],
-    "DoubleConversion": [
-
-    ],
-    "fast_float": [
-
-    ],
-    "fmt": [
-
-    ],
-    "RCT-Folly": [
-
-    ],
-    "SocketRocket": [
-
-    ],
-    "RCT-Folly/Fabric": [
-
-    ],
-    "React-debug": [
-
-    ]
+    "hermes-engine": [],
+    "React-hermes": [],
+    "glog": [],
+    "boost": [],
+    "DoubleConversion": [],
+    "fast_float": [],
+    "fmt": [],
+    "RCT-Folly": [],
+    "SocketRocket": [],
+    "RCT-Folly/Fabric": [],
+    "React-debug": []
   }
 }

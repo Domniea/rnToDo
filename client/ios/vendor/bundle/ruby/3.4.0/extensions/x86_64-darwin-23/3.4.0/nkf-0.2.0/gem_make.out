@@ -1,0 +1,20 @@
+current directory: /Users/adamdomnie/dev/ReactNative/rnToDo/client/ios/vendor/bundle/ruby/3.4.0/gems/nkf-0.2.0/ext/nkf
+/usr/local/opt/ruby/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/adamdomnie/dev/ReactNative/rnToDo/client/ios/vendor/bundle/ruby/3.4.0/gems/nkf-0.2.0/ext/nkf
+make DESTDIR\= sitearchdir\=./.gem.20250904-91889-bz0yad sitelibdir\=./.gem.20250904-91889-bz0yad clean
+
+current directory: /Users/adamdomnie/dev/ReactNative/rnToDo/client/ios/vendor/bundle/ruby/3.4.0/gems/nkf-0.2.0/ext/nkf
+make DESTDIR\= sitearchdir\=./.gem.20250904-91889-bz0yad sitelibdir\=./.gem.20250904-91889-bz0yad
+compiling nkf.c
+linking shared-object nkf.bundle
+ld: warning: search path '/usr/local/Cellar/openssl@3/3.5.1/lib' not found
+ld: warning: search path '/usr/local/Cellar/openssl@3/3.5.1/lib' not found
+
+current directory: /Users/adamdomnie/dev/ReactNative/rnToDo/client/ios/vendor/bundle/ruby/3.4.0/gems/nkf-0.2.0/ext/nkf
+make DESTDIR\= sitearchdir\=./.gem.20250904-91889-bz0yad sitelibdir\=./.gem.20250904-91889-bz0yad install
+/usr/bin/install -c -m 0755 nkf.bundle ./.gem.20250904-91889-bz0yad
+
+current directory: /Users/adamdomnie/dev/ReactNative/rnToDo/client/ios/vendor/bundle/ruby/3.4.0/gems/nkf-0.2.0/ext/nkf
+make DESTDIR\= sitearchdir\=./.gem.20250904-91889-bz0yad sitelibdir\=./.gem.20250904-91889-bz0yad clean

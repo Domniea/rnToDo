@@ -31,53 +31,25 @@
     "DEFINES_MODULE": "YES"
   },
   "dependencies": {
-    "React-featureflags": [
-
-    ],
+    "React-featureflags": [],
     "React-runtimeexecutor": [
       "0.80.1"
     ],
-    "React-jsi": [
-
-    ],
-    "React-jsinspectorcdp": [
-
-    ],
-    "React-jsinspectornetwork": [
-
-    ],
-    "React-jsinspectortracing": [
-
-    ],
+    "React-jsi": [],
+    "React-jsinspectorcdp": [],
+    "React-jsinspectornetwork": [],
+    "React-jsinspectortracing": [],
     "React-perflogger": [
       "0.80.1"
     ],
-    "hermes-engine": [
-
-    ],
-    "glog": [
-
-    ],
-    "boost": [
-
-    ],
-    "DoubleConversion": [
-
-    ],
-    "fast_float": [
-
-    ],
-    "fmt": [
-
-    ],
-    "RCT-Folly": [
-
-    ],
-    "SocketRocket": [
-
-    ],
-    "RCT-Folly/Fabric": [
-
-    ]
+    "hermes-engine": [],
+    "glog": [],
+    "boost": [],
+    "DoubleConversion": [],
+    "fast_float": [],
+    "fmt": [],
+    "RCT-Folly": [],
+    "SocketRocket": [],
+    "RCT-Folly/Fabric": []
   }
 }

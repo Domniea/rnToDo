@@ -149,7 +149,7 @@ function ListScreen({navigation, index, listName, todoList}) {
           <CustomButton
             text="Add ToDo"
             onPress={toggleAddToDo}
-            style={styles.test}
+            // style={styles.test}
             btnMargin={0}
           />
         )}
@@ -198,7 +198,7 @@ function ListScreen({navigation, index, listName, todoList}) {
         </View>
         <Pressable
           onPress={() => deleteList(listIndex)}
-          style={{color: 'green'}}>
+        >
           <Text
             style={[
               listName === 'unlisted'
@@ -232,10 +232,10 @@ const styles = StyleSheet.create({
     fontSize: 40,
     margin: '3%',
   },
-  test: {
-    backgroundColor: 'green',
-    width: 20,
-  },
+  // test: {
+  //   backgroundColor: 'green',
+  //   width: 20,
+  // },
   form: {
     alignItems: 'center',
     width: '100%',

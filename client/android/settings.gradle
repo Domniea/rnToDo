@@ -1,21 +1,138 @@
-// rootProject.name = 'client'
-// apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
-// include ':app'
-// includeBuild('../node_modules/@react-native/gradle-plugin')
+// // android/settings.gradle
 
-pluginManagement {
-  repositories {
-    gradlePluginPortal()
-    google()
-    mavenCentral()
-    maven { url = uri("$rootDir/../node_modules/react-native/android") }
-  }
-  includeBuild("../node_modules/@react-native/gradle-plugin")
-}
+// pluginManagement {
+//   repositories {
+//     gradlePluginPortal()
+//     google()
+//     mavenCentral()
+//     // Only needed here so Gradle can resolve the RN Gradle plugin itself
+//     maven { url = uri("$rootDir/../node_modules/react-native/android") }
+//   }
+//   includeBuild("../node_modules/@react-native/gradle-plugin")
+// }
 
-plugins {
-  id("com.facebook.react.settings")
-}
+// plugins {
+//   id("com.facebook.react.settings")
 
-rootProject.name = "client"
-include(":app")
+//   id("com.android.application")      version "8.10.0" apply false
+//   id("com.android.library")          version "8.10.0" apply false
+//   id("org.jetbrains.kotlin.android") version "2.0.20" apply false
+//   id("com.facebook.react")           version "0.80.1" apply false
+// }
+
+// dependencyResolutionManagement {
+//   repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+//   repositories {
+//     google()
+//     mavenCentral()
+//     mavenLocal()
+//     // ⚠️ Do NOT add the RN local maven here. We want react-android from Maven Central.
+//   }
+// }
+
+// // --- Autolinking (primary path): let RN settings plugin call the CLI ---
+// extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
+//   ex.autolinkLibrariesFromCommand()
+// }
+
+// // --- Autolinking fallback: if the plugin didn't write the file, do it ourselves ---
+// gradle.settingsEvaluated {
+//   def autolinkDir  = file("$rootDir/build/generated/autolinking")
+//   def autolinkJson = file("$autolinkDir/autolinking.json")
+//   if (!autolinkJson.exists()) {
+//     try {
+//       autolinkDir.mkdirs()
+//       // Prefer explicit NODE_BINARY if provided; otherwise rely on PATH
+//       def nodeBin = System.getenv("NODE_BINARY") ?: "node"
+//       def rnRoot  = file("$rootDir/..") // project root containing package.json
+//       def cliJs   = new File(rnRoot, "node_modules/react-native/cli.js")
+//       if (!cliJs.exists()) {
+//         throw new FileNotFoundException("react-native CLI not found at: ${cliJs}")
+//       }
+
+//       // Run: node node_modules/react-native/cli.js config
+//       def pb = new ProcessBuilder(nodeBin, cliJs.absolutePath, "config")
+//         .directory(rnRoot)
+//         .redirectErrorStream(true)
+//       def proc = pb.start()
+//       def out  = new StringBuffer()
+//       proc.inputStream.eachLine { out.append(it).append('\n') }
+//       def exit = proc.waitFor()
+
+//       if (exit == 0 && out) {
+//         autolinkJson.text = out.toString()
+//         println("Wrote autolinking.json -> ${autolinkJson}")
+//       } else {
+//         println("WARNING: RN CLI config failed (exit=${exit}). Autolinking JSON not written.")
+//       }
+//     } catch (Throwable t) {
+//       println("WARNING: Autolinking fallback failed: ${t.message}")
+//     }
+//   }
+// }
+
+// rootProject.name = "client"
+// include(":app")
+
+
+
+// android/settings.gradle (Groovy DSL)
+
+// android/settings.gradle — RN 0.80+ style (Groovy)
+
+// pluginManagement {
+//   repositories {
+//     gradlePluginPortal()
+//     google()
+//     mavenCentral()
+//     // RN Android artifacts (safe to keep)
+//     maven { url("$rootDir/../node_modules/react-native/android") }
+//   }
+
+//   // Use the RN Gradle plugin directly from node_modules
+//   // (RN 0.80 uses the scoped package)
+//   includeBuild("../node_modules/@react-native/gradle-plugin")
+
+//   // Pin plugin versions here so they never resolve to blanks
+//   plugins {
+//     id("com.android.application")      version "8.10.0"
+//     id("com.android.library")          version "8.10.0"
+//     id("org.jetbrains.kotlin.android") version "2.1.20"
+//     // DO NOT put a version for com.facebook.react; it's provided by includeBuild above
+//   }
+// }
+
+// dependencyResolutionManagement {
+//   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+//   repositories {
+//     google()
+//     mavenCentral()
+//     // Keep this if you have local RN Android artifacts (fine either way on 0.80)
+//     maven { url("$rootDir/../node_modules/react-native/android") }
+//   }
+// }
+
+// rootProject.name = "client"
+// include(":app")
+
+// // Settings plugin from @react-native/gradle-plugin
+// plugins {
+//   id("com.facebook.react.settings")
+// }
+
+// // RN 0.80 autolinking hook (new API name)
+// reactSettings {
+//   autolinkLibrariesFromCommand()
+// }
+
+
+
+
+
+
+pluginManagement { includeBuild("../node_modules/@react-native/gradle-plugin") }
+plugins { id("com.facebook.react.settings") }
+extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autolinkLibrariesFromCommand() }
+rootProject.name = 'client'
+include ':app'
+includeBuild('../node_modules/@react-native/gradle-plugin')
