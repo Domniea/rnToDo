@@ -57,3 +57,36 @@ const styles = StyleSheet.create({
 
 // export default withAuthenticator(App);
 export default App;
+
+
+
+// import * as React from 'react';
+// import { GestureHandlerRootView } from 'react-native-gesture-handler';
+// import { NavigationContainer, ThemeProvider } from '@react-navigation/native';
+// import { createNativeStackNavigator, } from '@react-navigation/native-stack';
+// import TestScreen from './src/screens/TestScreen';
+// // import TestScreen2 from './src/screens/TestScreen2';
+
+// import { enableScreens } from 'react-native-screens';
+// enableScreens(false);
+// const Stack = createNativeStackNavigator();
+
+// export default function App() {
+//   return (
+//     <GestureHandlerRootView style={{ flex: 1 }}>
+//       <NavigationContainer>
+//         <Stack.Navigator>
+//           {/* <Stack.Screen name="test2" component={TestScreen2} /> */}
+//           <Stack.Screen name="test1" component={TestScreen} />
+//         </Stack.Navigator>
+//       </NavigationContainer>
+//     </GestureHandlerRootView>
+  
+//     // <ThemeProvider>
+//     //   <TestScreen/>
+//     // </ThemeProvider>
+  
+//   )
+// }
+
+

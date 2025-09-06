@@ -13,6 +13,7 @@ const ListsProvider = props => {
   const [homeList, setHomeList] = useState('CreateList');
 
   const USERNAME = storage.getString('USERNAME');
+    console.log('HERE', USERNAME)
 
   // Seperate Lists
   function getSections(data) {

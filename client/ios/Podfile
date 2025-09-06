@@ -209,7 +209,80 @@
 
 
 # NEW ARCH
-# # Resolve react_native_pods.rb with node to allow for hoisting
+# ✅ Enable New Architecture (Fabric + TurboModules)
+ENV['RCT_NEW_ARCH_ENABLED'] = '1'
+ENV['USE_HERMES'] = '1'
+
+# Speed up spec resolution
+source 'https://cdn.cocoapods.org/'
+
+# Resolve react_native_pods.rb with node (RN hoisting-compatible)
+require Pod::Executable.execute_command('node', ['-p',
+  'require.resolve(
+    "react-native/scripts/react_native_pods.rb",
+    {paths: [process.argv[1]]},
+  )', __dir__]).strip
+
+# 🔧 iOS deployment target (RN 0.80 baseline is iOS 13.4+; we’ll use 15.6)
+platform :ios, '15.6'
+
+prepare_react_native_project!
+
+# ⚠️ Avoid dynamic frameworks unless strictly required.
+linkage = ENV['USE_FRAMEWORKS']
+if linkage
+  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
+  use_frameworks! :linkage => linkage.to_sym
+end
+
+target 'client' do
+  config = use_native_modules!
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    :hermes_enabled => (ENV['USE_HERMES'] == '1'),
+    :fabric_enabled => (ENV['RCT_NEW_ARCH_ENABLED'] == '1'),
+    :app_path => "#{Pod::Config.instance.installation_root}/.."
+  )
+
+  # Uncomment if you want Flipper in Debug
+  # use_flipper!
+
+  pre_install do |installer|
+    # 🔒 Force RN pods to build as static even if use_frameworks! is set
+    installer.pod_targets.each do |pod|
+      if pod.name.start_with?('React', 'RCT', 'Yoga', 'glog', 'hermes', 'Folly', 'fmt')
+        def pod.build_type; Pod::BuildType.static_library end
+      end
+    end
+  end
+
+  post_install do |installer|
+    react_native_post_install(
+      installer,
+      config[:reactNativePath],
+      :mac_catalyst_enabled => false
+    )
+
+    # 🔒 Enforce iOS 15.6 across Pods + user project
+    target_ios = '15.6'
+    installer.pods_project.targets.each do |t|
+      t.build_configurations.each do |bc|
+        bc.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = target_ios
+      end
+    end
+    installer.aggregate_targets.each do |agg|
+      agg.user_project.build_configurations.each do |bc|
+        bc.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = target_ios
+      end
+    end
+  end
+end
+
+
+
+# # === Podfile (OLD ARCH: Fabric/Turbo disabled) ===
+# Resolve react_native_pods.rb with node to allow for hoisting
 # require Pod::Executable.execute_command('node', ['-p',
 #   'require.resolve(
 #     "react-native/scripts/react_native_pods.rb",
@@ -221,7 +294,7 @@
 
 # prepare_react_native_project!
 
-# # Only enable frameworks if you REALLY need them
+# # Only enable frameworks if you REALLY need them (can complicate JSI libs)
 # linkage = ENV['USE_FRAMEWORKS']
 # if linkage
 #   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
@@ -231,12 +304,13 @@
 # target 'client' do
 #   config = use_native_modules!
 
+#   # ⬇️ Old architecture: New Arch OFF, Fabric OFF. Hermes can stay ON.
 #   use_react_native!(
-#     :path => config[:reactNativePath],
-#     :app_path => "#{Pod::Config.instance.installation_root}/..",
-#     :new_arch_enabled => true,   # Fabric + Turbo
-#     :fabric_enabled => true,     # (redundant but OK)
-#     :hermes_enabled => true      # explicit, optional
+#     :path             => config[:reactNativePath],
+#     :app_path         => "#{Pod::Config.instance.installation_root}/..",
+#     :new_arch_enabled => false,   # 👈 turn OFF
+#     :fabric_enabled   => false,   # 👈 turn OFF
+#     :hermes_enabled   => true     # fine on Old Arch
 #   )
 
 #   target 'clientTests' do
@@ -244,12 +318,12 @@
 #   end
 
 #   post_install do |installer|
-#     # Force all pods to iOS 15.1 and keep C++20
+#     # Keep deployment target and modern C++
 #     installer.pods_project.targets.each do |t|
 #       t.build_configurations.each do |cfg|
 #         cfg.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.1'
 #         cfg.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++20'
-#         # ❌ Do NOT disable Folly coroutines here
+#         # No Folly coroutine tweaks needed for Old Arch
 #       end
 #     end
 
@@ -264,65 +338,6 @@
 #     )
 #   end
 # end
-
-
-# # === Podfile (OLD ARCH: Fabric/Turbo disabled) ===
-# Resolve react_native_pods.rb with node to allow for hoisting
-require Pod::Executable.execute_command('node', ['-p',
-  'require.resolve(
-    "react-native/scripts/react_native_pods.rb",
-    {paths: [process.argv[1]]},
-  )', __dir__]).strip
-
-platform :ios, '15.1'
-ENV['IPHONEOS_DEPLOYMENT_TARGET'] = '15.1'
-
-prepare_react_native_project!
-
-# Only enable frameworks if you REALLY need them (can complicate JSI libs)
-linkage = ENV['USE_FRAMEWORKS']
-if linkage
-  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
-  use_frameworks! :linkage => linkage.to_sym
-end
-
-target 'client' do
-  config = use_native_modules!
-
-  # ⬇️ Old architecture: New Arch OFF, Fabric OFF. Hermes can stay ON.
-  use_react_native!(
-    :path             => config[:reactNativePath],
-    :app_path         => "#{Pod::Config.instance.installation_root}/..",
-    :new_arch_enabled => false,   # 👈 turn OFF
-    :fabric_enabled   => false,   # 👈 turn OFF
-    :hermes_enabled   => true     # fine on Old Arch
-  )
-
-  target 'clientTests' do
-    inherit! :complete
-  end
-
-  post_install do |installer|
-    # Keep deployment target and modern C++
-    installer.pods_project.targets.each do |t|
-      t.build_configurations.each do |cfg|
-        cfg.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.1'
-        cfg.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++20'
-        # No Folly coroutine tweaks needed for Old Arch
-      end
-    end
-
-    installer.pods_project.build_configurations.each do |cfg|
-      cfg.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.1'
-    end
-
-    react_native_post_install(
-      installer,
-      config[:reactNativePath],
-      :mac_catalyst_enabled => false
-    )
-  end
-end
 
 
 
