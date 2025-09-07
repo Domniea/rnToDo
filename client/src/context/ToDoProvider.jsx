@@ -1,174 +1,147 @@
-import React from 'react';
-import {useState, createContext, useContext} from 'react';
-import axios, {all} from 'axios';
+import { createContext, useCallback, useMemo, useState, useContext } from 'react';
+import axios from 'axios';
+import { ListsContext } from './ListsProvider';
 
-import {UserContext} from './UserProvider';
-import {ListsContext} from './ListsProvider';
+export const ToDoContext = createContext({
+  allToDos: [],
+  setAllToDos: () => {},
+  getAllToDos: async () => {},
+  getUsersToDo: async (_username) => {},
+  // submitToDo: async (_path, _payload) => {},
+  // editToDo: async (_path, _payload) => {},
+  // deleteToDo: async (_listName, _id) => {},
+  // deleteAllToDos: async (_username) => {},
+});
 
-const ToDoContext = createContext();
+const API_BASE = 'https://rntodo-production.up.railway.app';
 
-function ToDoProvider(props) {
-  const {lists, setLists, setHomeList, homeList} = useContext(ListsContext);
-
+export function ToDoProvider({ children }) {
   const [allToDos, setAllToDos] = useState([]);
+  const { setLists } = useContext(ListsContext);
 
-  const {user} = useContext(UserContext);
-
-  // Get All
-  async function getAllToDos() {
+  // GET: all
+  const getAllToDos = useCallback(async () => {
     try {
-      const data = await axios.get(
-        'https://rntodo-production.up.railway.app/todo/',
-      );
-      // const data = await axios.get('http://localhost:9000/todo/')
-      setAllToDos(data.data);
+      const res = await axios.get(`${API_BASE}/todo/`);
+      setAllToDos(res.data || []);
     } catch (error) {
       console.log(error);
     }
-  }
+  }, []);
 
-  // Get Users ToDo
-  async function getUsersToDo(username) {
+  // GET: user
+  const getUsersToDo = useCallback(async (username) => {
     try {
-      const data = await axios.get(
-        `https://rntodo-production.up.railway.app/todo/${username}`,
-      );
-      // const data = await axios.get(`http://localhost:9000/todo/${username}`)
-      setAllToDos(data.data);
+      const res = await axios.get(`${API_BASE}/todo/${encodeURIComponent(String(username || ''))}`);
+      setAllToDos(res.data || []);
     } catch (error) {
       console.log(error);
     }
-  }
+  }, []);
 
-  // Post ToDo
-  async function submitToDo(path, userData) {
-    try {
-      const data = await axios.post(
-        `https://rntodo-production.up.railway.app/todo/${path}`,
-        userData,
-      );
-      // const data = await axios.post(`http://localhost:9000/todo/${path}`, userData)
-      setAllToDos(prevState => {
-        return [...prevState, data.data];
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // // POST: create
+  // const submitToDo = useCallback(async (path, payload) => {
+  //   try {
+  //     const res = await axios.post(
+  //       `${API_BASE}/todo/${encodeURIComponent(String(path || ''))}`,
+  //       payload
+  //     );
+  //     // some endpoints return { todo }, some return the todo directly; keep this simple:
+  //     const newTodo = res?.data?.todo ?? res?.data;
+  //     if (!newTodo) return;
 
-  async function submitToDo(path, userData) {
-    try {
-      const res = await axios.post(
-        `https://rntodo-production.up.railway.app/todo/${path}`,
-        userData,
-      );
-      // const data = await axios.post(`http://localhost:9000/todo/${path}`, userData)
-      const listTitle = res.data.todo.list;
-      setLists(prevState => {
-        return prevState.map((obj, i) => {
-          return obj.list === listTitle
-            ? {obj, data: [...obj.data, res.data.todo]}
-            : obj;
-        });
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  //     // flat list
+  //     setAllToDos((prev) => [...prev, newTodo]);
 
-  // Edit ToDo
-  async function editToDo(path, userData) {
-    try {
-      const data = await axios.put(
-        `https://rntodo-production.up.railway.app/todo/${path}`,
-        userData,
-      );
-      // const data = await axios.put(`http://localhost:9000/todo/${path}`, userData)
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  //     // grouped lists
+  //     const listTitle = newTodo.list ?? 'unlisted';
+  //     setLists((prev) =>
+  //       prev.map((group) =>
+  //         group.list === listTitle
+  //           ? { ...group, data: [...group.data, newTodo] }
+  //           : group
+  //       )
+  //     );
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }, [setLists]);
 
-  // Delete ToDo
-  // async function deleteToDo(id) {
-  //     console.log('deleted')
-  //     try {
-  //         const data = await axios.delete(`https://rntodo-production.up.railway.app/todo/${id}`)
-  //         // const data = await axios.delete(`http://localhost:9000/todo/${id}`)
-  //         setAllToDos(prevState => {
-  //             return prevState.filter(person => person._id !== id)
-  //         })
-  //     }
-  //     catch(error) {
-  //         console.log(error)
-  //     }
-  // }
+  // // PUT: update (mirror POST behavior for state updates)
+  // const editToDo = useCallback(async (path, payload) => {
+  //   try {
+  //     const res = await axios.put(
+  //       `${API_BASE}/todo/${encodeURIComponent(String(path || ''))}`,
+  //       payload
+  //     );
+  //     const updated = res?.data?.todo ?? res?.data;
+  //     if (!updated || !updated._id) return;
 
-  async function deleteToDo(listname, id) {
-    console.log('deleted');
-    try {
-      const data = await axios.delete(
-        `https://rntodo-production.up.railway.app/todo/${id}`,
-      );
-      // const data = await axios.delete(`http://localhost:9000/todo/${id}`)
+  //     // flat list
+  //     setAllToDos((prev) => prev.map((t) => (t._id === updated._id ? { ...t, ...updated } : t)));
 
-      console.log(data.res);
-      setLists(prevState => {
-        const update = [];
-        prevState.map((obj, i) => {
-          console.log('OBJ', obj);
-          if (obj.list === listname) {
-            const dataUpdate = obj.data.filter(task => task._id !== id);
+  //     // grouped lists — remove from any list, then add into its current list
+  //     const targetList = updated.list ?? 'unlisted';
+  //     setLists((prev) => {
+  //       const next = prev.map((g) => ({ ...g, data: g.data.filter((t) => t._id !== updated._id) }));
+  //       const idx = next.findIndex((g) => g.list === targetList);
+  //       if (idx >= 0) {
+  //         next[idx] = { ...next[idx], data: [...next[idx].data, updated] };
+  //       } else {
+  //         next.push({ list: targetList, data: [updated] });
+  //       }
+  //       return next;
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }, [setLists]);
 
-            return update.push({list: listname, data: dataUpdate});
-          } else {
-            return update.push(obj);
-          }
-        });
-        return update;
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // // DELETE one
+  // const deleteToDo = useCallback(async (listName, id) => {
+  //   try {
+  //     await axios.delete(`${API_BASE}/todo/${encodeURIComponent(String(id || ''))}`);
 
-  // setLists(prevState => {
-  //     return prevState.map((obj, i) => {
-  //          return  obj.list === listTitle ?
-  //          {...obj, data: [...obj.data, res.data.todo]}:
-  //          obj
-  //      })
-  //  })
+  //     // flat list
+  //     setAllToDos((prev) => prev.filter((t) => t._id !== id));
 
-  // DELETE ALL
-  async function deleteAllToDos(username) {
-    try {
-      const responseData = await axios.delete(
-        `https://rntodo-production.up.railway.app/todo/delete/${username}`,
-      );
-      // const responseData = await axios.delete(`http://localhost:9000/todo/delete/${username}`)
-      setAllToDos([]);
-      console.log("All USER TODO's DELETED");
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  //     // grouped lists
+  //     const target = String(listName ?? 'unlisted');
+  //     setLists((prev) =>
+  //       prev.map((g) =>
+  //         g.list === target ? { ...g, data: g.data.filter((t) => t._id !== id) } : g
+  //       )
+  //     );
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }, [setLists]);
 
-  return (
-    <ToDoContext.Provider
-      value={{
-        allToDos,
-        setAllToDos,
-        getAllToDos,
-        getUsersToDo,
-        submitToDo,
-        editToDo,
-        deleteToDo,
-        deleteAllToDos,
-      }}>
-      {props.children}
-    </ToDoContext.Provider>
+  // // DELETE all for user (keeps your original behavior of clearing only allToDos)
+  // const deleteAllToDos = useCallback(async (username) => {
+  //   try {
+  //     await axios.delete(`${API_BASE}/todo/delete/${encodeURIComponent(String(username || ''))}`);
+  //     setAllToDos([]);
+  //     console.log("All USER TODO's DELETED");
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }, []);
+  
+
+  const value = useMemo(
+    () => ({
+      allToDos,
+      setAllToDos,
+      getAllToDos,
+      getUsersToDo,
+      // submitToDo,
+      // editToDo,
+    }),
+    [allToDos, getAllToDos, getUsersToDo, 
+      // submitToDo, editToDo, deleteToDo, deleteAllToDos
+    ]
   );
-}
 
-export {ToDoContext, ToDoProvider};
+  return <ToDoContext.Provider value={value}>{children}</ToDoContext.Provider>;
+}

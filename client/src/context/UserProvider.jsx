@@ -1,103 +1,82 @@
-import {AsyncStorage} from 'react-native'
-import React, { useContext } from "react";
-import { useEffect, useState, createContext } from "react";
-import { signOut } from 'aws-amplify/auth'
-import { getCurrentUser } from 'aws-amplify/auth';
-import { deleteUser } from "aws-amplify/auth"; 
+import React, { createContext, useCallback, useEffect, useMemo, useState } from 'react';
+import { fetchAuthSession, getCurrentUser, signOut, deleteUser } from 'aws-amplify/auth';
+import { Hub } from 'aws-amplify/utils';
+
 
 import { storage } from '../Storage';
 
-const UserContext = createContext()
+export const UserContext = createContext({
+  user: undefined,
+  setUser: () => {},
+  checkUser: async () => {},
+  handleSignOut: async () => {},
+  handleDeleteAccount: async () => {},
+});
 
+export function UserProvider({ children }) {
+  const [user, setUser] = useState(undefined);
 
-function UserProvider(props) {
-
-    const [user, setUser] = useState(undefined)
-
-    if(user) {
-        const { username } = user
-        // console.log(username)
-        storage.set('USERNAME', username)
-    }
-
-
-
-
-
-    // if(user !== undefined){
-    //     _storeData = async (user) => {
-    //         try{
-    //             await AsyncStorage.setItem(
-    //                 'test'
-    //             )
-    //         } catch(error) {
-    //             console.log(error)
-    //         }
-    //     } 
-    // }
-
-    // _retrieveData = async () => {
-    //     try{
-    //         const value = await AsyncStorage.getItem('TASKS')
-    //         if (value !== null) {
-    //             console.log(value)
-    //         }
-    //     }
-    //     catch(error) {
-    //         console.log(error)
-    //     }
-    // }
-
-    async function checkUser() {
-        try {
-            const response = await getCurrentUser({bypassCache: true});
-            setUser(response || 'test')
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    // Signout User
-    async function handleSignOut() {
-        try {
-          await signOut();
-        } catch (error) {
-          console.log('error signing out: ', error);
-        }
+  const checkUser = useCallback(async () => {
+    try {
+      // Warm tokens; if none, treat as signed-out (esp. during OAuth redirect)
+      const session = await fetchAuthSession();
+      if (!session || !session.tokens) {
+        setUser(undefined);
+        return;
       }
-
-      async function handleDeleteAccount() {
-          try {
-              await deleteUser()
-              Alert.alert('Your account has been permanently deleted')
-  
-              setTimeout(() => {
-                  setUser(undefined)
-                  }, 2000
-              )
-          }
-          catch(error) {
-              console.log(error)
-          }
+      const current = await getCurrentUser({ bypassCache: true });
+      setUser(current);
+      if (current && current.username) {
+        storage.set('USERNAME', String(current.username));
       }
+    } catch (e) {
+      setUser(undefined);
+    }
+  }, []);
 
-    useEffect(() => {
-        checkUser()
-    }, [])
+  const handleSignOut = useCallback(async () => {
+    try {
+      await signOut();
+    } finally {
+      setUser(undefined);
+      storage.delete('USERNAME');
+    }
+  }, []);
 
-    return (
-        <UserContext.Provider
-            value={{
-                user,
-                setUser,
-                handleSignOut,
-                checkUser,
-                handleDeleteAccount
-            }}
-        >
-            {props.children}
-        </UserContext.Provider>
-    )
+  const handleDeleteAccount = useCallback(async () => {
+    try {
+      await deleteUser();
+    } finally {
+      setUser(undefined);
+      storage.delete('USERNAME');
+    }
+  }, []);
+
+  useEffect(() => {
+    checkUser();
+  }, [checkUser]);
+
+  // Hub listener
+  useEffect(() => {
+    const unsub = Hub.listen('auth', async ({ payload: { event } }) => {
+      if (event === 'signedIn' || event === 'tokenRefresh') {
+        await checkUser();
+      } else if (event === 'signedOut') {
+        setUser(undefined);
+        storage.delete('USERNAME');
+      }
+    });
+    return () => unsub();
+  }, [checkUser]);
+
+  const value = useMemo(
+    () => ({ user, setUser, checkUser, handleSignOut, handleDeleteAccount }),
+    [user, checkUser, handleSignOut, handleDeleteAccount]
+  );
+
+  return (
+    <UserContext.Provider value={value}>
+        {children}
+    </UserContext.Provider>
+  )
 }
-
-export { UserContext, UserProvider }

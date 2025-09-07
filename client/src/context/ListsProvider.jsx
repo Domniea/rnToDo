@@ -1,44 +1,123 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React, {useState, createContext, useContext, useEffect} from 'react';
+// import {StyleSheet, Text, View} from 'react-native';
+// import React, {useState, createContext, useContext, useEffect} from 'react';
+// import axios from 'axios';
+
+// import {UserContext} from './UserProvider';
+// import {storage} from '../Storage';
+
+// const ListsContext = createContext();
+
+// const ListsProvider = props => {
+//   const [lists, setLists] = useState([]);
+
+//   const [homeList, setHomeList] = useState('CreateList');
+
+//   const USERNAME = storage.getString('USERNAME');
+//     console.log('HERE', USERNAME)
+
+//   // Seperate Lists
+//   function getSections(data) {
+//     return Object.values(
+//       data.reduce((result, todo) => {
+//         const listName = todo.list;
+//         if (!result[listName]) {
+//           listName !== undefined
+//             ? (result[listName] = {list: listName, data: [todo]})
+//             : (result[listName] = {list: 'unlisted', data: [todo]});
+//         } else {
+//           result[listName].data.push(todo);
+//         }
+//         return result;
+//       }, []),
+//     );
+//   }
+
+//   // Get Lists Call
+//   async function getUsersLists(username) {
+//     try {
+//       const res = await axios.get(
+//         `https://rntodo-production.up.railway.app/todo/${username}`,
+//       );
+
+//       setLists(getSections(res.data));
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
+
+//   function toRouteName(title) {
+//     const base = String(title ?? '')
+//       .trim()
+//       .toLowerCase();
+//     if (!base) return 'unlisted';
+//     // Collapse any non letter/number into underscores, then trim redundant underscores
+//     const cleaned = base
+//       .normalize('NFKD')
+//       .replace(/[^\p{L}\p{N}]+/gu, '_')
+//       .replace(/^_+|_+$/g, '');
+//     return `list-${cleaned || 'unlisted'}`;
+//   }
+
+//   useEffect(() => {
+//     getUsersLists(USERNAME);
+//   }, []);
+
+//   return (
+//     <ListsContext.Provider
+//       value={{
+//         test: 'test',
+//         lists,
+//         homeList,
+//         setHomeList,
+//         setLists,
+//         getUsersLists,
+//         toRouteName,
+//       }}>
+//       {props.children}
+//     </ListsContext.Provider>
+//   );
+// };
+
+// export {ListsContext, ListsProvider};
+
+// const styles = StyleSheet.create({});
+
+
+
+import React, {useState, createContext, useEffect, useContext, useMemo} from 'react';
 import axios from 'axios';
-
 import {UserContext} from './UserProvider';
-import {storage} from '../Storage';
 
-const ListsContext = createContext();
+export const ListsContext = createContext();
 
-const ListsProvider = props => {
+export function ListsProvider({children}) {
+  const { user } = useContext(UserContext);
   const [lists, setLists] = useState([]);
-
   const [homeList, setHomeList] = useState('CreateList');
 
-  const USERNAME = storage.getString('USERNAME');
-    console.log('HERE', USERNAME)
-
-  // Seperate Lists
   function getSections(data) {
     return Object.values(
       data.reduce((result, todo) => {
         const listName = todo.list;
         if (!result[listName]) {
-          listName !== undefined
-            ? (result[listName] = {list: listName, data: [todo]})
-            : (result[listName] = {list: 'unlisted', data: [todo]});
+          result[listName] = { list: listName ?? 'unlisted', data: [todo] };
         } else {
           result[listName].data.push(todo);
         }
         return result;
-      }, []),
+      }, {})
     );
   }
 
-  // Get Lists Call
   async function getUsersLists(username) {
+    if (!username) {
+      setLists([]);
+      return;
+    }
     try {
       const res = await axios.get(
-        `https://rntodo-production.up.railway.app/todo/${username}`,
+        `https://rntodo-production.up.railway.app/todo/${encodeURIComponent(username)}`
       );
-
       setLists(getSections(res.data));
     } catch (error) {
       console.log(error);
@@ -46,11 +125,8 @@ const ListsProvider = props => {
   }
 
   function toRouteName(title) {
-    const base = String(title ?? '')
-      .trim()
-      .toLowerCase();
-    if (!base) return 'unlisted';
-    // Collapse any non letter/number into underscores, then trim redundant underscores
+    const base = String(title ?? '').trim().toLowerCase();
+    if (!base) return 'list-unlisted';
     const cleaned = base
       .normalize('NFKD')
       .replace(/[^\p{L}\p{N}]+/gu, '_')
@@ -58,26 +134,20 @@ const ListsProvider = props => {
     return `list-${cleaned || 'unlisted'}`;
   }
 
+  // Refetch lists whenever the signed-in user changes
   useEffect(() => {
-    getUsersLists(USERNAME);
-  }, []);
+    const username = user && user.username ? String(user.username) : undefined;
+    getUsersLists(username);
+  }, [user]);
 
-  return (
-    <ListsContext.Provider
-      value={{
-        test: 'test',
-        lists,
-        homeList,
-        setHomeList,
-        setLists,
-        getUsersLists,
-        toRouteName,
-      }}>
-      {props.children}
-    </ListsContext.Provider>
-  );
-};
+  const value = useMemo(() => ({
+    lists,
+    setLists,
+    homeList,
+    setHomeList,
+    getUsersLists,
+    toRouteName,
+  }), [lists, homeList]);
 
-export {ListsContext, ListsProvider};
-
-const styles = StyleSheet.create({});
+  return <ListsContext.Provider value={value}>{children}</ListsContext.Provider>;
+}

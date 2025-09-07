@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "ios": "react-native run-ios --simulator 'iPhone 16 Pro Max'",
+    "android-default": "react-native run-android",
+    "ios": "npx react-native run-ios --udid DAA3ED69-1EAF-4776-84B5-AB7B89D72065",
     "ios-default": "npx react-native run-ios",
-    "ios-uuid": "npx react-native run-ios --udid DAA3ED69-1EAF-4776-84B5-AB7B89D72065",
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",

@@ -19,7 +19,6 @@ const CustomButton = props => {
   };
 
   const fireHaptic = () => {
-    console.log('Haptic Working');
     trigger('impactMedium', options);
   };
 

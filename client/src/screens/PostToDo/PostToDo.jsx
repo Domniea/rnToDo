@@ -1,22 +1,22 @@
 import React, {useContext} from 'react';
 import {
   StyleSheet,
-  useWindowDimensions,
+  // useWindowDimensions,
   View,
   TouchableWithoutFeedback,
   Modal,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {set, useForm} from 'react-hook-form';
+import {useForm} from 'react-hook-form';
 
 import CustomButton from '../../components/CustomButton';
 import CustomInput from '../../components/CustomInput';
-import KeyboardAvoidingContainer from '../../components/KeyboardAvoidingContainer';
+// import KeyboardAvoidingContainer from '../../components/KeyboardAvoidingContainer';
 
 import {UserContext} from '../../context/UserProvider';
-import {ToDoContext} from '../../context/ToDoProvider';
+// import {ToDoContext} from '../../context/ToDoProvider';
 import {OrientationContext} from '../../context/OrientationProvider';
-import {ListsContext} from '../../context/ListsProvider';
+// import {ListsContext} from '../../context/ListsProvider';
 
 const PostToDo = props => {
   const navigation = useNavigation();
@@ -29,9 +29,9 @@ const PostToDo = props => {
 
   const {user} = useContext(UserContext);
 
-  const {homeList, setHomeList} = useContext(ListsContext);
+  // const {homeList, setHomeList} = useContext(ListsContext);
 
-  const {submitToDo} = useContext(ToDoContext);
+  // const {submitToDo} = useContext(ToDoContext);
 
   const {username} = user;
 
@@ -77,7 +77,6 @@ const PostToDo = props => {
                 required: 'Title is required',
                 validate: value => {
                   if (value && value.length >= 30) {
-                    // this will give you the correct value for your error message
                     return `Please, enter a title with less than 30 characters (${value.length}/30)`;
                   }
                 },
@@ -91,7 +90,7 @@ const PostToDo = props => {
               rules={{
                 validate: value => {
                   if (value && value.length >= 128) {
-                    // this will give you the correct value for your error message
+
                     return `Please, enter a title with less than 128 characters (${value.length}/30)`;
                   }
                 },

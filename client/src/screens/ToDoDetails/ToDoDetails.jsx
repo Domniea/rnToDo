@@ -27,11 +27,11 @@ const ToDoDescription = props => {
 
   const {control, handleSubmit} = useForm();
 
-  const {editToDo, setAllToDos} = useContext(ToDoContext);
+  // const {editToDo, setAllToDos} = useContext(ToDoContext);
 
-  const {user} = useContext(UserContext);
+  // const {user} = useContext(UserContext);
 
-  const {username} = user;
+  // const {username} = user;
 
   const {toggleModal, title, notes, _id, setDetailsVisible, editTask} = props;
 
@@ -88,7 +88,6 @@ const ToDoDescription = props => {
                   required: true,
                   validate: value => {
                     if (value && value.length > 32) {
-                      // this will give you the correct value for your error message
                       return `Please, enter a title with less than 32 characters (${value.length}/32)`;
                     }
                   },
@@ -102,7 +101,6 @@ const ToDoDescription = props => {
                 rules={{
                   validate: value => {
                     if (value && value.length > 128) {
-                      // this will give you the correct value for your error message
                       return `Please, enter a title with less than 10 characters (${value.length}/128)`;
                     }
                   },
@@ -172,12 +170,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   editLANDSCAPE: {
-    // backgroundColor: '#FFF',
-    // padding: '10%',
-    // height: '60%',
-    // width: '80%',
-    // justifyContent: 'center',
-    // borderRadius: 10
     marginTop: '2%',
     backgroundColor: '#FFF',
     paddingHorizontal: '05%',

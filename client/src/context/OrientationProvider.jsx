@@ -1,43 +1,45 @@
-import React, {createContext, useState, useEffect} from 'react';
-import {useWindowDimensions, Dimensions} from 'react-native';
+import React, { createContext, useState, useEffect, useMemo } from 'react';
+import { Dimensions } from 'react-native';
 
-const OrientationContext = createContext();
+export const OrientationContext = createContext({
+  orientation: 'PORTRAIT',
+  windowWidth: 0,
+  windowHeight: 0,
+});
 
-const OrientationProvider = props => {
+export function OrientationProvider({ children }) {
   const [orientation, setOrientation] = useState('PORTRAIT');
+  const [windowSize, setWindowSize] = useState({
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+  });
 
-  const windowWidth = Dimensions.get('window').width;
-  const windowHeight = Dimensions.get('window').height;
-
-  const determineAndSetOrientation = () => {
-    if (width < height) {
-      setOrientation('PORTRAIT');
-    } else {
-      setOrientation('LANDSCAPE');
-    }
+  // Helper to determine orientation from width/height
+  const determineOrientation = (width, height) => {
+    return width < height ? 'PORTRAIT' : 'LANDSCAPE';
   };
 
   useEffect(() => {
-    Dimensions.addEventListener('change', ({window: {width, height}}) => {
-      if (width < height) {
-        setOrientation('PORTRAIT');
-      } else {
-        setOrientation('LANDSCAPE');
-      }
+    // Set initial orientation
+    setOrientation(determineOrientation(windowSize.width, windowSize.height));
+
+    // Subscribe to orientation changes
+    const subscription = Dimensions.addEventListener('change', ({ window }) => {
+      setWindowSize({ width: window.width, height: window.height });
+      setOrientation(determineOrientation(window.width, window.height));
     });
+
+    return () => subscription?.remove();
   }, []);
 
-  return (
-    <OrientationContext.Provider
-      style={{flex: 1}}
-      value={{
-        orientation,
-        windowWidth,
-        windowHeight,
-      }}>
-      {props.children}
-    </OrientationContext.Provider>
+  const value = useMemo(
+    () => ({
+      orientation,
+      windowWidth: windowSize.width,
+      windowHeight: windowSize.height,
+    }),
+    [orientation, windowSize]
   );
-};
 
-export {OrientationContext, OrientationProvider};
+  return <OrientationContext.Provider value={value}>{children}</OrientationContext.Provider>
+}
