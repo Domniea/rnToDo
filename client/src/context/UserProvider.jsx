@@ -74,9 +74,5 @@ export function UserProvider({ children }) {
     [user, checkUser, handleSignOut, handleDeleteAccount]
   );
 
-  return (
-    <UserContext.Provider value={value}>
-        {children}
-    </UserContext.Provider>
-  )
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>
 }

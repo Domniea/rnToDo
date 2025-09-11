@@ -38,9 +38,14 @@ const CreateList = () => {
         rules={{
           required: 'List Name is required',
           validate: value => {
+
+            const result = lists.some((l) => l.list === value)
+            
             if (value && value.length >= 16) {
-              // this will give you the correct value for your error message
               return `Please, enter a List Name with less than 30 characters (${value.length}/16)`;
+            }
+            if (result) {
+              return `${value} already exists. Please pick a new list name`
             }
           },
         }}
