@@ -114,9 +114,9 @@ function ListScreen({navigation, index, listName, todoList}) {
         const name = deleting?.list ?? 'undefined';
         console.log(seg(name))
         const url =
-          name === 'unlisted'
+          name == 'unlisted'
             ? `${API_BASE}/todo/delete/${seg(username)}/undefined`
-            : `${API_BASE}/todo/delete/${seg(username)}/${seg(name)}/test`;
+            : `${API_BASE}/todo/delete/${seg(username)}/${seg(name)}/`;
         await axios.delete(url);
       } catch (err) {
         console.log('Delete failed:', err?.message || err);
