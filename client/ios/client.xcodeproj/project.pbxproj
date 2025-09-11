@@ -11,7 +11,7 @@
 		00E356F31AD99517003FC87E /* clientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* clientTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		13B07FC11A68108700A75B9A /* BuildFile in Sources */ = {isa = PBXBuildFile; };
+		13B07FC11A68108700A75B9A /* (null) in Sources */ = {isa = PBXBuildFile; };
 		3185D459600BFA14546A57AA /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = B464FF5493D20B2C2AB06678 /* PrivacyInfo.xcprivacy */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		A9924A742E237B8900F911D0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A9924A732E237B8900F911D0 /* main.m */; };
@@ -300,9 +300,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-client/Pods-client-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-client/Pods-client-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -317,9 +321,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-client/Pods-client-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-client/Pods-client-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -344,7 +352,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				A9924A752E237B8900F911D0 /* main.m in Sources */,
-				13B07FC11A68108700A75B9A /* BuildFile in Sources */,
+				13B07FC11A68108700A75B9A /* (null) in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,7 +441,7 @@
 					"@executable_path/Frameworks",
 				);
 				MACH_O_TYPE = mh_execute;
-				MARKETING_VERSION = 5;
+				MARKETING_VERSION = 5.1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -472,7 +480,7 @@
 					"@executable_path/Frameworks",
 				);
 				MACH_O_TYPE = mh_execute;
-				MARKETING_VERSION = 5;
+				MARKETING_VERSION = 5.1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
