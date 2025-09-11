@@ -6,6 +6,7 @@
     "android": "react-native run-android",
     "android-default": "react-native run-android",
     "ios": "npx react-native run-ios --udid DAA3ED69-1EAF-4776-84B5-AB7B89D72065",
+    "ios16pm": "npx react-native run-ios --udid DAA3ED69-1EAF-4776-84B5-AB7B89D72065",
     "ios-default": "npx react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",

@@ -91,9 +91,11 @@ function ListScreen({navigation, index, listName, todoList}) {
   // DELETE list
   function deleteList(id) {
     const prev = lists;
+    console.log(prev)
     if (!Array.isArray(prev) || id < 0 || id >= prev.length) return;
 
     const deleting = prev[id];
+    console.log(deleting)
     const next = prev.filter((_, i) => i !== id);
 
     const targetRoute = next.length
@@ -110,10 +112,11 @@ function ListScreen({navigation, index, listName, todoList}) {
     (async () => {
       try {
         const name = deleting?.list ?? 'undefined';
+        console.log(seg(name))
         const url =
           name === 'unlisted'
             ? `${API_BASE}/todo/delete/${seg(username)}/undefined`
-            : `${API_BASE}/todo/delete/${seg(username)}/${seg(name)}`;
+            : `${API_BASE}/todo/delete/${seg(username)}/${seg(name)}/test`;
         await axios.delete(url);
       } catch (err) {
         console.log('Delete failed:', err?.message || err);
