@@ -134,11 +134,12 @@ const styles = StyleSheet.create({
   notes: {
     backgroundColor: 'white',
     paddingHorizontal: '3%',
-    minHeight: '30%',
+    minHeight: '37%',
     width: '80%',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
+    boxShadow: '0 0 20px rgba(0, 0, 0, 0.5)'
   },
   notesLANDSCAPE: {
     backgroundColor: '#FFF',
@@ -163,11 +164,12 @@ const styles = StyleSheet.create({
   edit: {
     backgroundColor: 'white',
     padding: '5%',
-    height: '35%',
+    height: '37%',
     width: '80%',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
+    boxShadow: '0 0 20px rgba(0, 0, 0, 0.5)'
   },
   editLANDSCAPE: {
     marginTop: '2%',
